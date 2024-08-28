@@ -209,7 +209,6 @@ if (isMobileDevice()) {
         <button id="right-arrow" class="arrow" style="position:absolute; top:50%; right:10%; transform:translateY(-50%); opacity:0.5;">►</button>
     `;
     document.getElementById('game-area').appendChild(arrowKeys);
-}
 
 // Untuk tombol panah
 document.getElementById('up-arrow').addEventListener('click', () => {
@@ -224,6 +223,7 @@ document.getElementById('left-arrow').addEventListener('click', () => {
 document.getElementById('right-arrow').addEventListener('click', () => {
     if (direction.x === 0) direction = { x: gridSize, y: 0 };
 });
+}
 document.addEventListener('keydown', e => {
     if (e.key === 'ArrowUp' && direction.y === 0) direction = { x: 0, y: -gridSize };
     if (e.key === 'ArrowDown' && direction.y === 0) direction = { x: 0, y: gridSize };

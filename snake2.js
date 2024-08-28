@@ -210,17 +210,6 @@ if (isMobileDevice()) {
     `;
     document.getElementById('game-area').appendChild(arrowKeys);
 
-// Membuat tombol panah transparan untuk kontrol
-const arrowKeys = document.createElement('div');
-arrowKeys.id = 'arrow-keys';
-arrowKeys.innerHTML = `
-    <button id="up-arrow" class="arrow" style="position:absolute; top:10%; left:50%; transform:translateX(-50%); opacity:0.5;">▲</button>
-    <button id="down-arrow" class="arrow" style="position:absolute; bottom:10%; left:50%; transform:translateX(-50%); opacity:0.5;">▼</button>
-    <button id="left-arrow" class="arrow" style="position:absolute; top:50%; left:10%; transform:translateY(-50%); opacity:0.5;">◄</button>
-    <button id="right-arrow" class="arrow" style="position:absolute; top:50%; right:10%; transform:translateY(-50%); opacity:0.5;">►</button>
-`;
-document.getElementById('game-area').appendChild(arrowKeys);
-
 // Tambahkan event listener untuk tombol panah
 document.getElementById('up-arrow').addEventListener('click', () => {
     if (direction.y === 0) direction = { x: 0, y: -gridSize };

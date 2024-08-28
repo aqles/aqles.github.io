@@ -2,7 +2,7 @@ function startGame(game) {
     const gameArea = document.getElementById('game-area');
     gameArea.innerHTML = '';
     if (game === 'snake') {
-        loadScript('games/snake.js');
+        loadScript('snake.js');
     } else if (game === 'tetris') {
         loadScript('games/tetris.js');
     }

@@ -1,4 +1,4 @@
-//meledug
+//teroooss
 const canvas = document.createElement('canvas');
 const ctx = canvas.getContext('2d');
 document.getElementById('game-area').appendChild(canvas);
@@ -185,24 +185,30 @@ document.getElementById('start-game-button').addEventListener('click', () => {
     initGame(widthGrids, heightGrids);
 });
 
-// Kontrol touch untuk perangkat mobile
-document.addEventListener('touchstart', handleTouch);
+// Membuat tombol panah transparan untuk kontrol
+const arrowKeys = document.createElement('div');
+arrowKeys.id = 'arrow-keys';
+arrowKeys.innerHTML = `
+    <button id="up-arrow" class="arrow" style="position:absolute; top:10%; left:50%; transform:translateX(-50%); opacity:0.5;">▲</button>
+    <button id="down-arrow" class="arrow" style="position:absolute; bottom:10%; left:50%; transform:translateX(-50%); opacity:0.5;">▼</button>
+    <button id="left-arrow" class="arrow" style="position:absolute; top:50%; left:10%; transform:translateY(-50%); opacity:0.5;">◄</button>
+    <button id="right-arrow" class="arrow" style="position:absolute; top:50%; right:10%; transform:translateY(-50%); opacity:0.5;">►</button>
+`;
+document.getElementById('game-area').appendChild(arrowKeys);
 
-function handleTouch(e) {
-    e.preventDefault(); // Mencegah halaman bergulir
-
-    const touch = e.touches[0];
-    const swipeDistanceX = touch.clientX - canvas.width / 2;
-    const swipeDistanceY = touch.clientY - canvas.height / 2;
-
-    if (Math.abs(swipeDistanceX) > Math.abs(swipeDistanceY)) {
-        if (swipeDistanceX > 0 && direction.x === 0) direction = { x: gridSize, y: 0 };
-        else if (swipeDistanceX < 0 && direction.x === 0) direction = { x: -gridSize, y: 0 };
-    } else {
-        if (swipeDistanceY > 0 && direction.y === 0) direction = { x: 0, y: gridSize };
-        else if (swipeDistanceY < 0 && direction.y === 0) direction = { x: 0, y: -gridSize };
-    }
-}
+// Tambahkan event listener untuk tombol panah
+document.getElementById('up-arrow').addEventListener('click', () => {
+    if (direction.y === 0) direction = { x: 0, y: -gridSize };
+});
+document.getElementById('down-arrow').addEventListener('click', () => {
+    if (direction.y === 0) direction = { x: 0, y: gridSize };
+});
+document.getElementById('left-arrow').addEventListener('click', () => {
+    if (direction.x === 0) direction = { x: -gridSize, y: 0 };
+});
+document.getElementById('right-arrow').addEventListener('click', () => {
+    if (direction.x === 0) direction = { x: gridSize, y: 0 };
+});
 
 document.addEventListener('keydown', e => {
     if (e.key === 'ArrowUp' && direction.y === 0) direction = { x: 0, y: -gridSize };

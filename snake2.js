@@ -8,31 +8,32 @@ let highScore = localStorage.getItem('highScore') || 0;
 let gridSize = 20;
 let numCellsX, numCellsY;
 
-function resizeCanvas() {
-    const gameArea = document.getElementById('game-area');
-    const size = Math.min(window.innerWidth, window.innerHeight) * 0.8;
-    canvas.width = size;
-    canvas.height = size;
-
-    numCellsX = Math.floor(canvas.width / gridSize);
-    numCellsY = Math.floor(canvas.height / gridSize);
-
-    if (snake) {
-        snake = snake.map(segment => ({
-            x: Math.floor(segment.x / gridSize) * gridSize,
-            y: Math.floor(segment.y / gridSize) * gridSize,
-        }));
-        food = {
-            x: Math.floor(Math.random() * numCellsX) * gridSize,
-            y: Math.floor(Math.random() * numCellsY) * gridSize,
-        };
+function setCanvasSize(size) {
+    switch (size) {
+        case 'small':
+            numCellsX = 20;
+            numCellsY = 20;
+            break;
+        case 'medium':
+            numCellsX = 30;
+            numCellsY = 30;
+            break;
+        case 'large':
+            numCellsX = 40;
+            numCellsY = 40;
+            break;
+        default:
+            numCellsX = 30;
+            numCellsY = 30;
+            break;
     }
+
+    canvas.width = numCellsX * gridSize;
+    canvas.height = numCellsY * gridSize;
 }
 
-window.addEventListener('resize', resizeCanvas);
-
-function initGame() {
-    resizeCanvas();
+function initGame(size = 'medium') {
+    setCanvasSize(size);
     snake = [{
         x: Math.floor(numCellsX / 2) * gridSize,
         y: Math.floor(numCellsY / 2) * gridSize,
@@ -117,7 +118,10 @@ function showGameOverPopup() {
     `;
     document.body.appendChild(popup);
 
-    document.getElementById('restart-button').addEventListener('click', initGame);
+    document.getElementById('restart-button').addEventListener('click', () => {
+        const size = prompt("Choose size: small, medium, large", "medium");
+        initGame(size);
+    });
 }
 
 function hideGameOverPopup() {
@@ -134,4 +138,6 @@ document.addEventListener('keydown', e => {
     if (e.key === 'ArrowRight' && direction.x === 0) direction = { x: gridSize, y: 0 };
 });
 
-initGame();
+// Memulai permainan dengan ukuran default 'medium'
+const initialSize = prompt("Choose size: small, medium, large", "medium");
+initGame(initialSize);

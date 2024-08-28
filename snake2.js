@@ -164,10 +164,12 @@ document.getElementById('start-game-button').addEventListener('click', () => {
     initGame(widthGrids, heightGrids);
 });
 
-// Kontrol touch untuk perangkat mobile
+// Kontrol touch untuk hp
 document.addEventListener('touchstart', handleTouch);
 
 function handleTouch(e) {
+    e.preventDefault(); // Mencegah halaman bergulir
+
     const touch = e.touches[0];
     const swipeDistanceX = touch.clientX - canvas.width / 2;
     const swipeDistanceY = touch.clientY - canvas.height / 2;
@@ -180,6 +182,7 @@ function handleTouch(e) {
         else if (swipeDistanceY < 0 && direction.y === 0) direction = { x: 0, y: -gridSize };
     }
 }
+
 
 document.addEventListener('keydown', e => {
     if (e.key === 'ArrowUp' && direction.y === 0) direction = { x: 0, y: -gridSize };

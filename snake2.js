@@ -103,9 +103,17 @@ function showGameOverPopup() {
     document.body.appendChild(popup);
 
     document.getElementById('restart-button').addEventListener('click', () => {
+        // Hapus popup
+        hideGameOverPopup();
+        
+        // Tampilkan area input dan sembunyikan area permainan dan instruksi
         document.getElementById('game-area').style.display = 'none';
         document.getElementById('input-area').style.display = 'block';
         document.getElementById('instruction').style.display = 'none';
+        // Reset permainan
+        document.getElementById('width-grid').value = '';
+        document.getElementById('height-grid').value = '';
+        
     });
 }
 

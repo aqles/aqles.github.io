@@ -209,6 +209,7 @@ if (isMobileDevice()) {
         <button id="right-arrow" class="arrow" style="position:absolute; top:50%; right:10%; transform:translateY(-50%); opacity:0.5;">►</button>
     `;
     document.getElementById('game-area').appendChild(arrowKeys);
+}
 
 // Tambahkan event listener untuk tombol panah
 document.getElementById('up-arrow').addEventListener('click', () => {

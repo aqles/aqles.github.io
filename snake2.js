@@ -10,6 +10,7 @@ let numCellsX, numCellsY;
 let gridSize, speed = 200;
 let level = 1;
 let currentFoodColor, snakeColor = '#FFFFFF'; // Warna default ular
+let mouthOpen = false; // Status mulut terbuka/tutup
 
 function setCanvasSize(widthGrids, heightGrids) {
     numCellsX = widthGrids;
@@ -36,6 +37,7 @@ function initGame(widthGrids, heightGrids) {
     speed = 200;
 
     snakeColor = '#FFFFFF'; // Warna default ular
+    mouthOpen = false; // Mulut tertutup pada awal permainan
     hideGameOverPopup();
 
     if (intervalId) {
@@ -88,6 +90,9 @@ function gameLoop() {
         return;
     }
 
+    // Cek jika ular akan memakan makanan (jarak dekat)
+    mouthOpen = (Math.abs(head.x - food.x) <= gridSize && Math.abs(head.y - food.y) <= gridSize);
+
     snake.unshift(head);
 
     if (head.x === food.x && head.y === food.y) {
@@ -99,8 +104,9 @@ function gameLoop() {
         }
         snakeColor = currentFoodColor; // Ubah warna ular sesuai dengan makanan yang dimakan
         food = generateFood();
+        mouthOpen = false; // Mulut tertutup setelah makan
     } else {
-        snake.pop();
+        snake.pop(); // Hanya buang ekor jika tidak makan
     }
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -132,10 +138,12 @@ function drawSnakeHead(x, y) {
     ctx.fillStyle = snakeColor;
     ctx.fillRect(x, y, gridSize, gridSize);
 
-    // Membuat mulut pada kepala ular
-    ctx.fillStyle = 'black';
-    const mouthSize = gridSize / 4;
-    ctx.fillRect(x + gridSize / 2 - mouthSize / 2, y + gridSize / 2, mouthSize, mouthSize);
+    // Menggambar mulut (buka/tutup)
+    if (mouthOpen) {
+        ctx.fillStyle = 'black';
+        const mouthSize = gridSize / 4;
+        ctx.fillRect(x + gridSize / 2 - mouthSize / 2, y + gridSize / 2, mouthSize, mouthSize);
+    }
 }
 
 function gameOver() {
@@ -184,6 +192,23 @@ document.getElementById('start-game-button').addEventListener('click', () => {
 
     initGame(widthGrids, heightGrids);
 });
+
+// Fungsi untuk mendeteksi apakah perangkat adalah mobile
+function isMobileDevice() {
+    return /Mobi|Android/i.test(navigator.userAgent);
+}
+
+// Membuat tombol panah transparan untuk kontrol jika di mobile
+if (isMobileDevice()) {
+    const arrowKeys = document.createElement('div');
+    arrowKeys.id = 'arrow-keys';
+    arrowKeys.innerHTML = `
+        <button id="up-arrow" class="arrow" style="position:absolute; top:10%; left:50%; transform:translateX(-50%); opacity:0.5;">▲</button>
+        <button id="down-arrow" class="arrow" style="position:absolute; bottom:10%; left:50%; transform:translateX(-50%); opacity:0.5;">▼</button>
+        <button id="left-arrow" class="arrow" style="position:absolute; top:50%; left:10%; transform:translateY(-50%); opacity:0.5;">◄</button>
+        <button id="right-arrow" class="arrow" style="position:absolute; top:50%; right:10%; transform:translateY(-50%); opacity:0.5;">►</button>
+    `;
+    document.getElementById('game-area').appendChild(arrowKeys);
 
 // Membuat tombol panah transparan untuk kontrol
 const arrowKeys = document.createElement('div');

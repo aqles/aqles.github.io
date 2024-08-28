@@ -1,17 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome Home</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Game Iseng</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Biar Gak Bosen</h1>
     <div id="game-container">
-        <button onclick="startGame('snake')">Play Snake</button>
-        <div id="game-area"></div>
+        <h1>Biar Gak Bosen!</h1>
+        <div id="input-area">
+            <label for="width-grid">Lebar (in grids):</label>
+            <input type="number" id="width-grid" min="10" max="100" value="30">
+            <label for="height-grid">Tinggi (in grids):</label>
+            <input type="number" id="height-grid" min="10" max="100" value="30">
+            <button id="start-game-button">Mari Mulai!</button>
+        </div>
+        <div id="game-area" style="display: none;"></div>
+        <p id="instruction" style="display: none;">Kalau pakai PC pakai arrow aja ya.</p>
     </div>
-    <script src="script.js"></script>
+
+    <script src="snake2.js"></script>
 </body>
 </html>

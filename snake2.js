@@ -1,5 +1,3 @@
-// why
-
 const canvas = document.createElement('canvas');
 const ctx = canvas.getContext('2d');
 document.getElementById('game-area').appendChild(canvas);
@@ -7,24 +5,30 @@ document.getElementById('game-area').appendChild(canvas);
 let snake, direction, food, intervalId;
 let score = 0;
 let highScore = localStorage.getItem('highScore') || 0;
+let gridSize = 20; // Ukuran grid selalu tetap
 
 function resizeCanvas() {
     const gameArea = document.getElementById('game-area');
     const size = Math.min(window.innerWidth, window.innerHeight) * 0.8;
     canvas.width = size;
     canvas.height = size;
+
+    // ini harus dinamis juga
+    snake.forEach(segment => {
+        segment.x = Math.floor(segment.x / gridSize) * gridSize;
+        segment.y = Math.floor(segment.y / gridSize) * gridSize;
+    });
+    
+    food.x = Math.floor(food.x / gridSize) * gridSize;
+    food.y = Math.floor(food.y / gridSize) * gridSize;
 }
 
 window.addEventListener('resize', resizeCanvas);
-resizeCanvas();
 
 function initGame() {
-    snake = [{ x: canvas.width / 2, y: canvas.height / 2 }];
-    direction = { x: 0, y: -20 };
-    food = {
-        x: Math.floor(Math.random() * (canvas.width / 20)) * 20,
-        y: Math.floor(Math.random() * (canvas.height / 20)) * 20
-    };
+    snake = [{ x: Math.floor(canvas.width / 2 / gridSize) * gridSize, y: Math.floor(canvas.height / 2 / gridSize) * gridSize }];
+    direction = { x: 0, y: -gridSize };
+    food = generateFood();
     score = 0;
 
     hideGameOverPopup();
@@ -33,6 +37,13 @@ function initGame() {
         clearInterval(intervalId);
     }
     intervalId = setInterval(gameLoop, 100);
+}
+
+function generateFood() {
+    return {
+        x: Math.floor(Math.random() * (canvas.width / gridSize)) * gridSize,
+        y: Math.floor(Math.random() * (canvas.height / gridSize)) * gridSize
+    };
 }
 
 function gameLoop() {
@@ -60,20 +71,17 @@ function gameLoop() {
             highScore = score;
             localStorage.setItem('highScore', highScore);
         }
-        food = {
-            x: Math.floor(Math.random() * (canvas.width / 20)) * 20,
-            y: Math.floor(Math.random() * (canvas.height / 20)) * 20
-        };
+        food = generateFood();
     } else {
         snake.pop();
     }
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = 'green';
-    snake.forEach(s => ctx.fillRect(s.x, s.y, 20, 20));
+    snake.forEach(s => ctx.fillRect(s.x, s.y, gridSize, gridSize));
 
     ctx.fillStyle = 'red';
-    ctx.fillRect(food.x, food.y, 20, 20);
+    ctx.fillRect(food.x, food.y, gridSize, gridSize);
 
     ctx.fillStyle = 'white';
     ctx.font = `${canvas.width / 20}px Arial`;
@@ -110,10 +118,10 @@ function hideGameOverPopup() {
 }
 
 document.addEventListener('keydown', e => {
-    if (e.key === 'ArrowUp' && direction.y === 0) direction = { x: 0, y: -20 };
-    if (e.key === 'ArrowDown' && direction.y === 0) direction = { x: 0, y: 20 };
-    if (e.key === 'ArrowLeft' && direction.x === 0) direction = { x: -20, y: 0 };
-    if (e.key === 'ArrowRight' && direction.x === 0) direction = { x: 20, y: 0 };
+    if (e.key === 'ArrowUp' && direction.y === 0) direction = { x: 0, y: -gridSize };
+    if (e.key === 'ArrowDown' && direction.y === 0) direction = { x: 0, y: gridSize };
+    if (e.key === 'ArrowLeft' && direction.x === 0) direction = { x: -gridSize, y: 0 };
+    if (e.key === 'ArrowRight' && direction.x === 0) direction = { x: gridSize, y: 0 };
 });
 
 initGame();

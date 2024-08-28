@@ -10,11 +10,13 @@ body {
 }
 /* Responsive Canvas */
 #game-area {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #333;
+    position: relative;
+    margin: 20px auto;
+    border: 2px solid white;
+    display: inline-block;
+}
+canvas {
+    background-color: #000;
 }
 #game-container {
     text-align: center;

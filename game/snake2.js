@@ -211,7 +211,7 @@ if (isMobileDevice()) {
     document.getElementById('game-area').appendChild(arrowKeys);
 }
 
-// Tambahkan event listener untuk tombol panah
+// Untuk tombol panah
 document.getElementById('up-arrow').addEventListener('click', () => {
     if (direction.y === 0) direction = { x: 0, y: -gridSize };
 });

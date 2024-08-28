@@ -44,10 +44,20 @@ function initGame(widthGrids, heightGrids) {
 }
 
 function generateFood() {
+    currentFoodColor = getRandomColor();
     return {
         x: Math.floor(Math.random() * numCellsX) * gridSize,
         y: Math.floor(Math.random() * numCellsY) * gridSize
     };
+}
+
+function getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
 }
 
 function updateSpeed() {
@@ -92,10 +102,10 @@ function gameLoop() {
     }
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = 'green';
+    ctx.fillStyle = currentFoodColor;
     snake.forEach(s => ctx.fillRect(s.x, s.y, gridSize, gridSize));
 
-    ctx.fillStyle = 'red';
+    ctx.fillStyle = currentFoodColor;
     ctx.fillRect(food.x, food.y, gridSize, gridSize);
 
     // Menampilkan skor, high score, dan level di kanan atas
@@ -131,8 +141,8 @@ function showGameOverPopup() {
         document.getElementById('game-area').style.display = 'none';
         document.getElementById('input-area').style.display = 'block';
         document.getElementById('instruction').style.display = 'none';
-        document.getElementById('width-grid').value = '';
-        document.getElementById('height-grid').value = '';
+        document.getElementById('width-grid').value = '50';
+        document.getElementById('height-grid').value = '50';
     });
 }
 

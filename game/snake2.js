@@ -73,6 +73,14 @@ function updateSpeed() {
     }
 }
 
+// Elemen audio
+const eatSound = document.getElementById('eat-sound');
+
+// Fungsi untuk ular memakan makanan
+function handleEating() {
+    eatSound.play();
+}
+
 function gameLoop() {
     const head = {
         x: snake[0].x + direction.x,

@@ -1,4 +1,4 @@
-//iseng bro
+//Heehhhh
 const canvas = document.createElement('canvas');
 const ctx = canvas.getContext('2d');
 document.getElementById('game-area').appendChild(canvas);
@@ -6,14 +6,18 @@ document.getElementById('game-area').appendChild(canvas);
 let snake, direction, food, intervalId;
 let score = 0;
 let highScore = localStorage.getItem('highScore') || 0;
-let gridSize = 20;
 let numCellsX, numCellsY;
-let speed = 200; // Kecepatan awal dalam milidetik (lebih lambat)
+let gridSize, speed = 200;
 let level = 1;
 
 function setCanvasSize(widthGrids, heightGrids) {
     numCellsX = widthGrids;
     numCellsY = heightGrids;
+
+    // Dinamiskan ukuran grid berdasarkan ukuran layar
+    const cellWidth = Math.floor(window.innerWidth / numCellsX);
+    const cellHeight = Math.floor(window.innerHeight / numCellsY);
+    gridSize = Math.min(cellWidth, cellHeight);
 
     canvas.width = numCellsX * gridSize;
     canvas.height = numCellsY * gridSize;
@@ -29,7 +33,7 @@ function initGame(widthGrids, heightGrids) {
     food = generateFood();
     score = 0;
     level = 1;
-    speed = 200; // Kecepatan awal permainan
+    speed = 200;
 
     hideGameOverPopup();
 
@@ -50,7 +54,7 @@ function updateSpeed() {
     const newLevel = Math.floor(score / 20) + 1;
     if (newLevel > level) {
         level = newLevel;
-        speed = Math.max(100, 150 - (level - 1) * 10); // Maksimal speed 100 ms
+        speed = Math.max(100, 150 - (level - 1) * 10);
         clearInterval(intervalId);
         intervalId = setInterval(gameLoop, speed);
     }
@@ -94,11 +98,13 @@ function gameLoop() {
     ctx.fillStyle = 'red';
     ctx.fillRect(food.x, food.y, gridSize, gridSize);
 
+    // Menampilkan skor, high score, dan level di kanan atas
     ctx.fillStyle = 'white';
-    ctx.font = `${canvas.width / 20}px Arial`;
-    ctx.fillText(`Score: ${score}`, 10, canvas.width / 20);
-    ctx.fillText(`High Score: ${highScore}`, 10, canvas.width / 10);
-    ctx.fillText(`Level: ${level}`, 10, canvas.width / 15);
+    ctx.font = `${gridSize * 0.8}px Arial`;
+    ctx.textAlign = 'right';
+    ctx.fillText(`Score: ${score}`, canvas.width - 10, gridSize);
+    ctx.fillText(`High Score: ${highScore}`, canvas.width - 10, gridSize * 2);
+    ctx.fillText(`Level: ${level}`, canvas.width - 10, gridSize * 3);
 }
 
 function gameOver() {
@@ -121,15 +127,10 @@ function showGameOverPopup() {
     document.body.appendChild(popup);
 
     document.getElementById('restart-button').addEventListener('click', () => {
-        // Hapus popup
         hideGameOverPopup();
-        
-        // Tampilkan area input dan sembunyikan area permainan dan instruksi
         document.getElementById('game-area').style.display = 'none';
         document.getElementById('input-area').style.display = 'block';
         document.getElementById('instruction').style.display = 'none';
-        
-        // Reset permainan
         document.getElementById('width-grid').value = '';
         document.getElementById('height-grid').value = '';
     });
@@ -152,6 +153,23 @@ document.getElementById('start-game-button').addEventListener('click', () => {
 
     initGame(widthGrids, heightGrids);
 });
+
+// Kontrol touch untuk perangkat mobile
+document.addEventListener('touchstart', handleTouch);
+
+function handleTouch(e) {
+    const touch = e.touches[0];
+    const swipeDistanceX = touch.clientX - canvas.width / 2;
+    const swipeDistanceY = touch.clientY - canvas.height / 2;
+
+    if (Math.abs(swipeDistanceX) > Math.abs(swipeDistanceY)) {
+        if (swipeDistanceX > 0 && direction.x === 0) direction = { x: gridSize, y: 0 };
+        else if (swipeDistanceX < 0 && direction.x === 0) direction = { x: -gridSize, y: 0 };
+    } else {
+        if (swipeDistanceY > 0 && direction.y === 0) direction = { x: 0, y: gridSize };
+        else if (swipeDistanceY < 0 && direction.y === 0) direction = { x: 0, y: -gridSize };
+    }
+}
 
 document.addEventListener('keydown', e => {
     if (e.key === 'ArrowUp' && direction.y === 0) direction = { x: 0, y: -gridSize };

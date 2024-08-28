@@ -50,7 +50,7 @@ function updateSpeed() {
     const newLevel = Math.floor(score / 20) + 1;
     if (newLevel > level) {
         level = newLevel;
-        speed = Math.max(20, 40 - (level - 1) * 10); // Maksimal speed 100 ms
+        speed = Math.max(100, 200 - (level - 1) * 10); // Maksimal speed 100 ms
         clearInterval(intervalId);
         intervalId = setInterval(gameLoop, speed);
     }

@@ -1,4 +1,4 @@
-//Heehhhh
+//meledug
 const canvas = document.createElement('canvas');
 const ctx = canvas.getContext('2d');
 document.getElementById('game-area').appendChild(canvas);
@@ -9,12 +9,12 @@ let highScore = localStorage.getItem('highScore') || 0;
 let numCellsX, numCellsY;
 let gridSize, speed = 200;
 let level = 1;
+let currentFoodColor, snakeColor = '#FFFFFF'; // Warna default ular
 
 function setCanvasSize(widthGrids, heightGrids) {
     numCellsX = widthGrids;
     numCellsY = heightGrids;
 
-    // Dinamiskan ukuran grid berdasarkan ukuran layar
     const cellWidth = Math.floor(window.innerWidth / numCellsX);
     const cellHeight = Math.floor(window.innerHeight / numCellsY);
     gridSize = Math.min(cellWidth, cellHeight);
@@ -35,6 +35,7 @@ function initGame(widthGrids, heightGrids) {
     level = 1;
     speed = 200;
 
+    snakeColor = '#FFFFFF'; // Warna default ular
     hideGameOverPopup();
 
     if (intervalId) {
@@ -96,15 +97,25 @@ function gameLoop() {
             highScore = score;
             localStorage.setItem('highScore', highScore);
         }
+        snakeColor = currentFoodColor; // Ubah warna ular sesuai dengan makanan yang dimakan
         food = generateFood();
     } else {
         snake.pop();
     }
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = currentFoodColor;
-    snake.forEach(s => ctx.fillRect(s.x, s.y, gridSize, gridSize));
 
+    // Menggambar ular
+    ctx.fillStyle = snakeColor;
+    snake.forEach((s, index) => {
+        if (index === 0) {
+            drawSnakeHead(s.x, s.y); // Menggambar kepala ular dengan mulut
+        } else {
+            ctx.fillRect(s.x, s.y, gridSize, gridSize);
+        }
+    });
+
+    // Menggambar makanan
     ctx.fillStyle = currentFoodColor;
     ctx.fillRect(food.x, food.y, gridSize, gridSize);
 
@@ -115,6 +126,16 @@ function gameLoop() {
     ctx.fillText(`Score: ${score}`, canvas.width - 10, gridSize);
     ctx.fillText(`High Score: ${highScore}`, canvas.width - 10, gridSize * 2);
     ctx.fillText(`Level: ${level}`, canvas.width - 10, gridSize * 3);
+}
+
+function drawSnakeHead(x, y) {
+    ctx.fillStyle = snakeColor;
+    ctx.fillRect(x, y, gridSize, gridSize);
+
+    // Membuat mulut pada kepala ular
+    ctx.fillStyle = 'black';
+    const mouthSize = gridSize / 4;
+    ctx.fillRect(x + gridSize / 2 - mouthSize / 2, y + gridSize / 2, mouthSize, mouthSize);
 }
 
 function gameOver() {
@@ -164,7 +185,7 @@ document.getElementById('start-game-button').addEventListener('click', () => {
     initGame(widthGrids, heightGrids);
 });
 
-// Kontrol touch untuk hp
+// Kontrol touch untuk perangkat mobile
 document.addEventListener('touchstart', handleTouch);
 
 function handleTouch(e) {
@@ -182,7 +203,6 @@ function handleTouch(e) {
         else if (swipeDistanceY < 0 && direction.y === 0) direction = { x: 0, y: -gridSize };
     }
 }
-
 
 document.addEventListener('keydown', e => {
     if (e.key === 'ArrowUp' && direction.y === 0) direction = { x: 0, y: -gridSize };

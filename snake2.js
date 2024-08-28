@@ -1,3 +1,4 @@
+//iseng bro
 const canvas = document.createElement('canvas');
 const ctx = canvas.getContext('2d');
 document.getElementById('game-area').appendChild(canvas);
@@ -7,6 +8,8 @@ let score = 0;
 let highScore = localStorage.getItem('highScore') || 0;
 let gridSize = 20;
 let numCellsX, numCellsY;
+let speed = 200; // Kecepatan awal dalam milidetik (lebih lambat)
+let level = 1;
 
 function setCanvasSize(widthGrids, heightGrids) {
     numCellsX = widthGrids;
@@ -25,13 +28,15 @@ function initGame(widthGrids, heightGrids) {
     direction = { x: 0, y: -gridSize };
     food = generateFood();
     score = 0;
+    level = 1;
+    speed = 200; // Kecepatan awal permainan
 
     hideGameOverPopup();
 
     if (intervalId) {
         clearInterval(intervalId);
     }
-    intervalId = setInterval(gameLoop, 100);
+    intervalId = setInterval(gameLoop, speed);
 }
 
 function generateFood() {
@@ -39,6 +44,16 @@ function generateFood() {
         x: Math.floor(Math.random() * numCellsX) * gridSize,
         y: Math.floor(Math.random() * numCellsY) * gridSize
     };
+}
+
+function updateSpeed() {
+    const newLevel = Math.floor(score / 100) + 1;
+    if (newLevel > level) {
+        level = newLevel;
+        speed = Math.max(100, 200 - (level - 1) * 10); // Maksimal speed 100 ms
+        clearInterval(intervalId);
+        intervalId = setInterval(gameLoop, speed);
+    }
 }
 
 function gameLoop() {
@@ -62,6 +77,7 @@ function gameLoop() {
 
     if (head.x === food.x && head.y === food.y) {
         score++;
+        updateSpeed();
         if (score > highScore) {
             highScore = score;
             localStorage.setItem('highScore', highScore);
@@ -82,6 +98,7 @@ function gameLoop() {
     ctx.font = `${canvas.width / 20}px Arial`;
     ctx.fillText(`Score: ${score}`, 10, canvas.width / 20);
     ctx.fillText(`High Score: ${highScore}`, 10, canvas.width / 10);
+    ctx.fillText(`Level: ${level}`, 10, canvas.width / 15);
 }
 
 function gameOver() {
@@ -97,6 +114,7 @@ function showGameOverPopup() {
             <h2>Game Over</h2>
             <p>Your score: ${score}</p>
             <p>High score: ${highScore}</p>
+            <p>Level: ${level}</p>
             <button id="restart-button">Start Again</button>
         </div>
     `;
@@ -110,10 +128,10 @@ function showGameOverPopup() {
         document.getElementById('game-area').style.display = 'none';
         document.getElementById('input-area').style.display = 'block';
         document.getElementById('instruction').style.display = 'none';
+        
         // Reset permainan
         document.getElementById('width-grid').value = '';
         document.getElementById('height-grid').value = '';
-        
     });
 }
 

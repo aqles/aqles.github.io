@@ -1,3 +1,13 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #282c34;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
 /* Responsive Canvas */
 #game-area {
     display: flex;
@@ -5,6 +15,9 @@
     align-items: center;
     height: 100vh;
     background-color: #333;
+}
+#game-container {
+    text-align: center;
 }
 
 /* Game Over Pop-up */
@@ -19,6 +32,21 @@
     align-items: center;
     justify-content: center;
     z-index: 1000;
+}
+/*input area*/
+#input-area {
+    margin-bottom: 20px;
+}
+
+#input-area label {
+    margin-right: 10px;
+}
+
+#input-area input {
+    width: 60px;
+    margin-right: 20px;
+    padding: 5px;
+    text-align: center;
 }
 
 #popup-content {

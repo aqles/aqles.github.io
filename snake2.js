@@ -5,7 +5,8 @@ document.getElementById('game-area').appendChild(canvas);
 let snake, direction, food, intervalId;
 let score = 0;
 let highScore = localStorage.getItem('highScore') || 0;
-let gridSize = 20; // Ukuran grid selalu tetap
+let gridSize = 20;
+let numCellsX, numCellsY;
 
 function resizeCanvas() {
     const gameArea = document.getElementById('game-area');
@@ -13,20 +14,29 @@ function resizeCanvas() {
     canvas.width = size;
     canvas.height = size;
 
-    // ini harus dinamis juga
-    snake.forEach(segment => {
-        segment.x = Math.floor(segment.x / gridSize) * gridSize;
-        segment.y = Math.floor(segment.y / gridSize) * gridSize;
-    });
-    
-    food.x = Math.floor(food.x / gridSize) * gridSize;
-    food.y = Math.floor(food.y / gridSize) * gridSize;
+    numCellsX = Math.floor(canvas.width / gridSize);
+    numCellsY = Math.floor(canvas.height / gridSize);
+
+    if (snake) {
+        snake = snake.map(segment => ({
+            x: Math.floor(segment.x / gridSize) * gridSize,
+            y: Math.floor(segment.y / gridSize) * gridSize,
+        }));
+        food = {
+            x: Math.floor(Math.random() * numCellsX) * gridSize,
+            y: Math.floor(Math.random() * numCellsY) * gridSize,
+        };
+    }
 }
 
 window.addEventListener('resize', resizeCanvas);
 
 function initGame() {
-    snake = [{ x: Math.floor(canvas.width / 2 / gridSize) * gridSize, y: Math.floor(canvas.height / 2 / gridSize) * gridSize }];
+    resizeCanvas();
+    snake = [{
+        x: Math.floor(numCellsX / 2) * gridSize,
+        y: Math.floor(numCellsY / 2) * gridSize,
+    }];
     direction = { x: 0, y: -gridSize };
     food = generateFood();
     score = 0;
@@ -41,8 +51,8 @@ function initGame() {
 
 function generateFood() {
     return {
-        x: Math.floor(Math.random() * (canvas.width / gridSize)) * gridSize,
-        y: Math.floor(Math.random() * (canvas.height / gridSize)) * gridSize
+        x: Math.floor(Math.random() * numCellsX) * gridSize,
+        y: Math.floor(Math.random() * numCellsY) * gridSize
     };
 }
 

@@ -193,13 +193,6 @@ document.getElementById('start-game-button').addEventListener('click', () => {
     initGame(widthGrids, heightGrids);
 });
 
-document.addEventListener('keydown', e => {
-    if (e.key === 'ArrowUp' && direction.y === 0) direction = { x: 0, y: -gridSize };
-    if (e.key === 'ArrowDown' && direction.y === 0) direction = { x: 0, y: gridSize };
-    if (e.key === 'ArrowLeft' && direction.x === 0) direction = { x: -gridSize, y: 0 };
-    if (e.key === 'ArrowRight' && direction.x === 0) direction = { x: gridSize, y: 0 };
-});
-
 // Fungsi untuk mendeteksi apakah perangkat adalah mobile
 function isMobileDevice() {
     return /Mobi|Android/i.test(navigator.userAgent);
@@ -230,4 +223,10 @@ document.getElementById('left-arrow').addEventListener('click', () => {
 });
 document.getElementById('right-arrow').addEventListener('click', () => {
     if (direction.x === 0) direction = { x: gridSize, y: 0 };
+});
+document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowUp' && direction.y === 0) direction = { x: 0, y: -gridSize };
+    if (e.key === 'ArrowDown' && direction.y === 0) direction = { x: 0, y: gridSize };
+    if (e.key === 'ArrowLeft' && direction.x === 0) direction = { x: -gridSize, y: 0 };
+    if (e.key === 'ArrowRight' && direction.x === 0) direction = { x: gridSize, y: 0 };
 });

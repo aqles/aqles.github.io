@@ -178,8 +178,8 @@ function showGameOverPopup() {
         document.getElementById('game-area').style.display = 'none';
         document.getElementById('input-area').style.display = 'block';
         document.getElementById('instruction').style.display = 'none';
-        document.getElementById('width-grid').value = '50';
-        document.getElementById('height-grid').value = '50';
+        document.getElementById('width-grid').value = '30';
+        document.getElementById('height-grid').value = '30';
     });
 }
 

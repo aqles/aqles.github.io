@@ -47,7 +47,7 @@
             cursor: pointer;
         }
         #content {
-            padding-top: 100px;
+            padding-top: 120px;
             flex: 1;
         }
         #game-container {
@@ -123,7 +123,7 @@
                     <option value="multi">Multiplayer Online</option>
                 </select>
                 <br><br>
-                <button id="start-game-button">🎮 Mulai!</button>
+                <button id="start-game-button" onclick="startGame()">🎮 Mulai!</button>
             </div>
             <canvas id="game-area" width="600" height="600"></canvas>
             <p id="instruction" style="display: none;">Gunakan arrow keys atau WASD untuk bermain!</p>
@@ -131,7 +131,7 @@
     </div>
     
     <footer>
-        &copy; 2025 Game Retro Snake - All Rights Reserved
+        &copy; 2025 ednasalam.com - All Rights Reserved
     </footer>
     
     <audio id="eat-sound" src="sound/eat-se.mp3"></audio>
@@ -146,12 +146,7 @@
         
         function toggleGameMode() {
             let mode = document.getElementById("game-mode").value;
-            let startButton = document.getElementById("start-game-button");
-            if (mode === "single") {
-                startButton.setAttribute("onclick", "startGame('single')");
-            } else {
-                startButton.setAttribute("onclick", "startGame('multi')");
-            }
+            document.getElementById("start-game-button").setAttribute("onclick", `startGame('${mode}')`);
         }
     </script>
 </body>

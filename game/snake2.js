@@ -15,7 +15,7 @@ let score = 0, highScore = localStorage.getItem('highScore') || 0;
 let mode, playerId, players = {};
 
 // WebSocket Connection
-const socket = new WebSocket('ws://dorian-horn-mortarboard.glitch.me');
+const socket = new WebSocket('wss://dorian-horn-mortarboard.glitch.me');
 
 // Initialize Game
 function initSinglePlayer() {

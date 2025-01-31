@@ -241,30 +241,34 @@
     <footer>
         &copy; 2025 ednasalam.com - All Rights Reserved
     </footer>
-
+    <audio id="eat-sound" src="sound/eat-se.mp3"></audio>
+    <script src="game/snake2.js"></script>
     <script>
+        let gameActive = false;
+
         // Toggle Menu
         function toggleMenu() {
             document.getElementById('dropdownMenu').classList.toggle('show');
         }
 
-        // Tutup menu saat klik di luar
         window.onclick = function(event) {
             if (!event.target.matches('.menu-button')) {
                 document.getElementById('dropdownMenu').classList.remove('show');
             }
         }
 
-        // Navigasi Halaman
         function showPage(pageId) {
             document.querySelectorAll('.page-content, #game-container').forEach(page => {
                 page.style.display = 'none';
             });
             document.getElementById(pageId).style.display = 'block';
-            toggleMenu(); // Tutup menu setelah pilih halaman
+            toggleMenu();
+            
+            if(pageId === 'game-container' && gameActive) {
+                resumeGame();
+            }
         }
 
-        // Validasi Nama
         function startGame() {
             const nameInput = document.getElementById('player-name');
             if (!nameInput.value.trim()) {
@@ -272,32 +276,40 @@
                 return;
             }
             
-            // Mulai game
+            // Inisialisasi game dari snake2.js
+            const canvas = document.getElementById('game-area');
+            const gameMode = document.getElementById('game-mode').value;
+            
+            initGame(
+                canvas,
+                nameInput.value,
+                gameMode,
+                document.getElementById('eat-sound')
+            );
+            
             document.getElementById('input-area').style.display = 'none';
             document.getElementById('game-area').style.display = 'block';
             document.getElementById('back-to-menu').style.display = 'block';
-            
-            // Inisialisasi game canvas
-            const canvas = document.getElementById('game-area');
-            const size = Math.min(window.innerWidth - 40, 600);
-            canvas.width = size;
-            canvas.height = size;
-            
-            // TODO: Tambahkan logika game snake
+            gameActive = true;
         }
 
         function backToMenu() {
             document.getElementById('input-area').style.display = 'block';
             document.getElementById('game-area').style.display = 'none';
             document.getElementById('back-to-menu').style.display = 'none';
+            gameActive = false;
+            resetGame();
         }
 
-        // Responsive canvas
+        // Handle resize untuk canvas
         window.addEventListener('resize', () => {
-            const canvas = document.getElementById('game-area');
-            const size = Math.min(window.innerWidth - 40, 600);
-            canvas.width = size;
-            canvas.height = size;
+            if(gameActive) {
+                const canvas = document.getElementById('game-area');
+                const size = Math.min(window.innerWidth - 40, 600);
+                canvas.width = size;
+                canvas.height = size;
+                resizeGame();
+            }
         });
     </script>
 </body>

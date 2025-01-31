@@ -91,25 +91,22 @@ function gameLoop() {
         y: snake[0].y + direction.y
     };
 
-    if (
-        head.x < 0 ||
-        head.x >= canvas.width ||
-        head.y < 0 ||
-        head.y >= canvas.height ||
-        snake.some(s => s.x === head.x && s.y === head.y)
-    ) {
+    // Logika untuk menembus dinding
+    if (head.x < 0) head.x = canvas.width - gridSize; // Keluar kiri -> masuk kanan
+    else if (head.x >= canvas.width) head.x = 0; // Keluar kanan -> masuk kiri
+
+    if (head.y < 0) head.y = canvas.height - gridSize; // Keluar atas -> masuk bawah
+    else if (head.y >= canvas.height) head.y = 0; // Keluar bawah -> masuk atas
+
+    // Cek tabrakan dengan tubuh ular
+    if (snake.some(s => s.x === head.x && s.y === head.y)) {
         gameOver();
         return;
     }
 
-    // Cek jika ular akan memakan makanan (jarak dekat)
-    const currentHead = snake[0];
-    mouthOpen = (
-        (currentHead.x + direction.x === food.x && currentHead.y + direction.y === food.y) ||
-        (currentHead.x === food.x && currentHead.y === food.y)
-    );
     snake.unshift(head);
 
+    // Cek jika ular memakan makanan
     if (head.x === food.x && head.y === food.y) {
         score++;
         updateSpeed();
@@ -124,17 +121,14 @@ function gameLoop() {
         snake.pop(); // Hanya buang ekor jika tidak makan
     }
 
+    // Gambar ulang layar
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Menggambar ular
     ctx.fillStyle = snakeColor;
     snake.forEach((s, index) => {
         if (index === 0) {
-            if (mouthOpen) {
-                ctx.fillStyle = 'yellow'; // Warna kepala berubah saat memakan
-            }
-            drawSnakeHead(s.x, s.y);
-            ctx.fillStyle = snakeColor; // Kembalikan warna asli
+            drawSnakeHead(s.x, s.y); // Menggambar kepala ular dengan mulut
         } else {
             ctx.fillRect(s.x, s.y, gridSize, gridSize);
         }
@@ -151,6 +145,13 @@ function gameLoop() {
     ctx.fillText(`Score: ${score}`, canvas.width - 10, gridSize);
     ctx.fillText(`High Score: ${highScore}`, canvas.width - 10, gridSize * 2);
     ctx.fillText(`Level: ${level}`, canvas.width - 10, gridSize * 3);
+
+    // Cek jika ular akan memakan makanan (jarak dekat)
+    const currentHead = snake[0];
+    mouthOpen = (
+        (currentHead.x + direction.x === food.x && currentHead.y + direction.y === food.y) ||
+        (currentHead.x === food.x && currentHead.y === food.y)
+);
 }
 
 function drawSnakeHead(x, y) {

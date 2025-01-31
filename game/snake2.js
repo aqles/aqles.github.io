@@ -4,10 +4,9 @@ const canvas = document.getElementById('game-area');
 const ctx = canvas.getContext('2d');
 
 // Game Constants (SESUAI SERVER)
-const GRID_SIZE = 20;
-const GRID_CELLS = 30;
-canvas.width = GRID_CELLS * GRID_SIZE;
-canvas.height = GRID_CELLS * GRID_SIZE;
+const GRID_CELLS = 20; // Tetap 20x20 grid
+let GRID_SIZE = Math.min(window.innerWidth, window.innerHeight) / GRID_CELLS; // Ukuran grid menyesuaikan layar
+
 
 // Game Variables
 let snake, direction, food, intervalId;
@@ -58,6 +57,17 @@ function initMultiPlayer(playerName) {
                 break;
         }
     };
+}
+
+//canvas
+function adjustCanvasSize() {
+    const canvas = document.getElementById('game-area');
+    if (!canvas) return; // Biar ga error kalau canvas belum ada
+
+    const size = Math.min(window.innerWidth * 0.8, window.innerHeight * 0.8); // 80% dari ukuran layar
+    canvas.width = size;
+    canvas.height = size;
+    GRID_SIZE = size / GRID_CELLS; // Update ukuran grid biar proporsional
 }
 
 // Game Logic
@@ -157,6 +167,12 @@ document.addEventListener('keydown', (e) => {
 
 // Game Management
 function startGame(selectedMode) {
+    adjustCanvasSize(); // Sesuaikan ukuran grid sebelum mulai game
+    if (selectedMode === 'single') {
+        initSinglePlayer();
+    } else {
+        initMultiPlayer();
+    }
     mode = selectedMode;
     const playerName = document.getElementById('player-name').value;
     

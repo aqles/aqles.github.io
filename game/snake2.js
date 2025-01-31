@@ -1,3 +1,55 @@
+//multiplayer
+const socket = new WebSocket('wss://your-glitch-project.glitch.me'); // Ganti dengan URL WebSocket dari Glitch
+
+let playerId;
+let players = {};
+let food = { x: 300, y: 300 };
+
+// Saat koneksi terbuka, kirim permintaan untuk join game
+socket.onopen = () => {
+    console.log("Connected to WebSocket server");
+    const playerName = prompt("Masukkan nama kamu:");
+    socket.send(JSON.stringify({ type: 'join', name: playerName }));
+};
+
+// Saat menerima pesan dari server
+socket.onmessage = (event) => {
+    let data = JSON.parse(event.data);
+    
+    if (data.type === 'init') {
+        playerId = data.playerId;
+        players = data.players;
+        food = data.food;
+    } else if (data.type === 'update') {
+        players = data.players;
+        food = data.food;
+    } else if (data.type === 'leaderboard') {
+        updateLeaderboard(data.leaderboard);
+    }
+};
+
+// Kirim posisi baru setiap kali pemain bergerak
+document.addEventListener('keydown', (e) => {
+    let newDirection;
+    if (e.key === 'ArrowUp') newDirection = { x: 0, y: -10 };
+    if (e.key === 'ArrowDown') newDirection = { x: 0, y: 10 };
+    if (e.key === 'ArrowLeft') newDirection = { x: -10, y: 0 };
+    if (e.key === 'ArrowRight') newDirection = { x: 10, y: 0 };
+
+    if (newDirection) {
+        socket.send(JSON.stringify({ type: 'move', playerId, direction: newDirection }));
+    }
+});
+
+// Gambar leaderboard
+function updateLeaderboard(leaderboard) {
+    const leaderboardDiv = document.getElementById('leaderboard');
+    leaderboardDiv.innerHTML = "<h3>🏆 Leaderboard 🏆</h3>";
+    leaderboard.forEach((entry, index) => {
+        leaderboardDiv.innerHTML += `<p>${index + 1}. ${entry.name} - ${entry.score}</p>`;
+    });
+}
+
 //teroooss
 const canvas = document.createElement('canvas');
 const ctx = canvas.getContext('2d');

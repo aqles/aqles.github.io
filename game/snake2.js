@@ -47,18 +47,19 @@ function initMultiPlayer(playerName) {
     };
 
     socket.onmessage = (event) => {
-        let data = JSON.parse(event.data);
-        if (data.type === 'init') {
-            playerId = data.playerId;
-            players = data.players;
-            food = data.food;
-        } else if (data.type === 'update') {
-            players = data.players;
-            food = data.food;
-        } else if (data.type === 'leaderboard') {
-            updateLeaderboard(data.leaderboard);
-        }
-    };
+    console.log("Received WebSocket Data:", event.data); // Tambahin log ini buat debug
+    let data = JSON.parse(event.data);
+    if (data.type === 'init') {
+        playerId = data.playerId;
+        players = data.players;
+        food = data.food;
+    } else if (data.type === 'update') {
+        players = data.players;
+        food = data.food;
+    } else if (data.type === 'leaderboard') {
+        updateLeaderboard(data.leaderboard);
+    }
+};
 
     clearInterval(intervalId);
     intervalId = setInterval(gameLoopMulti, speed);
@@ -136,8 +137,9 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowDown') newDirection = { x: 0, y: gridSize };
     if (e.key === 'ArrowLeft') newDirection = { x: -gridSize, y: 0 };
     if (e.key === 'ArrowRight') newDirection = { x: gridSize, y: 0 };
+
     if (newDirection) {
-        if (mode === 'multi' && players[playerId]) {
+        if (mode === 'multi' && playerId) {  // Tambahkan pengecekan playerId
             socket.send(JSON.stringify({ type: 'move', playerId, direction: newDirection }));
         } else {
             direction = newDirection;
@@ -149,9 +151,10 @@ document.addEventListener('keydown', (e) => {
 function startGame(selectedMode) {
     mode = selectedMode;
     document.getElementById('game-area').style.display = 'block';
+    document.getElementById('back-to-menu').style.display = 'block'; // Tampilkan tombol kembali
     document.getElementById('input-area').style.display = 'none';
-    
-    const playerName = document.getElementById('player-name').value || "Guest"; // Ambil nama dari input
+
+    const playerName = document.getElementById('player-name').value || "Guest";
 
     if (mode === 'single') {
         initSinglePlayer();
@@ -159,4 +162,5 @@ function startGame(selectedMode) {
         initMultiPlayer(playerName);
     }
 }
+
 

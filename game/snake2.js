@@ -100,8 +100,8 @@ function gameLoop() {
     if (head.y < 0) head.y = canvas.height - gridSize; // Keluar atas -> masuk bawah
     else if (head.y >= canvas.height) head.y = 0; // Keluar bawah -> masuk atas
 
-    // Cek tabrakan dengan tubuh ular
-    if (snake.some(s => s.x === head.x && s.y === head.y)) {
+    // Cek tabrakan dengan tubuh ular (kecuali kepala)
+    if (snake.slice(1).some(s => s.x === head.x && s.y === head.y)) {
         gameOver();
         return;
     }
@@ -110,7 +110,7 @@ function gameLoop() {
 
     // Cek jika ular memakan makanan
     if (head.x === food.x && head.y === food.y) {
-        // Logika saat makan
+        console.log("Makanan dimakan!"); // Debugging
         handleEating(); // Mainkan suara
         score++;
         updateSpeed();
@@ -133,17 +133,16 @@ function gameLoop() {
     });
 
     // Menggambar makanan
-    // Menggambar makanan
     ctx.fillStyle = currentFoodColor;
-    switch(food.shape) {
+    switch (food.shape) {
         case 'circle':
             ctx.beginPath();
-            ctx.arc(food.x + gridSize/2, food.y + gridSize/2, gridSize/2, 0, Math.PI*2);
+            ctx.arc(food.x + gridSize / 2, food.y + gridSize / 2, gridSize / 2, 0, Math.PI * 2);
             ctx.fill();
             break;
         case 'triangle':
             ctx.beginPath();
-            ctx.moveTo(food.x + gridSize/2, food.y);
+            ctx.moveTo(food.x + gridSize / 2, food.y);
             ctx.lineTo(food.x, food.y + gridSize);
             ctx.lineTo(food.x + gridSize, food.y + gridSize);
             ctx.closePath();
@@ -166,7 +165,7 @@ function gameLoop() {
     mouthOpen = (
         (currentHead.x + direction.x === food.x && currentHead.y + direction.y === food.y) ||
         (currentHead.x === food.x && currentHead.y === food.y)
-);
+    );
 }
 
 function drawSnakeHead(x, y) {

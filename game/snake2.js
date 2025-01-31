@@ -38,13 +38,14 @@ function initSinglePlayer() {
 }
 
 // Init Multiplayer Mode
-function initMultiPlayer() {
+function initMultiPlayer(playerName) {
     setCanvasSize(30, 30);
     document.getElementById('leaderboard').style.display = 'block';
+
     socket.onopen = () => {
-        const playerName = prompt("Masukkan nama kamu:");
         socket.send(JSON.stringify({ type: 'join', name: playerName }));
     };
+
     socket.onmessage = (event) => {
         let data = JSON.parse(event.data);
         if (data.type === 'init') {
@@ -58,9 +59,11 @@ function initMultiPlayer() {
             updateLeaderboard(data.leaderboard);
         }
     };
+
     clearInterval(intervalId);
     intervalId = setInterval(gameLoopMulti, speed);
 }
+
 
 // Bikin posisi makanan
 function generateFood() {
@@ -146,6 +149,14 @@ document.addEventListener('keydown', (e) => {
 function startGame(selectedMode) {
     mode = selectedMode;
     document.getElementById('game-area').style.display = 'block';
-    if (mode === 'single') initSinglePlayer();
-    else initMultiPlayer();
+    document.getElementById('input-area').style.display = 'none';
+    
+    const playerName = document.getElementById('player-name').value || "Guest"; // Ambil nama dari input
+
+    if (mode === 'single') {
+        initSinglePlayer();
+    } else {
+        initMultiPlayer(playerName);
+    }
 }
+

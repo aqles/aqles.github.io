@@ -77,6 +77,10 @@
             margin: 20px auto;
             background: #000;
         }
+        #back-to-menu {
+            display: none;
+            margin-top: 20px;
+        }
         p {
             font-size: 12px;
         }
@@ -103,7 +107,7 @@
     <div id="content">
         <div id="about" style="display: none;">
             <h2>About Us</h2>
-            <p>Game Retro Snake adalah game seru yang dibuat untuk semua pecinta game klasik.</p>
+            <p>Website yang dibuat iseng aja emang lagi pengen hehe.</p>
         </div>
         
         <div id="privacy" style="display: none;">
@@ -126,13 +130,13 @@
                 <button id="start-game-button" onclick="startGame()">🎮 Mulai!</button>
             </div>
             <canvas id="game-area" width="600" height="600"></canvas>
+            <button id="back-to-menu" onclick="backToMenu()">🔙 Kembali ke Menu</button>
             <p id="instruction" style="display: none;">Gunakan arrow keys atau WASD untuk bermain!</p>
         </div>
     </div>
     <div id="leaderboard" style="display: none; background: #222; color: white; padding: 10px; margin-top: 20px;">
-    <h3>🏆 Leaderboard 🏆</h3>
+        <h3>🏆 Leaderboard 🏆</h3>
     </div>
-
     
     <footer>
         &copy; 2025 ednasalam.com - All Rights Reserved
@@ -151,6 +155,12 @@
         function toggleGameMode() {
             let mode = document.getElementById("game-mode").value;
             document.getElementById("start-game-button").setAttribute("onclick", `startGame('${mode}')`);
+        }
+        
+        function backToMenu() {
+            document.getElementById("game-area").style.display = "none";
+            document.getElementById("back-to-menu").style.display = "none";
+            document.getElementById("input-area").style.display = "block";
         }
     </script>
 </body>

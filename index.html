@@ -6,7 +6,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>Game Retro Snake</title>
+    <title>Game Iseng Aja</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
@@ -23,11 +23,19 @@
             padding: 15px;
             box-shadow: 0px 4px 8px #000;
         }
+        header nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
         header nav a {
-            margin: 0 15px;
             text-decoration: none;
             color: #1a1a1a;
             font-weight: bold;
+            padding: 10px;
+            background: #fff;
+            border-radius: 5px;
+            box-shadow: 2px 2px 0px #000;
         }
         #game-container {
             margin-top: 20px;
@@ -73,15 +81,27 @@
 <body>
     <header>
         <nav>
-            <a href="#about">About Us</a>
-            <a href="#privacy">Kebijakan Privasi</a>
+            <a href="#" onclick="showPage('about')">About Us</a>
+            <a href="#" onclick="showPage('privacy')">Kebijakan Privasi</a>
+            <a href="#" onclick="showPage('game')">Game</a>
         </nav>
     </header>
+    
+    <div id="about" style="display: none;">
+        <h2>About Us</h2>
+        <p>Game Retro Snake adalah game seru yang dibuat untuk semua pecinta game klasik.</p>
+    </div>
+    
+    <div id="privacy" style="display: none;">
+        <h2>Kebijakan Privasi</h2>
+        <p>Kami menghormati privasi Anda dan tidak mengumpulkan data pribadi.</p>
+    </div>
+    
     <div id="game-container">
         <h1>Game Retro Snake</h1>
         <div id="input-area">
             <label for="game-mode">Pilih Mode:</label>
-            <select id="game-mode">
+            <select id="game-mode" onchange="toggleGameMode()">
                 <option value="single">Single Player</option>
                 <option value="multi">Multiplayer Online</option>
             </select>
@@ -91,13 +111,40 @@
         <canvas id="game-area" width="600" height="600"></canvas>
         <p id="instruction" style="display: none;">Gunakan arrow keys atau WASD untuk bermain!</p>
     </div>
-    <div id="leaderboard" style="background: #222; color: white; padding: 10px; margin-top: 20px;">
-    <h3>🏆 Leaderboard 🏆</h3>
-    </div>
+    
     <footer>
-        &copy; 2025 ednasalam.com - All Rights Reserved
+        &copy; 2025 Game Retro Snake - All Rights Reserved
     </footer>
+    
     <audio id="eat-sound" src="sound/eat-se.mp3"></audio>
     <script src="game/snake2.js"></script>
+    <script>
+        function showPage(page) {
+            document.getElementById('about').style.display = 'none';
+            document.getElementById('privacy').style.display = 'none';
+            document.getElementById('game-container').style.display = 'none';
+            document.getElementById(page).style.display = 'block';
+        }
+        
+        function toggleGameMode() {
+            let mode = document.getElementById("game-mode").value;
+            let startButton = document.getElementById("start-game-button");
+            if (mode === "single") {
+                startButton.setAttribute("onclick", "startSinglePlayer()");
+            } else {
+                startButton.setAttribute("onclick", "startMultiPlayer()");
+            }
+        }
+        
+        function startSinglePlayer() {
+            document.getElementById("game-area").style.display = "block";
+            initSinglePlayer();
+        }
+        
+        function startMultiPlayer() {
+            document.getElementById("game-area").style.display = "block";
+            initMultiPlayer();
+        }
+    </script>
 </body>
 </html>

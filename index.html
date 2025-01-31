@@ -207,7 +207,7 @@
                         <option value="single">Single Player</option>
                         <option value="multi">Multiplayer</option>
                     </select>
-                    <button onclick="startGame()">🎮 Mulai!</button>
+                    <button onclick="startGame(document.getElementById('game-mode').value)">🎮 Mulai!</button>
                 </div>
                 <canvas id="game-area"></canvas>
                 <button id="back-to-menu" onclick="backToMenu()" style="display: none;">🔙 Kembali</button>
@@ -236,6 +236,8 @@
 
     <audio id="eat-sound" src="sound/eat-se.mp3"></audio>
     <script>
+        let mode;
+
         // Navigation System
         function toggleMenu() {
             document.getElementById('dropdownMenu').classList.toggle('show');
@@ -287,7 +289,7 @@
             canvas.height = size;
 
             // Start game logic
-            initGame(mode, name);
+            startGame(mode);;
             gameActive = true;
         }
 

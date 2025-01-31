@@ -22,6 +22,11 @@
             background: #ffcc00;
             padding: 15px;
             box-shadow: 0px 4px 8px #000;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
         }
         header nav {
             display: flex;
@@ -36,6 +41,10 @@
             background: #fff;
             border-radius: 5px;
             box-shadow: 2px 2px 0px #000;
+            cursor: pointer;
+        }
+        #content {
+            padding-top: 80px;
         }
         #game-container {
             margin-top: 20px;
@@ -70,8 +79,6 @@
         footer {
             background: #ffcc00;
             padding: 10px;
-            position: absolute;
-            bottom: 0;
             width: 100%;
             color: #1a1a1a;
             font-weight: bold;
@@ -81,35 +88,37 @@
 <body>
     <header>
         <nav>
-            <a href="#" onclick="showPage('about')">About Us</a>
-            <a href="#" onclick="showPage('privacy')">Kebijakan Privasi</a>
-            <a href="#" onclick="showPage('game')">Game</a>
+            <a onclick="showPage('about')">About Us</a>
+            <a onclick="showPage('privacy')">Kebijakan Privasi</a>
+            <a onclick="showPage('game-container')">Game</a>
         </nav>
     </header>
     
-    <div id="about" style="display: none;">
-        <h2>About Us</h2>
-        <p>Game Retro Snake adalah game seru yang dibuat untuk semua pecinta game klasik.</p>
-    </div>
-    
-    <div id="privacy" style="display: none;">
-        <h2>Kebijakan Privasi</h2>
-        <p>Kami menghormati privasi Anda dan tidak mengumpulkan data pribadi.</p>
-    </div>
-    
-    <div id="game-container">
-        <h1>Game Retro Snake</h1>
-        <div id="input-area">
-            <label for="game-mode">Pilih Mode:</label>
-            <select id="game-mode" onchange="toggleGameMode()">
-                <option value="single">Single Player</option>
-                <option value="multi">Multiplayer Online</option>
-            </select>
-            <br><br>
-            <button id="start-game-button">🎮 Mulai!</button>
+    <div id="content">
+        <div id="about" style="display: none;">
+            <h2>About Us</h2>
+            <p>Game Retro Snake adalah game seru yang dibuat untuk semua pecinta game klasik.</p>
         </div>
-        <canvas id="game-area" width="600" height="600"></canvas>
-        <p id="instruction" style="display: none;">Gunakan arrow keys atau WASD untuk bermain!</p>
+        
+        <div id="privacy" style="display: none;">
+            <h2>Kebijakan Privasi</h2>
+            <p>Kami menghormati privasi Anda dan tidak mengumpulkan data pribadi.</p>
+        </div>
+        
+        <div id="game-container">
+            <h1>Game Iseng Aja</h1>
+            <div id="input-area">
+                <label for="game-mode">Pilih Mode:</label>
+                <select id="game-mode" onchange="toggleGameMode()">
+                    <option value="single">Single Player</option>
+                    <option value="multi">Multiplayer Online</option>
+                </select>
+                <br><br>
+                <button id="start-game-button">🎮 Mulai!</button>
+            </div>
+            <canvas id="game-area" width="600" height="600"></canvas>
+            <p id="instruction" style="display: none;">Gunakan arrow keys atau WASD untuk bermain!</p>
+        </div>
     </div>
     
     <footer>
@@ -130,20 +139,10 @@
             let mode = document.getElementById("game-mode").value;
             let startButton = document.getElementById("start-game-button");
             if (mode === "single") {
-                startButton.setAttribute("onclick", "startSinglePlayer()");
+                startButton.setAttribute("onclick", "startGame('single')");
             } else {
-                startButton.setAttribute("onclick", "startMultiPlayer()");
+                startButton.setAttribute("onclick", "startGame('multi')");
             }
-        }
-        
-        function startSinglePlayer() {
-            document.getElementById("game-area").style.display = "block";
-            initSinglePlayer();
-        }
-        
-        function startMultiPlayer() {
-            document.getElementById("game-area").style.display = "block";
-            initMultiPlayer();
         }
     </script>
 </body>

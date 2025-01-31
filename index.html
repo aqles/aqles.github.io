@@ -13,10 +13,12 @@
         :root {
             --header-height: 80px;
             --footer-height: 60px;
+            --grid-color: #00ff00;
+            --bg-color: #1a1a1a;
         }
 
         body {
-            background-color: #1a1a1a;
+            background-color: var(--bg-color);
             color: #fff;
             font-family: 'Press Start 2P', cursive;
             margin: 0;
@@ -89,27 +91,50 @@
             margin-top: var(--header-height);
             margin-bottom: var(--footer-height);
             width: 100%;
-            max-width: 1000px;
+            max-width: 1200px;
             margin-left: auto;
             margin-right: auto;
         }
 
-        #game-container {
+        .game-wrapper {
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            gap: 20px;
             justify-content: center;
+            width: 100%;
+        }
+
+        #game-container {
+            flex: 1;
+            max-width: 600px;
         }
 
         #game-area {
             border: 4px solid #fff;
             box-shadow: 5px 5px 0px #000;
             background: #000;
-            width: 90vmin;
-            height: 90vmin;
-            max-width: 600px;
-            max-height: 600px;
-            display: none;
+            width: 100%;
+            aspect-ratio: 1/1;
+        }
+
+        #leaderboard {
+            background: #2a2a2a;
+            padding: 15px;
+            border: 3px solid #ffcc00;
+            min-width: 250px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        #leaderboard h3 {
+            color: #ffcc00;
+            margin: 0 0 15px 0;
+            font-size: 1.1rem;
+        }
+
+        #leaderboard p {
+            font-size: 0.8rem;
+            margin: 8px 0;
+            color: var(--grid-color);
         }
 
         #input-area {
@@ -123,6 +148,9 @@
             margin: 10px 0;
             width: 200px;
             max-width: 80%;
+            background: #000;
+            color: #fff;
+            border: 2px solid #fff;
         }
 
         button {
@@ -135,11 +163,6 @@
             box-shadow: 3px 3px 0px #000;
             margin: 10px;
             transition: all 0.2s;
-        }
-
-        button:hover {
-            transform: translate(2px, 2px);
-            box-shadow: 1px 1px 0px #000;
         }
 
         footer {
@@ -156,46 +179,29 @@
             justify-content: center;
         }
 
-        .page-content {
-            display: none;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .active-page {
-            display: block;
-        }
-
-        #instruction {
-            font-size: 12px;
-            margin-top: 10px;
-        }
-
         @media (max-width: 768px) {
+            .game-wrapper {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            #leaderboard {
+                width: 100%;
+                max-width: 400px;
+                order: -1;
+                margin-bottom: 20px;
+            }
+            
             :root {
                 --header-height: 70px;
                 --footer-height: 50px;
-            }
-            
-            .logo {
-                font-size: 1.2rem;
-            }
-            
-            button {
-                padding: 8px 15px;
-                font-size: 0.8rem;
-            }
-            
-            #game-area {
-                width: 95vmin;
-                height: 95vmin;
             }
         }
     </style>
 </head>
 <body>
     <header>
-        <div class="logo">🐍 GAME ISENG 🎮</div>
+        <div class="logo">🐍 GAME ISENG AJA 🎮</div>
         <div class="menu-container">
             <button class="menu-button" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
             <div class="dropdown-menu" id="dropdownMenu">
@@ -207,31 +213,33 @@
     </header>
 
     <div id="content">
-        <!-- Halaman Game -->
-        <div id="game-container" class="active-page">
-            <h1>Game Iseng Aja</h1>
-            <div id="input-area">
-                <input type="text" id="player-name" placeholder="Nama Kamu" required>
-                <br>
-                <select id="game-mode" onchange="toggleGameMode()">
-                    <option value="single">Single Player</option>
-                    <option value="multi">Multiplayer Online</option>
-                </select>
-                <br>
-                <button onclick="startGame()">🎮 Mulai!</button>
+        <div class="game-wrapper">
+            <div id="game-container">
+                <div id="input-area">
+                    <input type="text" id="player-name" placeholder="Nama Kamu" required>
+                    <br>
+                    <select id="game-mode">
+                        <option value="single">Single Player</option>
+                        <option value="multi">Multiplayer Online</option>
+                    </select>
+                    <br>
+                    <button onclick="startGame()">🎮 Mulai!</button>
+                </div>
+                <canvas id="game-area"></canvas>
+                <button id="back-to-menu" onclick="backToMenu()" style="display: none;">🔙 Kembali ke Menu</button>
+                <p id="instruction">Gunakan arrow keys atau WASD untuk bermain!</p>
             </div>
-            <canvas id="game-area"></canvas>
-            <button id="back-to-menu" onclick="backToMenu()" style="display: none;">🔙 Kembali ke Menu</button>
-            <p id="instruction">Gunakan arrow keys atau WASD untuk bermain!</p>
+            
+            <div id="leaderboard">
+                <h3>🏆 LEADERBOARD 🏆</h3>
+            </div>
         </div>
 
-        <!-- Halaman About -->
         <div id="about" class="page-content">
             <h2>About Us</h2>
             <p>Website yang dibuat iseng aja emang lagi pengen hehe.</p>
         </div>
 
-        <!-- Halaman Privacy -->
         <div id="privacy" class="page-content">
             <h2>Kebijakan Privasi</h2>
             <p>Kami menghormati privasi Anda dan tidak mengumpulkan data pribadi.</p>
@@ -241,12 +249,23 @@
     <footer>
         &copy; 2025 ednasalam.com - All Rights Reserved
     </footer>
+
     <audio id="eat-sound" src="sound/eat-se.mp3"></audio>
-    <script src="game/snake2.js"></script>
     <script>
+        // JS Snake Code Integration
+        const canvas = document.getElementById('game-area');
+        const ctx = canvas.getContext('2d');
         let gameActive = false;
 
-        // Toggle Menu
+        // Responsive Canvas Setup
+        function setCanvasSize() {
+            const gameContainer = document.getElementById('game-container');
+            const size = Math.min(gameContainer.offsetWidth, 600);
+            canvas.width = size;
+            canvas.height = size;
+        }
+
+        // Navigation Functions
         function toggleMenu() {
             document.getElementById('dropdownMenu').classList.toggle('show');
         }
@@ -263,12 +282,9 @@
             });
             document.getElementById(pageId).style.display = 'block';
             toggleMenu();
-            
-            if(pageId === 'game-container' && gameActive) {
-                resumeGame();
-            }
         }
 
+        // Game Control Functions
         function startGame() {
             const nameInput = document.getElementById('player-name');
             if (!nameInput.value.trim()) {
@@ -276,21 +292,9 @@
                 return;
             }
             
-            // Inisialisasi game dari snake2.js
-            const canvas = document.getElementById('game-area');
+            setCanvasSize();
             const gameMode = document.getElementById('game-mode').value;
-            
-            initGame(
-                canvas,
-                nameInput.value,
-                gameMode,
-                document.getElementById('eat-sound')
-            );
-            
-            document.getElementById('input-area').style.display = 'none';
-            document.getElementById('game-area').style.display = 'block';
-            document.getElementById('back-to-menu').style.display = 'block';
-            gameActive = true;
+            startGame(gameMode);
         }
 
         function backToMenu() {
@@ -301,16 +305,12 @@
             resetGame();
         }
 
-        // Handle resize untuk canvas
+        // Window Resize Handler
         window.addEventListener('resize', () => {
-            if(gameActive) {
-                const canvas = document.getElementById('game-area');
-                const size = Math.min(window.innerWidth - 40, 600);
-                canvas.width = size;
-                canvas.height = size;
-                resizeGame();
-            }
+            setCanvasSize();
+            if(gameActive) resizeGame();
         });
     </script>
+    <script src="game/snake2.js"></script>
 </body>
 </html>

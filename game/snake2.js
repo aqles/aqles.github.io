@@ -13,6 +13,26 @@ let mode, playerId, players = {};
 // WebSocket Connection
 const socket = new WebSocket('wss://dorian-horn-mortarboard.glitch.me');
 
+function toggleMenu() {
+    let menu = document.getElementById('dropdownMenu');
+    menu.classList.toggle('show');
+}
+
+// Biar menu tertutup kalau klik di luar
+window.onclick = function(e) {
+    if (!e.target.closest('.menu-container')) {
+        document.getElementById('dropdownMenu').classList.remove('show');
+    }
+};
+
+function backToMenu() {
+    document.getElementById('input-area').style.display = 'block';
+    document.getElementById('game-area').style.display = 'none';
+    document.getElementById('back-to-menu').style.display = 'none';
+    document.getElementById('instruction').style.display = 'none';
+    gameActive = false;
+}
+
 function initSinglePlayer() {
     snake = [{ x: Math.floor(GRID_CELLS/2) * GRID_SIZE, y: Math.floor(GRID_CELLS/2) * GRID_SIZE }];
     direction = { x: 0, y: -GRID_SIZE };

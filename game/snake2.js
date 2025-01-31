@@ -78,7 +78,11 @@ const eatSound = document.getElementById('eat-sound');
 
 // Fungsi untuk ular memakan makanan
 function handleEating() {
-    eatSound.play();
+    if (eatSound.paused) {
+        eatSound.play().catch(error => {
+            console.error("Audio playback failed:", error);
+        });
+    }
 }
 
 function gameLoop() {
@@ -100,8 +104,10 @@ function gameLoop() {
 
     // Cek jika ular akan memakan makanan (jarak dekat)
     const currentHead = snake[0];
-    mouthOpen = (currentHead.x + direction.x === food.x && currentHead.y + direction.y === food.y);
-
+    mouthOpen = (
+        (currentHead.x + direction.x === food.x && currentHead.y + direction.y === food.y) ||
+        (currentHead.x === food.x && currentHead.y === food.y)
+    );
     snake.unshift(head);
 
     if (head.x === food.x && head.y === food.y) {
@@ -124,7 +130,11 @@ function gameLoop() {
     ctx.fillStyle = snakeColor;
     snake.forEach((s, index) => {
         if (index === 0) {
-            drawSnakeHead(s.x, s.y); // Menggambar kepala ular dengan mulut
+            if (mouthOpen) {
+                ctx.fillStyle = 'yellow'; // Warna kepala berubah saat memakan
+            }
+            drawSnakeHead(s.x, s.y);
+            ctx.fillStyle = snakeColor; // Kembalikan warna asli
         } else {
             ctx.fillRect(s.x, s.y, gridSize, gridSize);
         }
@@ -145,20 +155,57 @@ function gameLoop() {
 
 function drawSnakeHead(x, y) {
     ctx.fillStyle = snakeColor;
-    ctx.fillRect(x, y, gridSize, gridSize);
 
+    // Gambar kepala sebagai lingkaran
+    ctx.beginPath();
+    ctx.arc(x + gridSize / 2, y + gridSize / 2, gridSize / 2, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Gambar mata
+    ctx.fillStyle = 'black';
+    const eyeRadius = gridSize / 8;
+    if (direction.x === 0 && direction.y === -gridSize) { // Bergerak ke atas
+        ctx.beginPath();
+        ctx.arc(x + gridSize / 4, y + gridSize / 4, eyeRadius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(x + (gridSize * 3) / 4, y + gridSize / 4, eyeRadius, 0, Math.PI * 2);
+        ctx.fill();
+    } else if (direction.x === 0 && direction.y === gridSize) { // Bergerak ke bawah
+        ctx.beginPath();
+        ctx.arc(x + gridSize / 4, y + (gridSize * 3) / 4, eyeRadius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(x + (gridSize * 3) / 4, y + (gridSize * 3) / 4, eyeRadius, 0, Math.PI * 2);
+        ctx.fill();
+    } else if (direction.x === -gridSize && direction.y === 0) { // Bergerak ke kiri
+        ctx.beginPath();
+        ctx.arc(x + gridSize / 4, y + gridSize / 4, eyeRadius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(x + gridSize / 4, y + (gridSize * 3) / 4, eyeRadius, 0, Math.PI * 2);
+        ctx.fill();
+    } else if (direction.x === gridSize && direction.y === 0) { // Bergerak ke kanan
+        ctx.beginPath();
+        ctx.arc(x + (gridSize * 3) / 4, y + gridSize / 4, eyeRadius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(x + (gridSize * 3) / 4, y + (gridSize * 3) / 4, eyeRadius, 0, Math.PI * 2);
+        ctx.fill();
+    }
+
+    // Gambar mulut jika terbuka
     if (mouthOpen) {
         ctx.fillStyle = 'black';
         const mouthSize = gridSize / 4;
-
         if (direction.y === -gridSize) { // Bergerak ke atas
-            ctx.fillRect(x + gridSize/2 - mouthSize/2, y, mouthSize, mouthSize/2);
+            ctx.fillRect(x + gridSize / 2 - mouthSize / 2, y, mouthSize, mouthSize / 2);
         } else if (direction.y === gridSize) { // Bergerak ke bawah
-            ctx.fillRect(x + gridSize/2 - mouthSize/2, y + gridSize - mouthSize/2, mouthSize, mouthSize/2);
+            ctx.fillRect(x + gridSize / 2 - mouthSize / 2, y + gridSize - mouthSize / 2, mouthSize, mouthSize / 2);
         } else if (direction.x === -gridSize) { // Bergerak ke kiri
-            ctx.fillRect(x, y + gridSize/2 - mouthSize/2, mouthSize/2, mouthSize);
+            ctx.fillRect(x, y + gridSize / 2 - mouthSize / 2, mouthSize / 2, mouthSize);
         } else if (direction.x === gridSize) { // Bergerak ke kanan
-            ctx.fillRect(x + gridSize - mouthSize/2, y + gridSize/2 - mouthSize/2, mouthSize/2, mouthSize);
+            ctx.fillRect(x + gridSize - mouthSize / 2, y + gridSize / 2 - mouthSize / 2, mouthSize / 2, mouthSize);
         }
     }
 }

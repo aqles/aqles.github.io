@@ -114,17 +114,19 @@ function gameLoop() {
         handleEating(); // Mainkan suara
         score++;
         updateSpeed();
+        snakeColors.unshift(currentFoodColor);
         food = generateFood();
     } else {
         snake.pop(); // Hanya kurangi ekor jika tidak makan
+        snakeColors.pop();
     }
 
     // Gambar ulang layar
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Menggambar ular
-    ctx.fillStyle = snakeColor;
     snake.forEach((s, index) => {
+        ctx.fillStyle = snakeColors[index]; // Gunakan warna dari array snakeColors
         if (index === 0) {
             drawSnakeHead(s.x, s.y); // Menggambar kepala ular dengan mulut
         } else {

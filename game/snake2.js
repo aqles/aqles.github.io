@@ -48,9 +48,11 @@ function initGame(widthGrids, heightGrids) {
 
 function generateFood() {
     currentFoodColor = getRandomColor();
+    const shapes = ['circle', 'square', 'triangle']; // Tambahkan bentuk lain jika ingin
     return {
         x: Math.floor(Math.random() * numCellsX) * gridSize,
-        y: Math.floor(Math.random() * numCellsY) * gridSize
+        y: Math.floor(Math.random() * numCellsY) * gridSize,
+        shape: shapes[Math.floor(Math.random() * shapes.length)] // Bentuk acak
     };
 }
 
@@ -108,17 +110,13 @@ function gameLoop() {
 
     // Cek jika ular memakan makanan
     if (head.x === food.x && head.y === food.y) {
+        // Logika saat makan
+        handleEating(); // Mainkan suara
         score++;
         updateSpeed();
-        if (score > highScore) {
-            highScore = score;
-            localStorage.setItem('highScore', highScore);
-        }
-        snakeColor = currentFoodColor; // Ubah warna ular sesuai dengan makanan yang dimakan
         food = generateFood();
-        mouthOpen = false; // Mulut tertutup setelah makan
     } else {
-        snake.pop(); // Hanya buang ekor jika tidak makan
+        snake.pop(); // Hanya kurangi ekor jika tidak makan
     }
 
     // Gambar ulang layar
@@ -135,8 +133,25 @@ function gameLoop() {
     });
 
     // Menggambar makanan
+    // Menggambar makanan
     ctx.fillStyle = currentFoodColor;
-    ctx.fillRect(food.x, food.y, gridSize, gridSize);
+    switch(food.shape) {
+        case 'circle':
+            ctx.beginPath();
+            ctx.arc(food.x + gridSize/2, food.y + gridSize/2, gridSize/2, 0, Math.PI*2);
+            ctx.fill();
+            break;
+        case 'triangle':
+            ctx.beginPath();
+            ctx.moveTo(food.x + gridSize/2, food.y);
+            ctx.lineTo(food.x, food.y + gridSize);
+            ctx.lineTo(food.x + gridSize, food.y + gridSize);
+            ctx.closePath();
+            ctx.fill();
+            break;
+        default: // square
+            ctx.fillRect(food.x, food.y, gridSize, gridSize);
+    }
 
     // Menampilkan skor, high score, dan level di kanan atas
     ctx.fillStyle = 'white';

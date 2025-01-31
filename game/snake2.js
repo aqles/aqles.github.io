@@ -3,7 +3,7 @@ const canvas = document.createElement('canvas');
 const ctx = canvas.getContext('2d');
 document.getElementById('game-area').appendChild(canvas);
 
-let snake, direction, food, intervalId;
+let snake, direction, food, intervalId, snakeColors;
 let score = 0;
 let highScore = localStorage.getItem('highScore') || 0;
 let numCellsX, numCellsY;
@@ -37,6 +37,7 @@ function initGame(widthGrids, heightGrids) {
     speed = 200;
 
     snakeColor = '#FFFFFF'; // Warna default ular
+    snakeColors = [snakeColor];
     mouthOpen = false; // Mulut tertutup pada awal permainan
     hideGameOverPopup();
 
@@ -109,15 +110,18 @@ function gameLoop() {
     snake.unshift(head);
 
     // Cek jika ular memakan makanan
+    let newColor = (head.x === food.x && head.y === food.y) 
+        ? currentFoodColor 
+        : snakeColors[0];
+    snakeColors.unshift(newColor);
+
     if (head.x === food.x && head.y === food.y) {
-        console.log("Makanan dimakan!"); // Debugging
-        handleEating(); // Mainkan suara
+        handleEating();
         score++;
         updateSpeed();
-        snakeColors.unshift(currentFoodColor);
         food = generateFood();
     } else {
-        snake.pop(); // Hanya kurangi ekor jika tidak makan
+        snake.pop();
         snakeColors.pop();
     }
 
@@ -171,7 +175,7 @@ function gameLoop() {
 }
 
 function drawSnakeHead(x, y) {
-    ctx.fillStyle = snakeColor;
+    ctx.fillStyle = snakeColors[0];
 
     // Gambar kepala sebagai lingkaran
     ctx.beginPath();
@@ -228,6 +232,10 @@ function drawSnakeHead(x, y) {
 }
 
 function gameOver() {
+     if (score > highScore) {
+        highScore = score;
+        localStorage.setItem('highScore', highScore);
+    }
     clearInterval(intervalId);
     showGameOverPopup();
 }

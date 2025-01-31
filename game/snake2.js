@@ -10,7 +10,7 @@ let numCellsX, numCellsY, gridSize, speed = 200;
 let mode;
 
 // Multiplayer Variables
-const socket = new WebSocket('wss://your-glitch-project.glitch.me');
+const socket = new WebSocket('wss://dorian-horn-mortarboard.glitch.me');
 let playerId;
 let players = {};
 

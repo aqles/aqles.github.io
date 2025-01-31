@@ -6,25 +6,95 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>Game Iseng</title>
+    <title>Game Retro Snake</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: #fff;
+            font-family: 'Press Start 2P', cursive;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background: #ffcc00;
+            padding: 15px;
+            box-shadow: 0px 4px 8px #000;
+        }
+        header nav a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: #1a1a1a;
+            font-weight: bold;
+        }
+        #game-container {
+            margin-top: 20px;
+        }
+        h1 {
+            color: #ffcc00;
+            text-shadow: 3px 3px 0px #000;
+        }
+        button {
+            font-family: 'Press Start 2P', cursive;
+            background: #ffcc00;
+            color: #1a1a1a;
+            border: 3px solid white;
+            padding: 10px;
+            cursor: pointer;
+            box-shadow: 3px 3px 0px #000;
+            margin: 10px;
+        }
+        button:hover {
+            background: #ffaa00;
+        }
+        #game-area {
+            display: none;
+            border: 5px solid #fff;
+            box-shadow: 5px 5px 0px #000;
+            margin: 20px auto;
+            background: #000;
+        }
+        p {
+            font-size: 12px;
+        }
+        footer {
+            background: #ffcc00;
+            padding: 10px;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            color: #1a1a1a;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
+    <header>
+        <nav>
+            <a href="#about">About Us</a>
+            <a href="#privacy">Kebijakan Privasi</a>
+        </nav>
+    </header>
     <div id="game-container">
-        <h1>Biar Gak Bosen!</h1>
+        <h1>Game Retro Snake</h1>
         <div id="input-area">
-            <label for="width-grid">Lebar (in grids):</label>
-            <input type="number" id="width-grid" min="10" max="100" value="30">
-            <label for="height-grid">Tinggi (in grids):</label>
-            <input type="number" id="height-grid" min="10" max="100" value="30">
-            <button id="start-game-button">Mari Mulai!</button>
+            <label for="game-mode">Pilih Mode:</label>
+            <select id="game-mode">
+                <option value="single">Single Player</option>
+                <option value="multi">Multiplayer Online</option>
+            </select>
+            <br><br>
+            <button id="start-game-button">🎮 Mulai!</button>
         </div>
-        <div id="game-area" style="display: none;"></div>
-        <p id="instruction" style="display: none;">Kalau pakai PC pakai arrow aja ya.</p>
+        <canvas id="game-area" width="600" height="600"></canvas>
+        <p id="instruction" style="display: none;">Gunakan arrow keys atau WASD untuk bermain!</p>
     </div>
+    <footer>
+        &copy; 2025 ednasalam.com - All Rights Reserved
+    </footer>
     <audio id="eat-sound" src="sound/eat-se.mp3"></audio>
-
-
     <script src="game/snake2.js"></script>
 </body>
 </html>

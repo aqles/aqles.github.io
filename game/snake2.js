@@ -99,7 +99,8 @@ function gameLoop() {
     }
 
     // Cek jika ular akan memakan makanan (jarak dekat)
-    mouthOpen = (Math.abs(head.x - food.x) <= gridSize && Math.abs(head.y - food.y) <= gridSize);
+    const currentHead = snake[0];
+    mouthOpen = (currentHead.x + direction.x === food.x && currentHead.y + direction.y === food.y);
 
     snake.unshift(head);
 
@@ -146,11 +147,19 @@ function drawSnakeHead(x, y) {
     ctx.fillStyle = snakeColor;
     ctx.fillRect(x, y, gridSize, gridSize);
 
-    // Menggambar mulut (buka/tutup)
     if (mouthOpen) {
         ctx.fillStyle = 'black';
         const mouthSize = gridSize / 4;
-        ctx.fillRect(x + gridSize / 2 - mouthSize / 2, y + gridSize / 2, mouthSize, mouthSize);
+
+        if (direction.y === -gridSize) { // Bergerak ke atas
+            ctx.fillRect(x + gridSize/2 - mouthSize/2, y, mouthSize, mouthSize/2);
+        } else if (direction.y === gridSize) { // Bergerak ke bawah
+            ctx.fillRect(x + gridSize/2 - mouthSize/2, y + gridSize - mouthSize/2, mouthSize, mouthSize/2);
+        } else if (direction.x === -gridSize) { // Bergerak ke kiri
+            ctx.fillRect(x, y + gridSize/2 - mouthSize/2, mouthSize/2, mouthSize);
+        } else if (direction.x === gridSize) { // Bergerak ke kanan
+            ctx.fillRect(x + gridSize - mouthSize/2, y + gridSize/2 - mouthSize/2, mouthSize/2, mouthSize);
+        }
     }
 }
 

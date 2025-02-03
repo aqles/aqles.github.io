@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const ctx = canvas.getContext('2d');
     const GRID_CELLS = 20;
     let GRID_SIZE = Math.min(window.innerWidth, window.innerHeight) / GRID_CELLS;
-    let snake = [{ x: 10, y: 10 }];
+    let snake = [{ x: 10, y: 10, color: '#00FF00' }];
     let direction = "RIGHT";
     let food = generateFood();
     let gameInterval;
@@ -11,24 +11,23 @@ document.addEventListener("DOMContentLoaded", function () {
     let highScore = localStorage.getItem('highScore') || 0;
     let level = 1;
     let playerName = "Player";
-    let mode = 'single';
     let gameActive = false;
-    
-    // WebSocket Connection
-    const socket = new WebSocket('wss://dorian-horn-mortarboard.glitch.me');
-    let playerId = null;
-    let players = {};
 
     // UI Elements
     const scoreDisplay = document.createElement("div");
-    scoreDisplay.style.position = "fixed";
-    scoreDisplay.style.top = "10px";
-    scoreDisplay.style.right = "10px";
-    scoreDisplay.style.color = "#fff";
-    scoreDisplay.style.fontFamily = "'Press Start 2P', cursive";
+    scoreDisplay.style.cssText = `
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        color: #fff;
+        font-family: 'Press Start 2P', cursive;
+        background: rgba(0, 0, 0, 0.7);
+        padding: 15px;
+        border-radius: 10px;
+        border: 2px solid #fff;
+    `;
     document.body.appendChild(scoreDisplay);
 
-    // Inisialisasi ukuran canvas
     function adjustCanvasSize() {
         const size = Math.min(window.innerWidth * 0.8, window.innerHeight * 0.8);
         canvas.width = size;
@@ -38,13 +37,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function generateFood() {
         return {
-            x: Math.floor(Math.random() * (canvas.width / GRID_SIZE)),
-            y: Math.floor(Math.random() * (canvas.height / GRID_SIZE))
+            x: Math.floor(Math.random() * GRID_CELLS),
+            y: Math.floor(Math.random() * GRID_CELLS),
+            color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+            shape: ['circle', 'square', 'triangle'][Math.floor(Math.random() * 3)]
         };
     }
 
-    function startGame(selectedMode) {
-        mode = selectedMode;
+    function startGame() {
         playerName = document.getElementById('player-name').value || "Player";
         document.getElementById('game-area').style.display = 'block';
         document.getElementById('input-area').style.display = 'none';
@@ -53,17 +53,11 @@ document.addEventListener("DOMContentLoaded", function () {
         
         adjustCanvasSize();
         resetGame();
-
-        if (mode === 'single') {
-            startGameLoop(200);
-        } else {
-            initMultiPlayer();
-            startGameLoop(50);
-        }
+        startGameLoop(200);
     }
 
     function resetGame() {
-        snake = [{ x: 10, y: 10 }];
+        snake = [{ x: 10, y: 10, color: '#00FF00' }];
         direction = "RIGHT";
         food = generateFood();
         score = 0;
@@ -73,82 +67,112 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function updateScoreDisplay() {
-        scoreDisplay.textContent = `${playerName} | Score: ${score} | Level: ${level}`;
-    }
-
-    function initMultiPlayer() {
-        document.getElementById('leaderboard').style.display = 'block';
-        socket.onopen = () => {
-            socket.send(JSON.stringify({ 
-                type: 'join', 
-                name: playerName,
-                position: snake[0]
-            }));
-        };
-        
-        socket.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-            switch(data.type) {
-                case 'init':
-                    playerId = data.playerId;
-                    players = data.players;
-                    food = data.food;
-                    break;
-                case 'update':
-                    players = data.players;
-                    food = data.food;
-                    break;
-                case 'leaderboard':
-                    updateLeaderboard(data.leaderboard);
-                    break;
-            }
-        };
+        scoreDisplay.innerHTML = `
+            ${playerName}<br>
+            Score: ${score}<br>
+            Level: ${level}
+        `;
     }
 
     function updateGame() {
         if (!gameActive) return;
-
-        const head = { ...snake[0] };
+    
+        const head = { ...snake[0], color: snake[0].color };
         switch (direction) {
             case "UP": head.y--; break;
             case "DOWN": head.y++; break;
             case "LEFT": head.x--; break;
             case "RIGHT": head.x++; break;
         }
-
+    
         // Collision detection
         if (head.x < 0 || head.y < 0 || 
-            head.x >= canvas.width/GRID_SIZE || 
-            head.y >= canvas.height/GRID_SIZE ||
+            head.x >= GRID_CELLS || 
+            head.y >= GRID_CELLS ||
             snake.some(segment => segment.x === head.x && segment.y === head.y)) {
             gameOver();
             return;
         }
-
-        snake.unshift(head);
+    
+        // Add new head with food color if eating
         if (head.x === food.x && head.y === food.y) {
+            // Play eat sound
+            const eatSound = document.getElementById('eat-sound');
+            eatSound.play();
+            
             score += 10;
-            if (score % 50 === 0) level++;
+            if (score % 20 === 0) level++;
+            head.color = food.color;
             food = generateFood();
         } else {
             snake.pop();
         }
-
+    
+        snake.unshift(head);
         updateScoreDisplay();
         drawGame();
     }
 
     function drawGame() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
+        ctx.fillStyle = '#000';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
         // Draw food
-        ctx.fillStyle = "red";
-        ctx.fillRect(food.x * GRID_SIZE, food.y * GRID_SIZE, GRID_SIZE-2, GRID_SIZE-2);
+        ctx.fillStyle = food.color;
+        const foodSize = GRID_SIZE - 2;
+        const foodX = food.x * GRID_SIZE + GRID_SIZE/2;
+        const foodY = food.y * GRID_SIZE + GRID_SIZE/2;
         
+        switch(food.shape) {
+            case 'circle':
+                ctx.beginPath();
+                ctx.arc(foodX, foodY, foodSize/2, 0, Math.PI * 2);
+                ctx.fill();
+                break;
+            case 'square':
+                ctx.fillRect(food.x * GRID_SIZE +1, food.y * GRID_SIZE +1, foodSize, foodSize);
+                break;
+            case 'triangle':
+                ctx.beginPath();
+                ctx.moveTo(foodX, foodY - foodSize/2);
+                ctx.lineTo(foodX - foodSize/2, foodY + foodSize/2);
+                ctx.lineTo(foodX + foodSize/2, foodY + foodSize/2);
+                ctx.closePath();
+                ctx.fill();
+                break;
+        }
+
         // Draw snake
-        ctx.fillStyle = "lime";
-        snake.forEach(segment => {
-            ctx.fillRect(segment.x * GRID_SIZE, segment.y * GRID_SIZE, GRID_SIZE-2, GRID_SIZE-2);
+        snake.forEach((segment, index) => {
+            ctx.fillStyle = segment.color;
+            const size = GRID_SIZE - 2;
+            const x = segment.x * GRID_SIZE + 1;
+            const y = segment.y * GRID_SIZE + 1;
+            
+            if (index === 0) { // Draw head
+                // Head shape
+                ctx.beginPath();
+                ctx.arc(x + size/2, y + size/2, size/2, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Eyes
+                ctx.fillStyle = '#fff';
+                const eyeSize = size/8;
+                const eyePositions = {
+                    'RIGHT': [{x: x + size/1.5, y: y + size/3}, {x: x + size/1.5, y: y + size/1.5}],
+                    'LEFT': [{x: x + size/3, y: y + size/3}, {x: x + size/3, y: y + size/1.5}],
+                    'UP': [{x: x + size/3, y: y + size/3}, {x: x + size/1.5, y: y + size/3}],
+                    'DOWN': [{x: x + size/3, y: y + size/1.5}, {x: x + size/1.5, y: y + size/1.5}]
+                };
+                
+                eyePositions[direction].forEach(eye => {
+                    ctx.beginPath();
+                    ctx.arc(eye.x, eye.y, eyeSize, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+            } else { // Draw body
+                ctx.fillRect(x, y, size, size);
+            }
         });
     }
 
@@ -165,70 +189,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function startGameLoop(speed) {
         clearInterval(gameInterval);
-        gameInterval = setInterval(mode === 'single' ? updateGame : updateMultiplayerGame, speed);
+        gameInterval = setInterval(updateGame, 200 - (level-1)*10);
     }
-
-    // Multiplayer functions
-    function updateMultiplayerGame() {
-        if (!players[playerId]) return;
-        drawMultiplayerGame();
-    }
-
-    function drawMultiplayerGame() {
-        ctx.fillStyle = '#000';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        
-        // Draw food
-        ctx.fillStyle = '#ff0000';
-        ctx.fillRect(food.x, food.y, GRID_SIZE-2, GRID_SIZE-2);
-        
-        // Draw players
-        Object.values(players).forEach(player => {
-            ctx.fillStyle = player.id === playerId ? '#00ff00' : '#0000ff';
-            ctx.fillRect(player.x, player.y, GRID_SIZE-2, GRID_SIZE-2);
-        });
-    }
-
-    // Event listeners
-    document.addEventListener('keydown', (e) => {
-        if (!gameActive) return;
-        
-        const newDirection = {
-            'ArrowUp': 'UP',
-            'ArrowDown': 'DOWN',
-            'ArrowLeft': 'LEFT',
-            'ArrowRight': 'RIGHT',
-            'w': 'UP',
-            's': 'DOWN',
-            'a': 'LEFT',
-            'd': 'RIGHT'
-        }[e.key];
-
-        if (newDirection) {
-            if (mode === 'multi') {
-                socket.send(JSON.stringify({
-                    type: 'move',
-                    direction: newDirection,
-                    playerId
-                }));
-            } else {
-                // Prevent 180-degree turn
-                if (
-                    (direction === 'UP' && newDirection === 'DOWN') ||
-                    (direction === 'DOWN' && newDirection === 'UP') ||
-                    (direction === 'LEFT' && newDirection === 'RIGHT') ||
-                    (direction === 'RIGHT' && newDirection === 'LEFT')
-                ) return;
-                
-                direction = newDirection;
-            }
-        }
-    });
-
-    window.addEventListener('resize', () => {
-        adjustCanvasSize();
-        drawGame();
-    });
 
     // Mobile controls
     const joystick = document.createElement("div");
@@ -245,8 +207,9 @@ document.addEventListener("DOMContentLoaded", function () {
     `;
     document.body.appendChild(joystick);
 
+    // Touch controls
     if ('ontouchstart' in window) {
-        joystick.style.display = 'flex';
+        joystick.style.display = 'block';
         let touchStart = null;
 
         joystick.addEventListener('touchstart', (e) => {
@@ -272,7 +235,40 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Expose function to global scope untuk HTML onclick
+    // Keyboard controls
+    document.addEventListener('keydown', (e) => {
+        if (!gameActive) return;
+        
+        const newDirection = {
+            'ArrowUp': 'UP',
+            'ArrowDown': 'DOWN',
+            'ArrowLeft': 'LEFT',
+            'ArrowRight': 'RIGHT',
+            'w': 'UP',
+            's': 'DOWN',
+            'a': 'LEFT',
+            'd': 'RIGHT'
+        }[e.key];
+
+        if (newDirection) {
+            const oppositeDirections = {
+                'UP': 'DOWN',
+                'DOWN': 'UP',
+                'LEFT': 'RIGHT',
+                'RIGHT': 'LEFT'
+            };
+            
+            if (direction !== oppositeDirections[newDirection]) {
+                direction = newDirection;
+            }
+        }
+    });
+
+    window.addEventListener('resize', () => {
+        adjustCanvasSize();
+        drawGame();
+    });
+
     window.startGame = startGame;
     window.backToMenu = backToMenu;
 });

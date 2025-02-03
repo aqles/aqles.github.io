@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Iseng Aja</title>
+    <title>Game Iseng</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
@@ -17,7 +17,7 @@
             overflow-x: hidden;
         }
 
-        /* Header Retro */
+        /* Header */
         header {
             width: 100%;
             padding: 0.5rem 1rem;
@@ -66,6 +66,10 @@
             z-index: 1001;
         }
 
+        .dropdown-menu.show {
+            display: block;
+        }
+
         .dropdown-menu a {
             color: #00ff00;
             padding: 0.8rem;
@@ -78,9 +82,6 @@
         .dropdown-menu a:hover {
             background: #00ff0011;
         }
-        
-        .dropdown-menu.show {
-    display: block;
 
         /* Main Content */
         #content {
@@ -230,9 +231,9 @@
         <div class="menu-container">
             <button class="menu-button" onclick="toggleMenu()">☰</button>
             <div class="dropdown-menu" id="dropdownMenu">
-                <a onclick="showPage('game-container')">🕹️ MAIN GAME</a>
-                <a onclick="showPage('about')">👾 TENTANG</a>
-                <a onclick="showPage('privacy')">🔒 PRIVASI</a>
+                <a onclick="showPage('game-container')">🕹️ Main Game</a>
+                <a onclick="showPage('about')">👾 Tentang</a>
+                <a onclick="showPage('privacy')">🔒 Privasi</a>
             </div>
         </div>
     </header>
@@ -293,13 +294,13 @@
 
         function toggleMenu() {
             const menu = document.getElementById('dropdownMenu');
-            menu.classList.toggle('show'); // Toggle class show
+            menu.classList.toggle('show');
         }
 
         function showPage(pageId) {
             document.querySelectorAll('.page-content').forEach(el => el.style.display = 'none');
             document.getElementById(pageId).style.display = 'block';
-            if(pageId === 'game-container') resetGameUI();
+            if (pageId === 'game-container') resetGameUI();
             toggleMenu();
         }
 
@@ -320,14 +321,12 @@
             document.getElementById('control-panel').style.display = panelState;
         });
 
+        // Tutup dropdown saat klik di luar
         document.addEventListener('click', (e) => {
-            if(!e.target.closest('.menu-container')) {
-                document.getElementById('dropdownMenu').classList.remove('show');
-            }
             const menu = document.getElementById('dropdownMenu');
             const menuButton = document.querySelector('.menu-button');
             if (!menu.contains(e.target) && !menuButton.contains(e.target)) {
-            menu.classList.remove('show');
+                menu.classList.remove('show');
             }
         });
     </script>

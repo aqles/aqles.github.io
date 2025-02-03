@@ -6,7 +6,87 @@
     <title>Game Iseng Aja</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Style CSS */
+        body {
+            margin: 0;
+            background-color: #1a1a1a;
+            color: white;
+            font-family: 'Press Start 2P', cursive;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        #game-area {
+            border: 3px solid #fff;
+            border-radius: 10px;
+            background: #000;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            background-color: #333;
+            padding: 10px;
+            right: 10px;
+            top: 50px;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        #input-area {
+            text-align: center;
+            padding: 20px;
+        }
+
+        input, button {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+        }
+
+        button {
+            background: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+
+        #instruction {
+            color: white;
+            position: fixed;
+            bottom: 20px;
+            text-align: center;
+            display: none;
+        }
+
+        .joystick {
+            position: fixed;
+            bottom: 50px;
+            left: 50px;
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            display: none;
+            touch-action: none;
+        }
+
+        .joystick.show {
+            display: block;
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -26,28 +106,25 @@
             <div id="game-container">
                 <div id="input-area">
                     <input type="text" id="player-name" placeholder="Nama Kamu" required>
-                    <select id="game-mode">
-                        <option value="single">Single Player</option>
-                        <option value="multi">Multiplayer</option>
-                    </select>
-                    <button onclick="startGame(document.getElementById('game-mode').value)">🎮 Mulai!</button>
+                    <button onclick="startGame()">🎮 Mulai!</button>
                 </div>
                 <canvas id="game-area"></canvas>
                 <button id="back-to-menu" onclick="backToMenu()" style="display: none;">🔙 Kembali</button>
-                <p id="instruction" style="display: none;">Gunakan arrow keys/WASD!</p>
-            </div>
-            
-            <div id="leaderboard">
-                <h3>🏆 LEADERBOARD 🏆</h3>
+                <p id="instruction" style="display: none;">
+                    Desktop: Gunakan arrow keys/WASD!<br>
+                    Mobile: Gunakan joystick di kiri bawah!<br>
+                    🔉 Nyalaikan sound untuk efek suara!
+                </p>
+                <div class="joystick" id="joystick"></div>
             </div>
         </div>
 
-        <div id="about" class="page-content">
+        <div id="about" class="page-content" style="display: none;">
             <h2>About Us</h2>
             <p>Website ini dibuat untuk iseng-iseng aja!</p>
         </div>
 
-        <div id="privacy" class="page-content">
+        <div id="privacy" class="page-content" style="display: none;">
             <h2>Kebijakan Privasi</h2>
             <p>Kami tidak mengumpulkan data pribadi pengguna.</p>
         </div>
@@ -56,8 +133,29 @@
     <footer>
         &copy; 2025 ednasalam.com
     </footer>
-
     <audio id="eat-sound" src="sound/eat-se.mp3"></audio>
-    <script src="/game/snake2.js" defer></script>
+    <script>
+        // Fungsi global untuk integrasi dengan HTML
+        function toggleMenu() {
+            const menu = document.getElementById('dropdownMenu');
+            menu.classList.toggle('show');
+        }
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page-content').forEach(el => {
+                el.style.display = 'none';
+            });
+            document.getElementById(pageId).style.display = 'block';
+            toggleMenu();
+        }
+
+        // Handle klik di luar menu
+        window.onclick = function(e) {
+            if (!e.target.closest('.menu-container')) {
+                document.getElementById('dropdownMenu').classList.remove('show');
+            }
+        };
+    </script>
+    <script src="game/snake2.js"></script>
 </body>
 </html>

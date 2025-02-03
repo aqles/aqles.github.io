@@ -7,21 +7,20 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
-        /* Style CSS */
+        /* Base Styles */
         body {
             margin: 0;
             background-color: #1a1a1a;
-            color: white;
+            color: #00ff00;
             font-family: 'Press Start 2P', cursive;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             min-height: 100vh;
+            overflow-x: hidden;
         }
-        
+
+        /* Header Retro */
         header {
             width: 100%;
-            padding: 1rem;
+            padding: 0.5rem 1rem;
             background: #000;
             border-bottom: 3px solid #00ff00;
             display: flex;
@@ -33,17 +32,17 @@
         }
 
         .logo {
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             text-shadow: 2px 2px #ff0000;
-            padding: 0.5rem 1rem;
-            background: #000;
+            padding: 0.5rem;
             border: 2px solid #00ff00;
             margin-left: 1rem;
+            white-space: nowrap;
         }
 
         .menu-container {
             position: relative;
-            margin-right: 2rem;
+            margin-right: 1rem;
         }
 
         .menu-button {
@@ -53,34 +52,130 @@
             padding: 0.5rem;
             cursor: pointer;
             transition: all 0.3s;
-        }
-
-        .menu-button:hover {
-            background: #00ff0022;
+            font-size: 1rem;
         }
 
         .dropdown-menu {
             position: absolute;
             right: 0;
+            top: 100%;
             background: #000;
             border: 2px solid #00ff00;
-            min-width: 200px;
+            min-width: 180px;
             display: none;
+            z-index: 1001;
         }
 
         .dropdown-menu a {
             color: #00ff00;
-            padding: 1rem;
+            padding: 0.8rem;
             display: block;
             text-decoration: none;
             border-bottom: 1px solid #00ff0033;
+            font-size: 0.7rem;
         }
 
         .dropdown-menu a:hover {
             background: #00ff0011;
         }
+        
+        .dropdown-menu.show {
+    display: block;
 
-        /* Game Over Retro Style */
+        /* Main Content */
+        #content {
+            margin-top: 70px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Game Container */
+        #game-container {
+            position: relative;
+            margin: 0 auto;
+        }
+
+        #game-area {
+            border: 3px solid #00ff00;
+            background: #000;
+        }
+
+        /* Input Area */
+        #input-area {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input {
+            background: #000;
+            border: 2px solid #00ff00;
+            color: #00ff00;
+            padding: 8px;
+            margin: 10px;
+            font-family: 'Press Start 2P';
+            font-size: 0.8rem;
+            width: 200px;
+        }
+
+        button {
+            background: #000;
+            border: 2px solid #00ff00;
+            color: #00ff00;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-family: 'Press Start 2P';
+            transition: all 0.3s;
+            font-size: 0.8rem;
+        }
+
+        button:hover {
+            background: #00ff00;
+            color: #000;
+        }
+
+        /* Kontrol & Instruksi */
+        #control-panel {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: #000000aa;
+            padding: 0;
+            border: 2px solid #00ff00;
+            backdrop-filter: blur(5px);
+            z-index: 999;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            border-bottom: 1px solid #00ff00;
+        }
+
+        .close-btn {
+            background: #ff0000;
+            border: 1px solid #fff;
+            color: white;
+            padding: 0.2rem 0.5rem;
+            cursor: pointer;
+            font-family: 'Press Start 2P';
+            font-size: 0.6rem;
+        }
+
+        .close-btn:hover {
+            background: #ff4444;
+        }
+
+        #instruction {
+            padding: 1rem;
+            font-size: 0.7rem;
+        }
+
+        /* Game Over Screen */
         #game-over {
             display: none;
             position: fixed;
@@ -94,26 +189,7 @@
             z-index: 1001;
         }
 
-        #game-over h1 {
-            color: #ff0000;
-            font-size: 2.5rem;
-            text-shadow: 3px 3px #000;
-            margin: 0 0 1rem 0;
-        }
-
-        /* Instruksi */
-        #instruction {
-            position: fixed;
-            top: 100px;
-            right: 20px;
-            background: #000000aa;
-            padding: 1rem;
-            border: 2px solid #00ff00;
-            max-width: 250px;
-            backdrop-filter: blur(5px);
-        }
-
-        /* Efek CRT Retro */
+        /* Efek CRT */
         .crt-effect {
             position: fixed;
             top: 0;
@@ -121,92 +197,139 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
-                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            z-index: 999;
-            background-size: 100% 2px, 3px 100%;
-            animation: scanline 6s linear infinite;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.15) 0px,
+                rgba(0, 0, 0, 0.15) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            animation: scanline 1s linear infinite;
+            opacity: 0.5;
+            z-index: 998;
         }
 
         @keyframes scanline {
-            from { background-position: 0 0; }
-            to { background-position: 0 100%; }
+            from { transform: translateY(-100%); }
+            to { transform: translateY(100%); }
+        }
+
+        /* Responsif */
+        @media (max-width: 600px) {
+            .logo { font-size: 0.9rem; }
+            #game-area { width: 280px; height: 280px; }
+            .joystick { display: block; }
         }
     </style>
 </head>
 <body>
     <div class="crt-effect"></div>
+    
     <header>
         <div class="logo">🐍 GAME ISENG 🎮</div>
         <div class="menu-container">
-            <button class="menu-button" onclick="toggleMenu()"><i class="fas fa-arcade"></i></button>
+            <button class="menu-button" onclick="toggleMenu()">☰</button>
             <div class="dropdown-menu" id="dropdownMenu">
-                <a onclick="showPage('game-container')">🕹️ Main Game</a>
-                <a onclick="showPage('about')">👾 About Us</a>
-                <a onclick="showPage('privacy')">🔒 Privacy</a>
+                <a onclick="showPage('game-container')">🕹️ MAIN GAME</a>
+                <a onclick="showPage('about')">👾 TENTANG</a>
+                <a onclick="showPage('privacy')">🔒 PRIVASI</a>
             </div>
         </div>
     </header>
-    <div id="game-over">
-        <h1>GAME OVER</h1>
-        <p id="final-score">SCORE: 0</p>
-        <button onclick="restartGame()" style="background: #ff0000; padding: 0.5rem 1rem; margin: 0.5rem;">🔄 RESTART</button>
-        <button onclick="backToMenu()" style="background: #00ff00; padding: 0.5rem 1rem; margin: 0.5rem;">🏠 MENU</button>
+
+    <div id="control-panel">
+        <div class="panel-header">
+            <span>📋 KONTROL</span>
+            <button class="close-btn" onclick="togglePanel()">X</button>
+        </div>
+        <div id="instruction">
+            Desktop: Pakai tombol panah/WASD!<br>
+            Mobile: Pakai joystick di bawah!<br>
+            🔊 Sound: <button onclick="toggleSound()">ON/OFF</button>
+        </div>
     </div>
+
+    <div id="game-over">
+        <h1>GAME OVER!</h1>
+        <p id="final-score">SKOR: 0</p>
+        <button onclick="restartGame()">COBA LAGI</button>
+        <button onclick="backToMenu()">MENU UTAMA</button>
+    </div>
+
     <div id="content">
-        <div class="game-wrapper">
-            <div id="game-container">
-                <div id="input-area">
-                    <input type="text" id="player-name" placeholder="Nama Kamu" required>
-                    <button onclick="startGame()">🎮 Mulai!</button>
-                </div>
-                <canvas id="game-area"></canvas>
-                <button id="back-to-menu" onclick="backToMenu()" style="display: none;">🔙 Kembali</button>
-                <p id="instruction" style="display: none;">
-                    Desktop: Gunakan arrow keys/WASD!<br>
-                    Mobile: Gunakan joystick di kiri bawah!<br>
-                    🔉 Nyalaikan sound untuk efek suara!
-                </p>
-                <div class="joystick" id="joystick"></div>
+        <div id="game-container" class="page-content">
+            <div id="input-area">
+                <input type="text" id="player-name" placeholder="MASUKKAN NAMA" required>
+                <button onclick="startGame()">🎮 MULAI MAIN!</button>
             </div>
+            <canvas id="game-area"></canvas>
+            <div class="joystick" id="joystick"></div>
         </div>
 
         <div id="about" class="page-content" style="display: none;">
-            <h2>About Us</h2>
-            <p>Website ini dibuat untuk iseng-iseng aja!</p>
+            <h2>TENTANG KAMI</h2>
+            <p>Bikin ini cuma buat iseng aja!</p>
         </div>
 
         <div id="privacy" class="page-content" style="display: none;">
-            <h2>Kebijakan Privasi</h2>
-            <p>Kami tidak mengumpulkan data pribadi pengguna.</p>
+            <h2>KEBIJAKAN PRIVASI</h2>
+            <p>Kami gak nyimpen data pribadi pemain!</p>
         </div>
     </div>
 
     <footer>
         &copy; 2025 ednasalam.com
     </footer>
+
     <audio id="eat-sound" src="sound/eat-se.mp3"></audio>
+
     <script>
-        // Fungsi global untuk integrasi dengan HTML
+        // Fungsi UI
+        function togglePanel() {
+            const panel = document.getElementById('control-panel');
+            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+            localStorage.setItem('panelState', panel.style.display);
+        }
+
         function toggleMenu() {
             const menu = document.getElementById('dropdownMenu');
-            menu.classList.toggle('show');
+            menu.classList.toggle('show'); // Toggle class show
         }
 
         function showPage(pageId) {
-            document.querySelectorAll('.page-content').forEach(el => {
-                el.style.display = 'none';
-            });
+            document.querySelectorAll('.page-content').forEach(el => el.style.display = 'none');
             document.getElementById(pageId).style.display = 'block';
+            if(pageId === 'game-container') resetGameUI();
             toggleMenu();
         }
 
-        // Handle klik di luar menu
-        window.onclick = function(e) {
-            if (!e.target.closest('.menu-container')) {
+        function backToMenu() {
+            showPage('game-container');
+            document.getElementById('game-over').style.display = 'none';
+            document.getElementById('input-area').style.display = 'block';
+        }
+
+        function toggleSound() {
+            const sound = document.getElementById('eat-sound');
+            sound.muted = !sound.muted;
+        }
+
+        // Inisialisasi
+        window.addEventListener('load', () => {
+            const panelState = localStorage.getItem('panelState') || 'block';
+            document.getElementById('control-panel').style.display = panelState;
+        });
+
+        document.addEventListener('click', (e) => {
+            if(!e.target.closest('.menu-container')) {
                 document.getElementById('dropdownMenu').classList.remove('show');
             }
-        };
+            const menu = document.getElementById('dropdownMenu');
+            const menuButton = document.querySelector('.menu-button');
+            if (!menu.contains(e.target) && !menuButton.contains(e.target)) {
+            menu.classList.remove('show');
+            }
+        });
     </script>
     <script src="game/snake2.js"></script>
 </body>

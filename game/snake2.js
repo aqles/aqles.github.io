@@ -1,3 +1,21 @@
+function startGame(selectedMode) {
+        console.log("Game dimulai dengan mode:", selectedMode);
+        adjustCanvasSize();
+        mode = selectedMode;
+        const playerName = document.getElementById('player-name').value;
+        document.getElementById('game-area').style.display = 'block';
+        document.getElementById('input-area').style.display = 'none';
+        document.getElementById('back-to-menu').style.display = 'block';
+        document.getElementById('instruction').style.display = 'block';
+        if (mode === 'single') {
+            initSinglePlayer();
+            startGameLoop(200);
+        } else {
+            initMultiPlayer(playerName);
+            startGameLoop(50);
+        }
+    }
+
 document.addEventListener("DOMContentLoaded", function () {
     const canvas = document.getElementById('game-area');
     const ctx = canvas.getContext('2d');
@@ -25,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let GRID_SIZE = Math.min(window.innerWidth, window.innerHeight) / GRID_CELLS;
     
     // Game Variables
-    let direction, food, intervalId;
+    let food, intervalId;
     let score = 0, highScore = localStorage.getItem('highScore') || 0;
     let mode, playerId, players = {};
     
@@ -191,24 +209,7 @@ document.addEventListener("DOMContentLoaded", function () {
             direction = newDirection;
         }
     });
-    
-    function startGame(selectedMode) {
-        adjustCanvasSize();
-        mode = selectedMode;
-        const playerName = document.getElementById('player-name').value;
-        document.getElementById('game-area').style.display = 'block';
-        document.getElementById('input-area').style.display = 'none';
-        document.getElementById('back-to-menu').style.display = 'block';
-        document.getElementById('instruction').style.display = 'block';
-        if (mode === 'single') {
-            initSinglePlayer();
-            startGameLoop(200);
-        } else {
-            initMultiPlayer(playerName);
-            startGameLoop(50);
-        }
-    }
-    
+      
     function startGameLoop(speed) {
         clearInterval(intervalId);
         intervalId = setInterval(mode === 'single' ? gameLoop : gameLoopMulti, speed);

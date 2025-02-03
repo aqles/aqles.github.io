@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let GRID_SIZE = Math.min(window.innerWidth, window.innerHeight) / GRID_CELLS;
     
     // Game Variables
-    let snake, direction, food, intervalId;
+    let direction, food, intervalId;
     let score = 0, highScore = localStorage.getItem('highScore') || 0;
     let mode, playerId, players = {};
     

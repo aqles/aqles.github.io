@@ -30,7 +30,7 @@
                         <option value="single">Single Player</option>
                         <option value="multi">Multiplayer</option>
                     </select>
-                    <button onclick="startGame()">🎮 Mulai!</button>
+                    <button onclick="startGame(document.getElementById('game-mode').value)">🎮 Mulai!</button>
                 </div>
                 <canvas id="game-area"></canvas>
                 <button id="back-to-menu" onclick="backToMenu()" style="display: none;">🔙 Kembali</button>

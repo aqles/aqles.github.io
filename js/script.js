@@ -1,7 +1,22 @@
 // script.js
+
 document.addEventListener('DOMContentLoaded', () => {
-  // Theme toggle
-  
+  // Theme switcher slider
+  const switchEl = document.getElementById('theme-switch');
+  const saved = localStorage.getItem('theme') || 'dark';
+  if (saved === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+    switchEl.checked = true;
+  }
+  switchEl.addEventListener('change', () => {
+    if (switchEl.checked) {
+      document.documentElement.setAttribute('data-theme', 'light');
+      localStorage.setItem('theme', 'light');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      localStorage.setItem('theme', 'dark');
+    }
+  });
 
   // Typing + Glitch animation
   const el = document.querySelector('.typing');
@@ -26,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   type();
 
-  // Particles.js background
+  // Particles.js
   if (window.particlesJS) {
     particlesJS.load('particle-bg', 'assets/particles.json', () => {
       console.log('Particles loaded');

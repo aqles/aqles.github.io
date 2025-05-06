@@ -1,0 +1,22 @@
+:root {
+  --bg: #121212;
+  --text: #0aff0a;
+  --accent: #ff00ff;
+}
+[data-theme="light"] {
+  --bg: #f0f0f0;
+  --text: #121212;
+  --accent: #0077ff;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Fira Code', monospace;
+  background: var(--bg);
+  color: var(--text);
+  transition: background 0.3s, color 0.3s;
+}
+
+/* Header, Hero, Projects, Contact, Footer styles same as sebelumnya */
+/* ... (tetap sama dengan sebelumnya) */

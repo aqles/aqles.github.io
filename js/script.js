@@ -87,4 +87,21 @@ document.addEventListener('DOMContentLoaded', () => {
 	  // Optional: benar-benar remove dari DOM setelah fade-out
 	  setTimeout(() => pre.remove(), 600);
 	});
+	
+  // Section Reveal on Scroll
+	const revealElements = document.querySelectorAll('.reveal');
+
+	const observer = new IntersectionObserver(entries => {
+	  entries.forEach(entry => {
+		if (entry.isIntersecting) {
+		  entry.target.classList.add('visible');
+		  observer.unobserve(entry.target); // hanya animasi sekali
+		}
+	  });
+	}, {
+	  threshold: 0.1
+	});
+
+	revealElements.forEach(el => observer.observe(el));
+
 });

@@ -258,3 +258,53 @@ footer { padding: 2rem; margin-top: 2rem; text-align: center; }
   opacity: 1;
   transform: translateY(0);
 }
+
+/* Interactive Terminal */
+#interactive-terminal {
+  padding: 2rem;
+  background: rgba(0,0,0,0.8);
+  margin: 2rem auto;
+  max-width: 800px;
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+}
+
+.terminal-widget {
+  font-family: 'Courier Prime', monospace;
+  color: var(--text);
+}
+
+.terminal-output {
+  max-height: 200px;
+  overflow-y: auto;
+  margin-bottom: 0.5rem;
+}
+
+.terminal-output p {
+  margin: 0.2rem 0;
+}
+
+.terminal-input-line {
+  display: flex;
+  align-items: center;
+}
+
+.prompt {
+  margin-right: 0.5rem;
+  color: var(--accent);
+}
+
+#terminal-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+#terminal-input::placeholder {
+  color: rgba(10,255,10,0.5);
+}
+

@@ -103,5 +103,39 @@ document.addEventListener('DOMContentLoaded', () => {
 	});
 
 	revealElements.forEach(el => observer.observe(el));
+	
+  // Interactive Terminal Logic
+	const termInput = document.getElementById('terminal-input');
+	const termOutput = document.getElementById('terminal-output');
+
+	const commands = {
+	  help: 'Available commands: <span class="accent">help</span>, <span class="accent">about</span>, <span class="accent">contact</span>, <span class="accent">clear</span>.',
+	  about: 'Hai, aku Aql, seorang IT enthusiast & web developer yang suka oprek oprek. 💻',
+	  contact: 'Kamu bisa hubungi aku lewat email: <span class="accent">aql@ednasalam.com</span> atau cek social profile di GitHub & LinkedIn.',
+	};
+
+	termInput.addEventListener('keydown', e => {
+	  if (e.key === 'Enter') {
+		const input = termInput.value.trim().toLowerCase();
+		const userLine = document.createElement('p');
+		userLine.innerHTML = `<span class="prompt">$></span> ${input}`;
+		termOutput.appendChild(userLine);
+
+		if (input === 'clear') {
+		  termOutput.innerHTML = '';
+		} else if (commands[input]) {
+		  const resp = document.createElement('p');
+		  resp.innerHTML = commands[input];
+		  termOutput.appendChild(resp);
+		} else {
+		  const resp = document.createElement('p');
+		  resp.innerHTML = `Command not found: <span class="accent">${input}</span>. Type <span class="accent">help</span>.`;
+		  termOutput.appendChild(resp);
+		}
+
+		termOutput.scrollTop = termOutput.scrollHeight; // auto-scroll
+		termInput.value = '';
+	  }
+	});
 
 });

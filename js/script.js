@@ -79,4 +79,12 @@ document.addEventListener('DOMContentLoaded', () => {
   closeBtn.addEventListener('click', () => {
     popup.style.display = 'none';
   });
+  
+  // Preloader: sembunyikan setelah window load
+	window.addEventListener('load', () => {
+	  const pre = document.getElementById('preloader');
+	  pre.classList.add('hide');
+	  // Optional: benar-benar remove dari DOM setelah fade-out
+	  setTimeout(() => pre.remove(), 600);
+	});
 });

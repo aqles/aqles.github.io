@@ -18,6 +18,57 @@ body {
   transition: background 0.3s, color 0.3s;
 }
 
+/* Preloader */
+#preloader {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 300;
+  transition: opacity 0.5s ease;
+}
+
+#preloader.hide {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(10, 255, 10, 0.2);
+  border-top: 4px solid var(--accent);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+#preloader p {
+  margin-top: 1rem;
+  font-family: 'Fira Code', monospace;
+  color: var(--text);
+}
+
+#preloader .bar {
+  display: inline-block;
+  width: 0;
+  height: 4px;
+  background: var(--accent);
+  vertical-align: middle;
+  animation: loadBar 2s ease-out forwards;
+}
+
+@keyframes loadBar {
+  to { width: 100px; }
+}
+
 /* Header */
 header {
   display: flex;

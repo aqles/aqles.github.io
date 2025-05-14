@@ -109,7 +109,7 @@ nav a:hover::after {
 }
 
 /* Hero */
-.hero {
+#hero {
   position: relative;
   height: 100vh;
   display: flex;

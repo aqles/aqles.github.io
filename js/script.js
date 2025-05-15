@@ -146,7 +146,8 @@ document.addEventListener('DOMContentLoaded', () => {
 			return `${setup} <br>— ${punchline}`;
 		  } catch {
 			return 'Ups, gagal ambil joke. Coba lagi ya! Hehehe';
-		  },
+		  }
+		},
 	  quote: () => quotes[Math.floor(Math.random() * quotes.length)],
 	  weather: async () => {
 		  if (!userCoords) return 'Geolocation belum diizinkan.';

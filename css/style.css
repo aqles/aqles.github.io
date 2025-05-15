@@ -308,3 +308,52 @@ footer { padding: 2rem; margin-top: 2rem; text-align: center; }
   color: rgba(10,255,10,0.5);
 }
 
+/* Neon Flicker Animation */
+@keyframes neon-flicker {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+    text-shadow:
+      0 0 2px var(--accent),
+      0 0 8px var(--accent),
+      0 0 16px var(--accent),
+      0 0 32px rgba(255,0,255,0.2);
+  }
+  20%, 24%, 55% {
+    text-shadow: none;
+  }
+}
+
+/* Lantern Glow Around Element */
+@keyframes lantern-glow {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(255,0,255,0.5), 0 0 30px rgba(255,0,255,0.3);
+  }
+  50% {
+    box-shadow: 0 0 5px rgba(255,0,255,0.2), 0 0 10px rgba(255,0,255,0.1);
+  }
+}
+
+/* Neon flicker untuk teks */
+.neon-flicker {
+  color: var(--accent);
+  animation: neon-flicker 2s infinite;
+}
+
+/* Efek lantern (glow) untuk container/tombol */
+.lantern {
+  position: relative;
+  animation: lantern-glow 3s ease-in-out infinite;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  background: rgba(0,0,0,0.7);
+  border: 1px solid var(--accent);
+}
+
+/* Hanya animasi kalau sudah visible */
+.neon-flicker, .lantern {
+  opacity: 0.6;
+  transition: opacity 0.3s;
+}
+.reveal.visible .neon-flicker,
+.reveal.visible .lantern {
+  opacity: 1;
+}

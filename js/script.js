@@ -86,6 +86,11 @@ document.addEventListener('DOMContentLoaded', () => {
 	  pre.classList.add('hide');
 	  // Optional: benar-benar remove dari DOM setelah fade-out
 	  setTimeout(() => pre.remove(), 600);
+	// fallback 10 detik
+		setTimeout(() => {
+		  const pre = document.getElementById('preloader');
+		  if (pre) pre.style.display = 'none';
+		}, 5000);
 	});
 	
   // Section Reveal on Scroll

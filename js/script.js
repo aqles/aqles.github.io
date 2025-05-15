@@ -178,6 +178,15 @@ document.addEventListener('DOMContentLoaded', () => {
 		try { return eval(args.join(' ')).toString(); }
 		catch { return 'Expression invalid.'; }
 	  },
+	  ip: async () => {
+		try {
+		  const res = await fetch('https://api.ipify.org?format=json');
+		  const obj = await res.json();
+		  return `Your IP: ${obj.ip}`;
+		} catch (err) {
+		  return 'Gagal ambil IP.';
+		}
+	  },
 	  random: () => `Random: ${Math.floor(Math.random() * 100) + 1}`
 	};
 

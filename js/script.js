@@ -108,34 +108,94 @@ document.addEventListener('DOMContentLoaded', () => {
 	const termInput = document.getElementById('terminal-input');
 	const termOutput = document.getElementById('terminal-output');
 
+	let userCoords = null;
+
+	// Minta izin geolocation dan simpan coords
+	if (navigator.geolocation) {
+	  navigator.geolocation.getCurrentPosition(pos => {
+		userCoords = {
+		  lat: pos.coords.latitude,
+		  lon: pos.coords.longitude
+		};
+	  });
+	}
+
+	const startTime = Date.now();
+	const quotes = [
+	  '“Talk is cheap. Show me the code.” – Linus Torvalds',
+	  '“Programs must be written for people to read.” – Harold Abelson',
+	  '“First, solve the problem. Then, write the code.” – John Johnson'
+	];
+
 	const commands = {
-	  help: 'Available commands: <span class="accent">help</span>, <span class="accent">about</span>, <span class="accent">contact</span>, <span class="accent">clear</span>.',
-	  about: 'Hai, aku Aql, seorang IT enthusiast & web developer yang suka oprek oprek. 💻',
-	  contact: 'Kamu bisa hubungi aku lewat email: <span class="accent">aql@ednasalam.com</span> atau cek social profile di GitHub & LinkedIn.',
+	  help: () => 'Available: help, about, contact, clear, date, time, uptime, projects, skills, joke, quote, weather, ascii, echo, calc, random, ip.',
+	  about: () => 'Hai, aku Aql, IT enthusiast & penyuka kopi, salam kenal!',
+	  contact: () => 'Email: aql@ednasalam.com | GitHub: github.com/aqles | LinkedIn: linkedin.com/in/ednasalam',
+	  date: () => new Date().toLocaleDateString(),
+	  time: () => new Date().toLocaleTimeString(),
+	  uptime: () => {
+		const sec = Math.floor((Date.now() - startTime) / 1000);
+		return `Uptime: ${sec} detik`;
+	  },
+	  projects: () => '1. My Portfolio – https://ednasalam.com\n2. AI Chatbot – https://ai.ednasalam.com',
+	  skills: () => '• JavaScript [█████▓░░░░░] 50%\n• Three.js    [████░░░░░░░] 40%\n• CSS Anim    [██████▓░░░░] 60%',
+	  joke: async () => {
+		  try {
+			const res = await fetch('https://official-joke-api.appspot.com/random_joke');
+			const { setup, punchline } = await res.json();
+			return `${setup} <br>— ${punchline}`;
+		  } catch {
+			return 'Ups, gagal ambil joke. Coba lagi ya! Hehehe';
+		  },
+	  quote: () => quotes[Math.floor(Math.random() * quotes.length)],
+	  weather: async () => {
+		  if (!userCoords) return 'Geolocation belum diizinkan.';
+		  try {
+			const { lat, lon } = userCoords;
+			// Panggil Open‐Meteo gratis, dapat current weather
+			const res = await fetch(
+			  `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`
+			);
+			const data = await res.json();
+			const temp = data.current_weather.temperature.toFixed(1);
+			const wind = data.current_weather.windspeed.toFixed(1);
+			return `Suhu: ${temp}°C, Angin: ${wind} m/s`;
+		  } catch {
+			return 'Gagal ambil data cuaca.';
+		  }
+		},
+	  ascii: () => .__                                                
+|  |__ _____    ____   ____   _____ _____    ____  
+|  |  \\__  \  /    \ /  _ \ /     \\__  \  /    \ 
+|   Y  \/ __ \|   |  (  <_> )  Y Y  \/ __ \|   |  \
+|___|  (____  /___|  /\____/|__|_|  (____  /___|  /
+     \/     \/     \/             \/     \/     \/ .trim(),
+	  echo: args => args.join(' '),
+	  calc: args => {
+		try { return eval(args.join(' ')).toString(); }
+		catch { return 'Expression invalid.'; }
+	  },
+	  random: () => `Random: ${Math.floor(Math.random() * 100) + 1}`
 	};
 
-	termInput.addEventListener('keydown', e => {
-	  if (e.key === 'Enter') {
-		const input = termInput.value.trim().toLowerCase();
-		const userLine = document.createElement('p');
-		userLine.innerHTML = `<span class="prompt">$></span> ${input}`;
-		termOutput.appendChild(userLine);
+	termInput.addEventListener('keydown', async e => {
+	  if (e.key !== 'Enter') return;
+	  const raw = termInput.value.trim();
+	  const [cmd, ...args] = raw.toLowerCase().split(' ');
+	  termOutput.innerHTML += `<p><span class="prompt">$></span> ${raw}</p>`;
 
-		if (input === 'clear') {
-		  termOutput.innerHTML = '';
-		} else if (commands[input]) {
-		  const resp = document.createElement('p');
-		  resp.innerHTML = commands[input];
-		  termOutput.appendChild(resp);
-		} else {
-		  const resp = document.createElement('p');
-		  resp.innerHTML = `Command not found: <span class="accent">${input}</span>. Type <span class="accent">help</span>.`;
-		  termOutput.appendChild(resp);
-		}
-
-		termOutput.scrollTop = termOutput.scrollHeight; // auto-scroll
-		termInput.value = '';
+	  if (cmd === 'clear') {
+		termOutput.innerHTML = '';
+	  } else if (commands[cmd]) {
+		let res = commands[cmd];
+		res = typeof res === 'function' ? await res(args) : res;
+		termOutput.innerHTML += `<p>${res.replace(/\n/g,'<br>')}</p>`;
+	  } else {
+		termOutput.innerHTML += `<p>Command not found: <span class="accent">${cmd}</span>. Type <span class="accent">help</span>.</p>`;
 	  }
+
+	  termOutput.scrollTop = termOutput.scrollHeight;
+	  termInput.value = '';
 	});
 
 });

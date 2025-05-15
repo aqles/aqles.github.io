@@ -130,23 +130,23 @@ document.addEventListener('DOMContentLoaded', () => {
 	  '“Talk is cheap. Show me the code.” – Linus Torvalds',
 	  '“Programs must be written for people to read.” – Harold Abelson',
 	  '“First, solve the problem. Then, write the code.” – John Johnson',
-	  '"Janganlah kalian memandang rendah kebaikan, meskipun hanya sekadar menjawab salam kepada saudaramu."
+	  'Janganlah kalian memandang rendah kebaikan, meskipun hanya sekadar menjawab salam kepada saudaramu.
 HR. Muslim',
-	  '"Barangsiapa yang memelihara adabnya, maka ia telah memelihara agamanya."
+	  'Barangsiapa yang memelihara adabnya, maka ia telah memelihara agamanya.
 HR. Al-Bukhari',
-	  '"Barangsiapa yang memperbaiki akhlaknya, maka ia telah menyempurnakan imannya."
+	  'Barangsiapa yang memperbaiki akhlaknya, maka ia telah menyempurnakan imannya.
 HR. Abu Daud',
-	  '"Jangan marahi anak-anak karena menangis, karena mereka seperti burung kecil yang takut kehilangan."
+	  'Jangan marahi anak-anak karena menangis, karena mereka seperti burung kecil yang takut kehilangan.
 HR. Tirmidzi (disebutkan dalam konteks kelembutan)',
-	  '"Jangan kalian dengki, jangan saling membenci, jangan saling memutus hubungan, dan jadilah kalian hamba Allah yang bersaudara."
+	  'Jangan kalian dengki, jangan saling membenci, jangan saling memutus hubungan, dan jadilah kalian hamba Allah yang bersaudara.
 HR. Al-Bukhari',
-	  '"Perumpamaan orang yang mengingat Allah dan yang tidak mengingat-Nya adalah seperti orang hidup dan mati."
+	  'Perumpamaan orang yang mengingat Allah dan yang tidak mengingat-Nya adalah seperti orang hidup dan mati.
 HR. Al-Bukhari',
-	  '"Barangsiapa yang beriman kepada Allah dan hari akhir, maka hendaklah dia berkata yang baik atau diam."
+	  'Barangsiapa yang beriman kepada Allah dan hari akhir, maka hendaklah dia berkata yang baik atau diam.
 HR. Abu Hurairah (dikutip dari riwayat Bukhari-Muslim secara maknawi)',
-	  '"Tempat yang paling dicintai Allah adalah masjid, dan tempat yang paling dibenci Allah adalah pasar."
+	  'Tempat yang paling dicintai Allah adalah masjid, dan tempat yang paling dibenci Allah adalah pasar.
 HR. Abu Hurairah (dalam beberapa riwayat disebutkan oleh Tirmidzi)',
-	  '"Orang mukmin yang paling sempurna imannya adalah yang paling baik akhlaknya."
+	  'Orang mukmin yang paling sempurna imannya adalah yang paling baik akhlaknya.
 HR. Abu Daud no. 4682 dan Ibnu Hibban',
 	
 	];

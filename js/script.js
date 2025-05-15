@@ -152,7 +152,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		  if (!userCoords) return 'Geolocation belum diizinkan.';
 		  try {
 			const { lat, lon } = userCoords;
-			// Panggil Open‐Meteo gratis, dapat current weather
 			const res = await fetch(
 			  `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`
 			);

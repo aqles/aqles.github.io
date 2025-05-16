@@ -21,6 +21,7 @@ export default async function handler(req, res) {
       }
     );
     const data = await response.json();
+	console.log('📥 Gemini raw response:', JSON.stringify(data, null, 2));
     // candidates[0].output.text selalu ada jika berhasil
     const reply = data.candidates?.[0]?.output?.text
       || 'Maaf, AI belum bisa jawab itu.';

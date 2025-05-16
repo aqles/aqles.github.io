@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	];
 
 	const commands = {
-	  help: () => 'Available: help, about, contact, clear, date, time, uptime, projects, skills, joke, quote, weather, ascii, echo, calc, random, ip.',
+	  help: () => 'Available: help, about, contact, clear, date, time, uptime, projects, skills, joke, quote, weather, ascii, echo, calc, random, ip and Ask for Asking',
 	  about: () => 'Hai, aku Aql, IT enthusiast & penyuka kopi, salam kenal!',
 	  contact: () => 'Email: aql@ednasalam.com | GitHub: github.com/aqles | LinkedIn: linkedin.com/in/ednasalam',
 	  date: () => new Date().toLocaleDateString(),
@@ -188,13 +188,12 @@ document.addEventListener('DOMContentLoaded', () => {
 		  }
 		},
 	  ascii: () => `                                              
- _______ _______ _______ _______ _______ _______ _______ 
-|\     /|\     /|\     /|\     /|\     /|\     /|\     /|
-| +---+ | +---+ | +---+ | +---+ | +---+ | +---+ | +---+ |
-| |   | | |   | | |   | | |   | | |   | | |   | | |   | |
-| |h  | | |a  | | |n  | | |o  | | |m  | | |a  | | |n  | |
-| +---+ | +---+ | +---+ | +---+ | +---+ | +---+ | +---+ |
-|/_____\|/_____\|/_____\|/_____\|/_____\|/_____\|/_____\|
+ __                                                
+|  |__ _____    ____   ____   _____ _____    ____  
+|  |  \\__  \  /    \ /  _ \ /     \\__  \  /    \ 
+|   Y  \/ __ \|   |  (  <_> )  Y Y  \/ __ \|   |  \
+|___|  (____  /___|  /\____/|__|_|  (____  /___|  /
+     \/     \/     \/             \/     \/     \/ 
                                                          
        `.trim(),
 	  echo: args => args.join(' '),
@@ -212,6 +211,22 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 	  },
 	  random: () => `Random: ${Math.floor(Math.random() * 100) + 1}`
+	  commands.ask = async (args) => {
+	  const prompt = args.join(' ');
+	  if (!prompt) return 'Usage: ask <pertanyaan>';
+	  try {
+		const res = await fetch('/api/gemini', {
+		  method: 'POST',
+		  headers: { 'Content-Type': 'application/json' },
+		  body: JSON.stringify({ prompt })
+		});
+		const data = await res.json();
+		return data.reply || 'AI belum bisa jawab itu.';
+	  } catch {
+		return 'Gagal terhubung ke AI.';
+	  }
+};
+
 	};
 
 	termInput.addEventListener('keydown', async e => {
@@ -227,7 +242,15 @@ document.addEventListener('DOMContentLoaded', () => {
 		res = typeof res === 'function' ? await res(args) : res;
 		termOutput.innerHTML += `<p>${res.replace(/\n/g,'<br>')}</p>`;
 	  } else {
-		termOutput.innerHTML += `<p>Command not found: <span class="accent">${cmd}</span>. Type <span class="accent">help</span>.</p>`;
+		else {
+	  // kalau cmd nggak ada di commands
+	  const resAI = await fetch('/api/gemini', {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ prompt: raw }) // raw = input user utuh
+	  });
+	  const dataAI = await resAI.json();
+	  termOutput.innerHTML += `<p>${dataAI.reply || 'AInya gak ngerti, coba lagi ya~'}</p>`;
 	  }
 
 	  termOutput.scrollTop = termOutput.scrollHeight;

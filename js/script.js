@@ -211,7 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 	  },
 	  random: () => `Random: ${Math.floor(Math.random() * 100) + 1}`,
-	  ask = async (args) => {
+	  ask: async (args) => {
 	  const prompt = args.join(' ');
 	  if (!prompt) return 'Usage: ask <pertanyaan>';
 	  try {

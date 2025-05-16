@@ -267,21 +267,30 @@ document.addEventListener('DOMContentLoaded', () => {
 	  if (cmd === 'clear') {
 		termOutput.innerHTML = '';
 	  } else if (commands[cmd]) {
-		let res = commands[cmd];
-		res = typeof res === 'function' ? await res(args) : res;
-		termOutput.innerHTML += `<p>${res.replace(/\n/g,'<br>')}</p>`;
-	  } else {
-	  // Fallback: semua input tak dikenal akan dikirim ke AI
-	  try {
-		const rawInput = raw;  
-		const answer = await commands.ask(rawInput.split(' '));
-		// tampilkan jawaban AI di terminal
-		termOutput.innerHTML += `<p>${answer.replace(/\n/g, '<br>')}</p>`;
-	  } catch (err) {
-		console.error('Error saat memanggil AI:', err);
-		termOutput.innerHTML += `<p>Gagal konek ke AI: ${err.message}</p>`;
-	  }
-	}
+	    const result = await commands[cmd](args);
+	      termOutput.innerHTML += `<p>${result.replace(/\n/g, '<br>')}</p>`;
+	    } else {
+	      // ===== Fallback AI dengan indikator thinking... =====
+	      const thinkingEl = document.createElement('p');
+	      thinkingEl.classList.add('thinking');
+	      thinkingEl.textContent = 'thinking...';
+	      termOutput.appendChild(thinkingEl);
+	      termOutput.scrollTop = termOutput.scrollHeight;
+	
+	      try {
+	        const answer = await commands.ask([raw]);
+	        thinkingEl.remove();
+	        const respEl = document.createElement('p');
+	        respEl.innerHTML = answer.replace(/\n/g, '<br>');
+	        termOutput.appendChild(respEl);
+	      } catch (err) {
+	        thinkingEl.remove();
+	        const errEl = document.createElement('p');
+	        errEl.textContent = `Gagal konek ke AI: ${err.message}`;
+	        termOutput.appendChild(errEl);
+	        console.error('Fetch AI error:', err);
+	      }
+	    }
 
 	  termOutput.scrollTop = termOutput.scrollHeight;
 	  termInput.value = '';

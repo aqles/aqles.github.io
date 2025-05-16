@@ -18,6 +18,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // Shrink header on scroll
+	const header = document.getElementById('main-header');
+	window.addEventListener('scroll', () => {
+	  if (window.scrollY > 50) {
+		header.classList.add('scrolled');
+	  } else {
+		header.classList.remove('scrolled');
+	  }
+	});
+
+  // Mobile nav toggle
+	const navLinks = document.querySelector('.nav-links');
+	const navToggle = document.getElementById('nav-toggle');
+	navToggle.addEventListener('click', () => {
+	  navLinks.classList.toggle('open');
+	  // Animate hamburger into X
+	  navToggle.classList.toggle('active');
+	});
+
   // Typing + Glitch animation
   const el = document.querySelector('.typing');
   const text = 'Hello_World();';

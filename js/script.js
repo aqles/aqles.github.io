@@ -170,7 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	];
 
 	const commands = {
-	  help: () => 'Available: help, about, contact, clear, date, time, uptime, projects, skills, joke, quote, weather, ascii, echo, calc, random, ip and Ask for Asking',
+	  help: () => 'Available: help, about, contact, clear, date, time, uptime, projects, skills, joke, quote, weather, ascii, echo, calc, random, ip, techstack, experience and Ask for Asking',
 	  about: () => 'Hai, aku Aql, IT enthusiast & penyuka kopi, salam kenal!',
 	  contact: () => 'Email: aql@ednasalam.com | GitHub: github.com/aqles | LinkedIn: linkedin.com/in/ednasalam',
 	  date: () => new Date().toLocaleDateString(),
@@ -230,7 +230,14 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 	  },
 	  random: () => `Random: ${Math.floor(Math.random() * 100) + 1}`,
-	  // ... di dalam const commands = { … }
+	  techstack: () => 
+		'HTML, CSS, JavaScript, Three.js, Node.js, React, GSAP, Lottie',
+
+	  experience: () =>
+		'2015 ─ People Management Intern PT. Pertamina (Persero)\n' +
+		'2016 ─ Planning & Schedulling Net Mediatama TV\n' +
+		'2017 ─ Web Dev Freelance\n'+
+		'2019 ─ Consultant Pemprov DKI Jakarta',
 	  ask: async (args) => {
 		  const prompt = args.join(' ');
 		  if (!prompt) return 'Usage: ask <pertanyaan>';

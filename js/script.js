@@ -228,8 +228,6 @@ document.addEventListener('DOMContentLoaded', () => {
 	}
 };
 
-	};
-
 	termInput.addEventListener('keydown', async e => {
 	  if (e.key !== 'Enter') return;
 	  const raw = termInput.value.trim();

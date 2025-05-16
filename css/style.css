@@ -432,6 +432,11 @@ footer { padding: 2rem; margin-top: 2rem; text-align: center; }
   margin: 0.2rem 0;
 }
 
+.terminal-output .thinking {
+  font-style: italic;
+  opacity: 0.7;
+}
+
 .terminal-input-line {
   display: flex;
   align-items: center;

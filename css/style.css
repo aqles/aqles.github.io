@@ -165,42 +165,64 @@ footer { padding: 2rem; margin-top: 2rem; text-align: center; }
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-family: 'Fira Code', monospace;
+  z-index: 200;
+  background: rgba(0,0,0,0.6);
+  padding: 0.25rem 0.75rem;
+  border-radius: 30px;
+  backdrop-filter: blur(5px);
+  transition: background 0.3s;
 }
-.theme-switcher span { color: var(--text); }
-.switch {
+
+.theme-switcher .icon {
+  font-size: 1.2rem;
+  transition: opacity 0.3s, transform 0.3s;
+  opacity: 0.5;
+}
+
+/* Highlight active icon */
+[data-theme="dark"] .theme-switcher .moon {
+  opacity: 1;
+  transform: scale(1.2);
+}
+[data-theme="light"] .theme-switcher .sun {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+/* Switch styling */
+.theme-switcher .switch {
   position: relative;
   display: inline-block;
   width: 50px;
   height: 24px;
 }
-.switch input { opacity: 0; width: 0; height: 0; }
-.slider {
+.theme-switcher .switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.theme-switcher .slider {
   position: absolute;
   cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  top: 0; left: 0;
+  right: 0; bottom: 0;
   background: var(--text);
   transition: 0.3s;
   border-radius: 24px;
 }
-.slider:before {
+.theme-switcher .slider:before {
   position: absolute;
   content: "";
-  height: 20px;
-  width: 20px;
-  left: 2px;
-  bottom: 2px;
+  height: 20px; width: 20px;
+  left: 2px; bottom: 2px;
   background: var(--accent);
   transition: 0.3s;
   border-radius: 50%;
 }
-.switch input:checked + .slider {
+.theme-switcher input:checked + .slider {
   background: var(--accent);
 }
-.switch input:checked + .slider:before {
+.theme-switcher input:checked + .slider:before {
   transform: translateX(26px);
 }
 

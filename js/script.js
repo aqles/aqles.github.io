@@ -210,8 +210,8 @@ document.addEventListener('DOMContentLoaded', () => {
 		  return 'Gagal ambil IP.';
 		}
 	  },
-	  random: () => `Random: ${Math.floor(Math.random() * 100) + 1}`
-	  commands.ask = async (args) => {
+	  random: () => `Random: ${Math.floor(Math.random() * 100) + 1}`,
+	  ask = async (args) => {
 	  const prompt = args.join(' ');
 	  if (!prompt) return 'Usage: ask <pertanyaan>';
 	  try {
@@ -225,6 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	  } catch {
 		return 'Gagal terhubung ke AI.';
 	  }
+	}
 };
 
 	};
@@ -242,7 +243,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		res = typeof res === 'function' ? await res(args) : res;
 		termOutput.innerHTML += `<p>${res.replace(/\n/g,'<br>')}</p>`;
 	  } else {
-		else {
 	  // kalau cmd nggak ada di commands
 	  const resAI = await fetch('/api/gemini', {
 		method: 'POST',

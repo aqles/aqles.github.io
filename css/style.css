@@ -85,7 +85,7 @@ body {
 }
 
 #main-header.scrolled {
-  padding: 0.5rem 2rem;
+  padding: 0.5rem 1rem;
   background: rgba(0,0,0,0.8);
   backdrop-filter: blur(10px);
 }

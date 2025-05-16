@@ -7,25 +7,26 @@ export default async function handler(req, res) {
   }
   try {
     const response = await fetch(
-      'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' 
-      + apiKey,
+      // pakai TextBison model
+      `https://generativelanguage.googleapis.com/v1beta/models/text-bison-001:generateText?key=${apiKey}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          prompt: {
-            text: prompt
-          },
-          // parameter Gemini
+          // bentuk body sesuai spec generateText
+          prompt: { text: prompt },
           temperature: 0.7,
           maxOutputTokens: 256
         })
       }
     );
     const data = await response.json();
-    const reply = data.candidates?.[0]?.output?.text || 'Maaf, AI belum bisa jawab itu.';
-    res.status(200).json({ reply });
+    // candidates[0].output.text selalu ada jika berhasil
+    const reply = data.candidates?.[0]?.output?.text
+      || 'Maaf, AI belum bisa jawab itu.';
+    return res.status(200).json({ reply });
   } catch (err) {
-    res.status(500).json({ error: 'Gemini API failed' });
+    console.error('Gemini API error:', err);
+    return res.status(500).json({ error: 'Gemini API failed' });
   }
 }

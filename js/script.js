@@ -211,6 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 	  },
 	  random: () => `Random: ${Math.floor(Math.random() * 100) + 1}`,
+	  // ... di dalam const commands = { … }
 	  ask: async (args) => {
 	  const prompt = args.join(' ');
 	  if (!prompt) return 'Usage: ask <pertanyaan>';
@@ -220,13 +221,18 @@ document.addEventListener('DOMContentLoaded', () => {
 		  headers: { 'Content-Type': 'application/json' },
 		  body: JSON.stringify({ prompt })
 		});
-		const data = await res.json();
-		return data.reply || 'AI belum bisa jawab itu.';
-	  } catch {
-		return 'Gagal terhubung ke AI.';
+		if (!res.ok) {
+		  throw new Error(`Server error ${res.status}`);
+		}
+		const { reply, error } = await res.json();
+		// tampilkan reply kalau ada, atau error message
+		return reply ?? error ?? 'AI belum bisa jawab itu.';
+	  } catch (err) {
+		console.error('Fetch AI error:', err);
+		return `Gagal terhubung ke AI: ${err.message}`;
 	  }
-	}
-};
+	  }
+	};
 
 	termInput.addEventListener('keydown', async e => {
 	  if (e.key !== 'Enter') return;
@@ -241,15 +247,17 @@ document.addEventListener('DOMContentLoaded', () => {
 		res = typeof res === 'function' ? await res(args) : res;
 		termOutput.innerHTML += `<p>${res.replace(/\n/g,'<br>')}</p>`;
 	  } else {
-	  // kalau cmd nggak ada di commands
-	  const resAI = await fetch('/api/gemini', {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ prompt: raw }) // raw = input user utuh
-	  });
-	  const dataAI = await resAI.json();
-	  termOutput.innerHTML += `<p>${dataAI.reply || 'AInya gak ngerti, coba lagi ya~'}</p>`;
+	  // Fallback: semua input tak dikenal akan dikirim ke AI
+	  try {
+		const rawInput = raw;  
+		const answer = await commands.ask(rawInput.split(' '));
+		// tampilkan jawaban AI di terminal
+		termOutput.innerHTML += `<p>${answer.replace(/\n/g, '<br>')}</p>`;
+	  } catch (err) {
+		console.error('Error saat memanggil AI:', err);
+		termOutput.innerHTML += `<p>Gagal konek ke AI: ${err.message}</p>`;
 	  }
+	}
 
 	  termOutput.scrollTop = termOutput.scrollHeight;
 	  termInput.value = '';

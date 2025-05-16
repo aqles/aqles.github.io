@@ -8,7 +8,7 @@ export default async function handler(req, res) {
   try {
     const response = await fetch(
       // pakai TextBison model
-      `https://generativelanguage.googleapis.com/v1beta/models/text-bison-001:generateText?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

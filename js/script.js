@@ -243,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		  if (!prompt) return 'Usage: ask <pertanyaan>';
 		  try {
 			const base = window.location.origin;
-			const res = await fetch(`${base}/api/hf`, {
+			const res = await fetch(`${base}/api/ai21`, {
 			  method: 'POST',
 			  headers: { 'Content-Type': 'application/json' },
 			  body: JSON.stringify({ prompt })

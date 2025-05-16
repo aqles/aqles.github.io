@@ -261,36 +261,40 @@ document.addEventListener('DOMContentLoaded', () => {
 	termInput.addEventListener('keydown', async e => {
 	  if (e.key !== 'Enter') return;
 	  const raw = termInput.value.trim();
-	  const [cmd, ...args] = raw.toLowerCase().split(' ');
 	  termOutput.innerHTML += `<p><span class="prompt">$></span> ${raw}</p>`;
-
-	  if (cmd === 'clear') {
-		termOutput.innerHTML = '';
-	  } else if (commands[cmd]) {
-	    const result = await commands[cmd](args);
-	      termOutput.innerHTML += `<p>${result.replace(/\n/g, '<br>')}</p>`;
-	    } else {
-	      // ===== Fallback AI dengan indikator thinking... =====
+	 // ===== Fallback AI dengan indikator thinking... =====
 	      const thinkingEl = document.createElement('p');
 	      thinkingEl.classList.add('thinking');
 	      thinkingEl.textContent = 'thinking...';
 	      termOutput.appendChild(thinkingEl);
 	      termOutput.scrollTop = termOutput.scrollHeight;
 	
-	      try {
-	        const answer = await commands.ask([raw]);
-	        thinkingEl.remove();
-	        const respEl = document.createElement('p');
-	        respEl.innerHTML = answer.replace(/\n/g, '<br>');
-	        termOutput.appendChild(respEl);
-	      } catch (err) {
-	        thinkingEl.remove();
-	        const errEl = document.createElement('p');
-	        errEl.textContent = `Gagal konek ke AI: ${err.message}`;
-	        termOutput.appendChild(errEl);
-	        console.error('Fetch AI error:', err);
-	      }
+	  const [cmd, ...args] = raw.toLowerCase().split(' ');
+	  
+	  try {
+	    let output;
+	
+	    if (cmd === 'clear') {
+	      termOutput.innerHTML = '';
+	      output = null;
+	    } else if (commands[cmd]) {
+	      output = await commands[cmd](args);
+	    } else {
+	      output = await commands.ask([raw]);
 	    }
+	    thinkingEl.remove();
+	    if (output !== null) {
+	      const respEl = document.createElement('p');
+	      respEl.innerHTML = output.replace(/\n/g, '<br>');
+	      termOutput.appendChild(respEl);
+	    }
+	  } catch (err) {
+	    thinkingEl.remove();
+	    const errEl = document.createElement('p');
+	    errEl.textContent = `Error: ${err.message}`;
+	    termOutput.appendChild(errEl);
+	    console.error('Command execution error:', err);
+	  }
 
 	  termOutput.scrollTop = termOutput.scrollHeight;
 	  termInput.value = '';

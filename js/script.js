@@ -213,25 +213,23 @@ document.addEventListener('DOMContentLoaded', () => {
 	  random: () => `Random: ${Math.floor(Math.random() * 100) + 1}`,
 	  // ... di dalam const commands = { … }
 	  ask: async (args) => {
-	  const prompt = args.join(' ');
-	  if (!prompt) return 'Usage: ask <pertanyaan>';
-	  try {
-		const res = await fetch('/api/gemini', {
-		  method: 'POST',
-		  headers: { 'Content-Type': 'application/json' },
-		  body: JSON.stringify({ prompt })
-		});
-		if (!res.ok) {
-		  throw new Error(`Server error ${res.status}`);
+		  const prompt = args.join(' ');
+		  if (!prompt) return 'Usage: ask <pertanyaan>';
+		  try {
+			const base = window.location.origin;
+			const res = await fetch(`${base}/api/gemini`, {
+			  method: 'POST',
+			  headers: { 'Content-Type': 'application/json' },
+			  body: JSON.stringify({ prompt })
+			});
+			if (!res.ok) throw new Error(`Status ${res.status}`);
+			const { reply, error } = await res.json();
+			return reply ?? error ?? 'AI belum bisa jawab itu.';
+		  } catch (err) {
+			console.error('Fetch AI error:', err);
+			return `Gagal konek ke AI: ${err.message}`;
+		  }
 		}
-		const { reply, error } = await res.json();
-		// tampilkan reply kalau ada, atau error message
-		return reply ?? error ?? 'AI belum bisa jawab itu.';
-	  } catch (err) {
-		console.error('Fetch AI error:', err);
-		return `Gagal terhubung ke AI: ${err.message}`;
-	  }
-	  }
 	};
 
 	termInput.addEventListener('keydown', async e => {

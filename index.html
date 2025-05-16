@@ -24,18 +24,25 @@
   </div>
 
   <!-- Header -->
-  <header>
+  <header id="main-header">
     <div class="logo">
       <svg width="40" height="40" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
         <circle cx="50" cy="50" r="48" stroke="currentColor" stroke-width="4" fill="none" />
         <text x="50%" y="55%" text-anchor="middle" fill="currentColor" font-family="Fira Code" font-size="20">&lt;/&gt;</text>
       </svg>
     </div>
-    <nav>
-      <a href="#projects">Projects</a>
-      <a href="#contact">Contact</a>
-    </nav>
-  </header>
+    <nav class="nav-links">
+		<a href="#hero">Home</a>
+		<a href="#projects">Projects</a>
+		<a href="#interactive-terminal">Terminal</a>
+		<a href="#contact">Contact</a>
+	  </nav>
+
+  <!-- Hamburger untuk mobile -->
+	  <button id="nav-toggle" aria-label="Toggle navigation">
+		<span></span><span></span><span></span>
+	  </button>
+	</header>
 
   <!-- Hero Section -->
   <section id="hero" class="reveal">

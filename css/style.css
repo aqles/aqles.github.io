@@ -12,6 +12,9 @@
   --text: #e0dede;
   --accent: #0077ff;
 }
+[data-theme="light"] .typing {
+  color: #3d4957
+}
 
 body {
   margin: 0;

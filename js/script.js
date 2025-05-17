@@ -66,12 +66,6 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log('Particles loaded');
     });
   }
-  // Particles.js
-  if (window.particlesJS) {
-    particlesJS.load('particle-bg', 'assets/particles.json', () => {
-      console.log('Particles loaded');
-    });
-  }
 
   // Form submission via AJAX
   const form = document.getElementById('contact-form');
@@ -105,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	  pre.classList.add('hide');
 	  // Optional: benar-benar remove dari DOM setelah fade-out
 	  setTimeout(() => pre.remove(), 600);
-	// fallback 10 detik
+	// fallback 5 detik
 		setTimeout(() => {
 		  const pre = document.getElementById('preloader');
 		  if (pre) pre.style.display = 'none';
@@ -133,7 +127,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	const termOutput = document.getElementById('terminal-output');
 
 	let userCoords = null;
-
+	
+	const chatHistory = [];
 	const startTime = Date.now();
 	const quotes = [
 	  `“Talk is cheap. Show me the code.” – Linus Torvalds`,
@@ -160,7 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	];
 
 	const commands = {
-	  help: () => 'Available: help, about, contact, clear, date, time, uptime, projects, skills, joke, quote, ascii, echo, calc, random, ip, techstack, experience and Ask for Asking',
+	  help: () => 'Available: help, about, contact, clear, clearhistory, date, time, uptime, projects, skills, joke, quote, ascii, echo, calc, random, ip, techstack, experience and Ask for Asking',
 	  about: () => 'Hai, aku Aql, IT enthusiast & penyuka kopi, salam kenal!',
 	  contact: () => 'Email: aql@ednasalam.com | GitHub: github.com/aqles | LinkedIn: linkedin.com/in/ednasalam',
 	  date: () => new Date().toLocaleDateString(),
@@ -207,30 +202,45 @@ document.addEventListener('DOMContentLoaded', () => {
 	  random: () => `Random: ${Math.floor(Math.random() * 100) + 1}`,
 	  techstack: () => 
 		'HTML, CSS, JavaScript, Three.js, Node.js, React, GSAP, Lottie',
-
+	  clearhistory: () => {
+		  chatHistory.length = 0;
+		  return 'Chat history cleared.';
+		},
 	  experience: () =>
 		'2015 ─ People Management Intern PT. Pertamina (Persero)\n' +
 		'2016 ─ Planning & Schedulling Net Mediatama TV\n' +
 		'2017 ─ Web Dev Freelance\n'+
 		'2019 ─ Consultant Pemprov DKI Jakarta',
 	  ask: async (args) => {
-		  const prompt = args.join(' ');
-		  if (!prompt) return 'Usage: ask <pertanyaan>';
+		 const currentInput = args.join(' ');
+	 	 if (!currentInput) return 'Usage: ask <pertanyaan>';
+		  const formattedHistory = chatHistory
+		    .slice(-6)
+		    .join('\n');
+		  const prompt = `${formattedHistory}\nUser: ${currentInput}\nAI:`;
+		
 		  try {
-			const base = window.location.origin;
-			const res = await fetch(`${base}/api/ai21`, {
-			  method: 'POST',
-			  headers: { 'Content-Type': 'application/json' },
-			  body: JSON.stringify({ prompt })
-			});
-			if (!res.ok) throw new Error(`Status ${res.status}`);
-			const { reply, error } = await res.json();
-			return reply ?? error ?? 'AI belum bisa jawab itu.';
+		    const res = await fetch(`${window.location.origin}/api/ai21`, {
+		      method: 'POST',
+		      headers: { 'Content-Type': 'application/json' },
+		      body: JSON.stringify({ prompt })
+		    });
+		
+		    if (!res.ok) throw new Error(`Status ${res.status}`);
+		
+		    const { reply, error } = await res.json();
+		    const cleanReply = reply?.trim() ?? error ?? 'AI belum bisa jawab itu.';
+		
+		    // Simpan ke chatHistory untuk konteks selanjutnya
+		    chatHistory.push(`User: ${currentInput}`);
+		    chatHistory.push(`AI: ${cleanReply}`);
+		
+		    return cleanReply;
 		  } catch (err) {
-			console.error('Fetch AI error:', err);
-			return `Gagal konek ke AI: ${err.message}`;
+		    console.error('Fetch AI error:', err);
+		    return `Gagal konek ke AI: ${err.message}`;
 		  }
-		}
+		},
 	};
 
 	termInput.addEventListener('keydown', async e => {

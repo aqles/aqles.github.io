@@ -13,6 +13,10 @@
   --accent: #0077ff;
 }
 
+[data-theme="light"] .theme-switcher .slider {
+  background: var(--text); 
+}
+
 body {
   margin: 0;
   padding: 0;

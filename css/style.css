@@ -269,7 +269,7 @@ footer { padding: 2rem; margin-top: 2rem; text-align: center; }
 /* Switch styling */
 .theme-switcher {
   position: fixed;
-  bottom: 1rem;
+  bottom: 5px;
   right: 1rem;
   left: auto;
   transform: none;
@@ -392,7 +392,7 @@ footer { padding: 2rem; margin-top: 2rem; text-align: center; }
 .reveal.visible {
   opacity: 1;
   transform: translateY(0);
-  padding-bottom: 54px;
+  padding-bottom: 42px;
 }
 
 /* Interactive Terminal */

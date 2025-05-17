@@ -392,6 +392,7 @@ footer { padding: 2rem; margin-top: 2rem; text-align: center; }
 .reveal.visible {
   opacity: 1;
   transform: translateY(0);
+  padding-bottom: 54px;
 }
 
 /* Interactive Terminal */

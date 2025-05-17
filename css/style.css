@@ -13,8 +13,9 @@
   --accent: #0077ff;
 }
 
-[data-theme="light"] .theme-switcher .slider {
-  background: var(--text); 
+[data-theme="light"] .theme-switcher input:checked +,
+[data-theme="light"] .slider, {
+  background: #fff;
 }
 
 body {

@@ -134,16 +134,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	let userCoords = null;
 
-	// Minta izin geolocation dan simpan coords
-	if (navigator.geolocation) {
-	  navigator.geolocation.getCurrentPosition(pos => {
-		userCoords = {
-		  lat: pos.coords.latitude,
-		  lon: pos.coords.longitude
-		};
-	  });
-	}
-
 	const startTime = Date.now();
 	const quotes = [
 	  `“Talk is cheap. Show me the code.” – Linus Torvalds`,
@@ -170,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	];
 
 	const commands = {
-	  help: () => 'Available: help, about, contact, clear, date, time, uptime, projects, skills, joke, quote, weather, ascii, echo, calc, random, ip, techstack, experience and Ask for Asking',
+	  help: () => 'Available: help, about, contact, clear, date, time, uptime, projects, skills, joke, quote, ascii, echo, calc, random, ip, techstack, experience and Ask for Asking',
 	  about: () => 'Hai, aku Aql, IT enthusiast & penyuka kopi, salam kenal!',
 	  contact: () => 'Email: aql@ednasalam.com | GitHub: github.com/aqles | LinkedIn: linkedin.com/in/ednasalam',
 	  date: () => new Date().toLocaleDateString(),
@@ -191,28 +181,13 @@ document.addEventListener('DOMContentLoaded', () => {
 		  }
 		},
 	  quote: () => quotes[Math.floor(Math.random() * quotes.length)],
-	  weather: async () => {
-		  if (!userCoords) return 'Geolocation belum diizinkan.';
-		  try {
-			const { lat, lon } = userCoords;
-			const res = await fetch(
-			  `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`
-			);
-			const data = await res.json();
-			const temp = data.current_weather.temperature.toFixed(1);
-			const wind = data.current_weather.windspeed.toFixed(1);
-			return `Suhu: ${temp}°C, Angin: ${wind} m/s`;
-		  } catch {
-			return 'Gagal ambil data cuaca.';
-		  }
-		},
 	  ascii: () => `                                              
- __                                                
-|  |__ _____    ____   ____   _____ _____    ____  
-|  |  \\__  \  /    \ /  _ \ /     \\__  \  /    \ 
-|   Y  \/ __ \|   |  (  <_> )  Y Y  \/ __ \|   |  \
-|___|  (____  /___|  /\____/|__|_|  (____  /___|  /
-     \/     \/     \/             \/     \/     \/ 
+   _____   ________  .____     
+  /  _  \  \_____  \ |    |    
+ /  /_\  \  /  / \  \|    |    
+/    |    \/   \_/.  \    |___ 
+\____|__  /\_____\ \_/_______ \
+        \/        \__>       \/
                                                          
        `.trim(),
 	  echo: args => args.join(' '),

@@ -16,6 +16,8 @@ export default async function handler(req, res) {
         body: JSON.stringify({
           model: 'jamba-large-1.6',  
           messages: [
+            { role: 'system', content: 'Kamu adalah ES-AI, asisten virtual penuh cinta yang siap membantu pengguna dengan bahasa sopan dan lembut. Jangan sebut diri sebagai AI generik.'
+          },
             { role: 'user', content: prompt }
           ],
           temperature: 0.7,

@@ -192,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	  },
 	  ip: async () => {
 		try {
-		  const res = await fetch('https://api.ipify.org?format=json');
+		  const res = await fetch('/api/ip');
 		  const obj = await res.json();
 		  return `Your IP: ${obj.ip}`;
 		} catch (err) {

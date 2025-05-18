@@ -229,7 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 	  },
 	  weather: async (args) => {
-		  const helpMsg = 'Format: <span class="accent">weather &lt;nama kota&gt;</span><br>Contoh: <code>weather Jakarta</code>';
+		  const helpMsg = 'Format: <span class="accent">weather &lt;nama kota&gt;</span><br>Contoh: <code>weather Jakarta</code>. Jangan pakai in atau di';
 		
 		  if (!args || args.length === 0) {
 		    return `Kamu belum kasih nama kotanya nih~ 🥺<br>${helpMsg}`;
@@ -258,7 +258,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		      method: 'POST',
 		      headers: { 'Content-Type': 'application/json' },
 		      body: JSON.stringify({
-		        prompt: `Berikan saran atau komentar positif dan ceria berdasarkan kondisi beriku:\n${cuacaRingkas}`
+		        prompt: `Berikan saran atau komentar positif dan ceria yang simpel dan pendek berdasarkan kondisi beriku:\n${cuacaRingkas}`
 		      })
 		    });
 		

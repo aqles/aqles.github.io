@@ -229,38 +229,46 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 	  },
 	  weather: async (args) => {
-	  if (args.length === 0) return 'Usage: weather <nama kota>';
-	
-	  try {
-	    const city = args.join(' ');
-	    const { lat, lon } = await getCoords(city);
-	
-	    const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
-	    const data = await res.json();
-	    const cuaca = data.current_weather;
-	
-	    const suhu = cuaca.temperature.toFixed(1);
-	    const angin = cuaca.windspeed.toFixed(1);
-	    const kode = cuaca.weathercode;
-	    const deskripsi = weatherCodeMap[kode] || 'Tidak diketahui';
-	
-	    const cuacaRingkas = `Cuaca di ${city} saat ini adalah ${deskripsi}, suhu ${suhu}°C, angin ${angin} m/s.`;
-	
-	    const aiRes = await fetch('/api/ai21', {
-	      method: 'POST',
-	      headers: { 'Content-Type': 'application/json' },
-	      body: JSON.stringify({
-	        prompt: `Berikan saran atau komentar lembut dan ceria berdasarkan kondisi berikut:\n${cuacaRingkas}`
-	      })
-	    });
-	
-	    const { reply } = await aiRes.json();
-	    return `${cuacaRingkas}<br><br>${reply}`;
-	  } catch (err) {
-	    console.error(err);
-	    return 'Gagal mengambil data cuaca atau kota tidak ditemukan.';
-	  }
-	},
+		  const helpMsg = 'Format: <span class="accent">weather &lt;nama kota&gt;</span><br>Contoh: <code>weather Jakarta</code>';
+		
+		  if (!args || args.length === 0) {
+		    return `Kamu belum kasih nama kotanya nih~ 🥺<br>${helpMsg}`;
+		  }
+		
+		  const city = args.join(' ').trim();
+		  if (city.length < 2) {
+		    return `Nama kota terlalu pendek atau gak valid 😢<br>${helpMsg}`;
+		  }
+		
+		  try {
+		    const { lat, lon } = await getCoords(city);
+		
+		    const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
+		    const data = await res.json();
+		    const cuaca = data.current_weather;
+		
+		    const suhu = cuaca.temperature.toFixed(1);
+		    const angin = cuaca.windspeed.toFixed(1);
+		    const kode = cuaca.weathercode;
+		    const deskripsi = weatherCodeMap[kode] || 'Tidak diketahui';
+		
+		    const cuacaRingkas = `Cuaca di ${city} saat ini adalah ${deskripsi}, suhu ${suhu}°C, angin ${angin} m/s.`;
+		
+		    const aiRes = await fetch('/api/ai21', {
+		      method: 'POST',
+		      headers: { 'Content-Type': 'application/json' },
+		      body: JSON.stringify({
+		        prompt: `Berikan saran atau komentar positif dan ceria berdasarkan kondisi beriku:\n${cuacaRingkas}`
+		      })
+		    });
+		
+		    const { reply } = await aiRes.json();
+		    return `${cuacaRingkas}<br><br>${reply}`;
+		  } catch (err) {
+		    console.error(err);
+		    return `Gagal mengambil data cuaca untuk <strong>${city}</strong> 😢<br>Coba pastikan penulisannya benar yaa 💌`;
+		  }
+		},
 	  random: () => `Random: ${Math.floor(Math.random() * 100) + 1}`,
 	  techstack: () => 
 		'HTML, CSS, JavaScript, Three.js, Node.js, React, GSAP, Lottie',

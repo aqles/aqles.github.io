@@ -129,6 +129,35 @@ document.addEventListener('DOMContentLoaded', () => {
 	let userCoords = null;
 	
 	const chatHistory = [];
+	async function getCoords(city) {
+	  const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(city)}`);
+	  const data = await res.json();
+	  if (data.length === 0) throw new Error('Kota tidak ditemukan');
+	  return {
+	    lat: parseFloat(data[0].lat),
+	    lon: parseFloat(data[0].lon)
+	  };
+	};
+	const weatherCodeMap = {
+	  0: 'Cerah',
+	  1: 'Sebagian berawan',
+	  2: 'Berawan',
+	  3: 'Mendung',
+	  45: 'Berkabut',
+	  48: 'Kabut beku',
+	  51: 'Gerimis ringan',
+	  53: 'Gerimis sedang',
+	  55: 'Gerimis lebat',
+	  61: 'Hujan ringan',
+	  63: 'Hujan sedang',
+	  65: 'Hujan lebat',
+	  71: 'Salju ringan',
+	  73: 'Salju sedang',
+	  75: 'Salju lebat',
+	  80: 'Hujan deras',
+	  81: 'Hujan sangat deras',
+	  82: 'Hujan ekstrem',
+	};
 	const startTime = Date.now();
 	const quotes = [
 	  `“Talk is cheap. Show me the code.” – Linus Torvalds`,
@@ -153,7 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	  `Orang mukmin yang paling sempurna imannya adalah yang paling baik akhlaknya.
 	HR. Abu Daud no. 4682 dan Ibnu Hibban`
 	];
-
+//List command
 	const commands = {
 	  help: () => 'Available: help, about, contact, clear, clearhistory, date, time, uptime, projects, skills, joke, quote, ascii, echo, calc, random, ip, techstack, experience and Ask for Asking',
 	  about: () => 'Hai, aku Aql, IT enthusiast & penyuka kopi, salam kenal!',
@@ -199,6 +228,40 @@ document.addEventListener('DOMContentLoaded', () => {
 		  return 'Gagal ambil IP.';
 		}
 	  },
+	  weather: async (args) => {
+	  if (args.length === 0) return 'Usage: weather <nama kota>';
+	
+	  try {
+	    const city = args.join(' ');
+	    const { lat, lon } = await getCoords(city);
+	
+	    const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
+	    const data = await res.json();
+	    const cuaca = data.current_weather;
+	
+	    const suhu = cuaca.temperature.toFixed(1);
+	    const angin = cuaca.windspeed.toFixed(1);
+	    const kode = cuaca.weathercode;
+	    const deskripsi = weatherCodeMap[kode] || 'Tidak diketahui';
+	
+	    const cuacaRingkas = `Cuaca di ${city} saat ini adalah ${deskripsi}, suhu ${suhu}°C, angin ${angin} m/s.`;
+	
+	    const aiRes = await fetch('/api/ai21', {
+	      method: 'POST',
+	      headers: { 'Content-Type': 'application/json' },
+	      body: JSON.stringify({
+	        prompt: `Berikan saran atau komentar lembut dan ceria berdasarkan kondisi berikut:\n${cuacaRingkas}`
+	      })
+	    });
+	
+	    const { reply } = await aiRes.json();
+	    return `${cuacaRingkas}<br><br>${reply}`;
+	  } catch (err) {
+	    console.error(err);
+	    return 'Gagal mengambil data cuaca atau kota tidak ditemukan.';
+	  }
+	}
+
 	  random: () => `Random: ${Math.floor(Math.random() * 100) + 1}`,
 	  techstack: () => 
 		'HTML, CSS, JavaScript, Three.js, Node.js, React, GSAP, Lottie',

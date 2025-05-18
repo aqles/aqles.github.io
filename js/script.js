@@ -260,8 +260,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	    console.error(err);
 	    return 'Gagal mengambil data cuaca atau kota tidak ditemukan.';
 	  }
-	}
-
+	},
 	  random: () => `Random: ${Math.floor(Math.random() * 100) + 1}`,
 	  techstack: () => 
 		'HTML, CSS, JavaScript, Three.js, Node.js, React, GSAP, Lottie',

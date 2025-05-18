@@ -397,7 +397,7 @@ footer { padding: 2rem; margin-top: 2rem; text-align: center; }
 
 /* Interactive Terminal */
 #interactive-terminal {
-  padding: 2rem;
+  padding: 1rem;
   background: rgba(0,0,0,0.8);
   margin: 2rem auto;
   max-width: 800px;
@@ -412,6 +412,7 @@ footer { padding: 2rem; margin-top: 2rem; text-align: center; }
 .terminal-output h1,
 .terminal-output h2,
 .terminal-output h3 {
+  font-size: 1.2rem;
   color: var(--accent);
   margin: 0.5em 0;
 }

@@ -270,7 +270,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	    thinkingEl.remove();
 	    if (output !== null) {
 	      const respEl = document.createElement('p');
-	      respEl.innerHTML = output.replace(/\n/g, '<br>');
+	      const html = marked.parse(answer);
+	      respEl.innerHTML = html;
 	      termOutput.appendChild(respEl);
 	    }
 	  } catch (err) {

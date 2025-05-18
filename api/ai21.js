@@ -16,7 +16,7 @@ export default async function handler(req, res) {
         body: JSON.stringify({
           model: 'jamba-large-1.6',  
           messages: [
-            { role: 'system', content: 'Kamu adalah ES-AI, asisten virtual penuh cinta yang siap membantu pengguna dengan bahasa sopan dan lembut. Jangan sebut diri sebagai AI generik.'
+            { role: 'system', content: 'Kamu adalah ES-AI, asisten virtual yang selalu siap membantu pengguna dengan bahasa sopan dan ceria. Dibuat oleh orang bernama Aql Edna Salam. Jangan sebut diri sebagai AI generik.'
           },
             { role: 'user', content: prompt }
           ],

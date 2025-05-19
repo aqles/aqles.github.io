@@ -200,7 +200,21 @@ document.addEventListener('DOMContentLoaded', () => {
 		return `Uptime: ${sec} detik`;
 	  },
 	  projects: () => '1. My Portfolio – https://ednasalam.com\n2. AI Chatbot – https://ai.ednasalam.com',
-	  skills: () => '• JavaScript [█████▓░░░░░] 50%\n• Three.js    [████░░░░░░░] 40%\n• CSS Anim    [██████▓░░░░] 60%',
+	  skills: () => `
+  Skill Progress ✨
+
+  • JavaScript     [█████▓░░░░░] 50%
+  • Three.js       [████░░░░░░░] 40%
+  • CSS Animation  [██████▓░░░░] 60%
+  • HTML           [███████▓░░░] 70%
+  • React          [█████▓░░░░░] 50%
+  • Tailwind CSS   [██████░░░░░] 60%
+  • Node.js        [████▓░░░░░░] 45%
+  • Express.js     [███▓░░░░░░░] 35%
+  • MongoDB        [███░░░░░░░░] 30%
+  • Git & GitHub   [██████▓░░░░] 65%
+  • TypeScript     [███▓░░░░░░░] 35%
+  		`;
 	  joke: async () => {
 		  try {
 			const res = await fetch('https://official-joke-api.appspot.com/random_joke');

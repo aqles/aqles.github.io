@@ -220,7 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
   • Token Limits     [███▓░░░░░░░] 35%
   • DNS + Hosting    [█████▓░░░░░] 50%
   • Cloudflare Setup [████▓░░░░░░] 45%
-  		`;
+  		`,
 	  joke: async () => {
 		  try {
 			const res = await fetch('https://official-joke-api.appspot.com/random_joke');

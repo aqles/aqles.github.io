@@ -214,13 +214,13 @@ document.addEventListener('DOMContentLoaded', () => {
 	  ascii: async () => {
 		try {
 		const prompt = `
-		Buatkan 1 ASCII art lucu atau keren secara acak. Jangan kasih penjelasan apapun. Cukup tampilkan langsung bentuk ASCII-nya saja.
+		Generate one random, cute or cool ASCII art. Do not include any explanation or extra text—only output the ASCII art itself.
 
-		Contoh:
-		(>'-')> atau 
-		  ( •_•)>⌐■-■ 
+		Example:
+		(>'-')> 
+		  ( •_•)>⌐■-■
 
-		Mulai sekarang buat yang unik dan beda.
+		From now on, always create something unique and different.
 		`;
 
 			const res = await fetch('/api/ai21', {

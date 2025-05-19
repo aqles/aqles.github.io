@@ -213,7 +213,7 @@ document.addEventListener('DOMContentLoaded', () => {
   • CSS & Tailwind CSS            [██████░░░░] 60%
   • HTML5 & Semantik              [███████░░░] 70%
   • Cloud Deployment (GitHub, CF) [████▓░░░░░] 50%
-  • AI Integration 			      [█████░░░░░] 55%
+  • AI Integration                [█████░░░░░] 55%
   • Prompt Engineering            [████▓░░░░░] 50%
   • Testing (Jest, RTL)           [███▓░░░░░░] 40%
   • Version Control (Git)         [██████░░░░] 60%

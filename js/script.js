@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const div = document.createElement('div');
     div.textContent = input;
     return div.innerHTML;
-	
+  }
   // Theme switcher slider
   const switchEl = document.getElementById('theme-switch');
   const saved = localStorage.getItem('theme') || 'dark';

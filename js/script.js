@@ -203,27 +203,22 @@ document.addEventListener('DOMContentLoaded', () => {
 	  skills: () => `
   Skill Progress ✨
 
-  • JavaScript         [██████▓░░░░] 65%
-  • TypeScript         [███▓░░░░░░░] 35%
-  • HTML               [███████▓░░░] 70%
-  • CSS Animation      [██████▓░░░░] 60%
-  • Tailwind CSS       [██████░░░░░] 60%
-  • React              [████▓░░░░░░] 45%
-  • Next.js            [████▓░░░░░░] 45%
-  • API Routing (Next) [████▓░░░░░░] 45%
-  • Node.js            [████▓░░░░░░] 45%
-  • Express.js         [███▓░░░░░░░] 35%
-  • MongoDB            [███░░░░░░░░] 30%
-  • Three.js           [████░░░░░░░] 40%
-  • Git & GitHub       [██████▓░░░░] 65%
-  • Auth / NextAuth    [████▓░░░░░░] 45%
-  • Token Handling     [███▓░░░░░░░] 35%
-  • AI Chatbot Dev     [████▓░░░░░░] 45% 
-  • Prompt Design      [████░░░░░░░] 40%
-  • DNS + Hosting      [█████▓░░░░░] 50%
-  • Cloudflare Config  [████▓░░░░░░] 45%
-  • Terminal UI Dev    [████▓░░░░░░] 45%
-  • Markdown / README  [██████░░░░░] 60%
+  • JavaScript (ES6+)             [████████░░] 80%
+  • TypeScript                    [███████░░░] 70%
+  • React & Next.js               [███████▓░░] 75%
+  • Node.js & Express.js          [██████░░░░] 65%
+  • RESTful API Design            [██████░░░░] 65%
+  • Database Management (MongoDB) [██████░░░░] 65%
+  • Authentication & AuthZ        [█████▓░░░░] 55%
+  • CSS & Tailwind CSS            [██████░░░░] 60%
+  • HTML5 & Semantik              [███████░░░] 70%
+  • Cloud Deployment (GitHub, CF) [████▓░░░░░] 50%
+  • AI Integration 			      [█████░░░░░] 55%
+  • Prompt Engineering            [████▓░░░░░] 50%
+  • Testing (Jest, RTL)           [███▓░░░░░░] 40%
+  • Version Control (Git)         [██████░░░░] 60%
+  • Three.js & 3D Animations      [███▓░░░░░░] 40%
+  • CI/CD Basics                  [███░░░░░░░] 35%
   		`,
 	  joke: async () => {
 		  try {

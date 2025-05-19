@@ -203,17 +203,23 @@ document.addEventListener('DOMContentLoaded', () => {
 	  skills: () => `
   Skill Progress ✨
 
-  • JavaScript     [█████▓░░░░░] 50%
-  • Three.js       [████░░░░░░░] 40%
-  • CSS Animation  [██████▓░░░░] 60%
-  • HTML           [███████▓░░░] 70%
-  • React          [█████▓░░░░░] 50%
-  • Tailwind CSS   [██████░░░░░] 60%
-  • Node.js        [████▓░░░░░░] 45%
-  • Express.js     [███▓░░░░░░░] 35%
-  • MongoDB        [███░░░░░░░░] 30%
-  • Git & GitHub   [██████▓░░░░] 65%
-  • TypeScript     [███▓░░░░░░░] 35%
+  • JavaScript       [██████▓░░░░] 65%
+  • TypeScript       [███▓░░░░░░░] 35%
+  • HTML             [███████▓░░░] 70%
+  • CSS Animation    [██████▓░░░░] 60%
+  • Tailwind CSS     [██████░░░░░] 60%
+  • React            [████▓░░░░░░] 45%
+  • Node.js          [████▓░░░░░░] 45%
+  • Express.js       [███▓░░░░░░░] 35%
+  • MongoDB          [███░░░░░░░░] 30%
+  • Three.js         [████░░░░░░░] 40%
+  • Git & GitHub     [██████▓░░░░] 65%
+  • Terminal UI Dev  [████▓░░░░░░] 45%
+  • API Integration  [█████░░░░░░] 50%
+  • Auth / NextAuth  [████▓░░░░░░] 45%
+  • Token Limits     [███▓░░░░░░░] 35%
+  • DNS + Hosting    [█████▓░░░░░] 50%
+  • Cloudflare Setup [████▓░░░░░░] 45%
   		`;
 	  joke: async () => {
 		  try {

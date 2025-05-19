@@ -224,7 +224,6 @@ document.addEventListener('DOMContentLoaded', () => {
   • Cloudflare Config  [████▓░░░░░░] 45%
   • Terminal UI Dev    [████▓░░░░░░] 45%
   • Markdown / README  [██████░░░░░] 60%
-  
   		`,
 	  joke: async () => {
 		  try {

@@ -1,6 +1,12 @@
 // script.js
 
 document.addEventListener('DOMContentLoaded', () => {
+  // ——— Fungsi sanitizeResponse ———
+  function sanitizeResponse(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+	
   // Theme switcher slider
   const switchEl = document.getElementById('theme-switch');
   const saved = localStorage.getItem('theme') || 'dark';
@@ -205,15 +211,31 @@ document.addEventListener('DOMContentLoaded', () => {
 		  }
 		},
 	  quote: () => quotes[Math.floor(Math.random() * quotes.length)],
-	  ascii: () => `                                              
-   _____   ________  .____     
-  /  _  \  \_____  \ |    |    
- /  /_\  \  /  / \  \|    |    
-/    |    \/   \_/.  \    |___ 
-\____|__  /\_____\ \_/_______ \
-        \/        \__>       \/
-                                                         
-       `.trim(),
+	  ascii: async () => {
+		try {
+		const prompt = `
+		Buatkan 1 ASCII art lucu atau keren secara acak. Jangan kasih penjelasan apapun. Cukup tampilkan langsung bentuk ASCII-nya saja.
+
+		Contoh:
+		(>'-')> atau 
+		  ( •_•)>⌐■-■ 
+
+		Mulai sekarang buat yang unik dan beda.
+		`;
+
+			const res = await fetch('/api/ai21', {
+			  method: 'POST',
+			  headers: { 'Content-Type': 'application/json' },
+			  body: JSON.stringify({ prompt })
+			});
+
+			const { reply } = await res.json();
+			return reply || 'AI belum bisa buat ASCII... :(';
+		  } catch (err) {
+			console.error('ASCII error:', err);
+			return 'Gagal ambil ASCII dari AI.';
+		  }
+		},
 	  echo: args => args.join(' '),
 	  calc: args => {
 		try { return eval(args.join(' ')).toString(); }
@@ -339,10 +361,17 @@ document.addEventListener('DOMContentLoaded', () => {
 	    }
 	    thinkingEl.remove();
 	    if (output !== null) {
-	      const respEl = document.createElement('p');
-	      const html = marked.parse(output);
-	      respEl.innerHTML = html;
-	      termOutput.appendChild(respEl);
+			const respEl = document.createElement('p');
+			let parsedHTML;
+
+			if (/[\s\S]{3,}/.test(output) && !output.includes('<') && output.includes('\n')) {
+			  parsedHTML = `<pre>${sanitizeResponse(output)}</pre>`;
+			} else {
+			  parsedHTML = marked.parse(output);
+			}
+
+			respEl.innerHTML = parsedHTML;
+			termOutput.appendChild(respEl);
 	    }
 	  } catch (err) {
 	    thinkingEl.remove();

@@ -440,6 +440,15 @@ footer { padding: 2rem; margin-top: 2rem; text-align: center; }
   color: var(--accent);
 }
 
+.terminal-output pre {
+  white-space: pre;
+  font-family: 'Fira Code', monospace;
+  background: rgba(0,0,0,0.2);
+  padding: 0.5rem;
+  border-radius: 5px;
+  margin: 0.5rem 0;
+}
+
 .terminal-output pre code {
   display: block;
   background: rgba(0, 0, 0, 0.4);

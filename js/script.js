@@ -2,9 +2,9 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   // ——— Fungsi sanitizeResponse ———
-  function sanitizeResponse(text) {
+  function sanitizeResponse(input) {
     const div = document.createElement('div');
-    div.textContent = text;
+    div.textContent = input;
     return div.innerHTML;
 	
   // Theme switcher slider

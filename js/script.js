@@ -451,7 +451,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 			respEl.innerHTML = parsedHTML;
 			termOutput.appendChild(respEl);
-	    }
+	   
 	  } catch (err) {
 	    thinkingEl.remove();
 	    const errEl = document.createElement('p');

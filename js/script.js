@@ -215,7 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	];
 //List command
 	const commands = {
-	  help: () => 'Available: help, about, contact, clear, clearhistory, date, time, weather, uptime, projects, skills, joke, quote, ascii, echo, calc, random, ip, techstack, experience and Ask for Asking',
+	  help: () => 'Available: help, about, contact, clear, clearhistory, date, time, dottrick, weather, uptime, projects, skills, joke, quote, ascii, echo, calc, random, ip, techstack, experience and Ask for Asking',
 	  about: () => 'Hai, aku Aql, IT enthusiast & penyuka kopi, salam kenal!',
 	  contact: () => 'Email: aql@ednasalam.com | GitHub: github.com/aqles | LinkedIn: linkedin.com/in/ednasalam',
 	  date: () => new Date().toLocaleDateString(),

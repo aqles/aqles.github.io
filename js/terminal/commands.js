@@ -1,5 +1,6 @@
 // public/js/terminal/commands.js
 // Semua definisi command, helper, dan data statis
+let chatHistory = [];
 
 export const startTime = Date.now();
 

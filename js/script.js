@@ -441,7 +441,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	    thinkingEl.remove();
 	  if (output !== null) {
 		const respEl = document.createElement('p');
-		const isTrustedHTML = ['dottrick', 'ascii', 'weather'].includes(cmd); // HTML yang kamu percaya
+		const isTrustedHTML = ['dottrick', 'weather'].includes(cmd); // HTML yang kamu percaya
 		let parsedHTML;
 		if (isTrustedHTML) {
 		  parsedHTML = output; // Langsung render HTML dari command (tanpa sanitize)

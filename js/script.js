@@ -146,10 +146,10 @@ document.addEventListener('DOMContentLoaded', () => {
 	    lon: parseFloat(data[0].lon)
 	  };
 	};
-	const gmailDotTrick = (email) => {
+	const gmailDotTrick = (email, maxCount = 100) => {
 	  const [username, domain] = email.split('@');
 	  if (!username || domain.toLowerCase() !== 'gmail.com') {
-		return ['Format salah yaa~ 😢 Coba begini: <code>dottrick namaku@gmail.com</code>'];
+		return ['Format salah yaa~ 😢 Coba: dottrick namaku@gmail.com 30'];
 	  }
 
 	  const results = new Set();
@@ -159,16 +159,17 @@ document.addEventListener('DOMContentLoaded', () => {
 		  const withDot = current.slice(0, i + 1) + '.' + current.slice(i + 1);
 		  if (!withDot.includes('..')) {
 			results.add(withDot);
-			if (results.size >= 50) break;
-			recurse(withDot, i + 2); // skip next to avoid overlapping dots
+			if (results.size >= maxCount) return;
+			recurse(withDot, i + 2);
 		  }
+		  if (results.size >= maxCount) return;
 		}
 	  };
 
 	  recurse(username, 0);
 
 	  return Array.from(results)
-		.slice(0, 50)
+		.slice(0, maxCount)
 		.map(name => `${name}@gmail.com`);
 	};
 	const weatherCodeMap = {
@@ -297,34 +298,37 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 	  },
 	  dottrick: (args) => {
-		  if (!args || args.length === 0) {
-			return 'Kamu belum kasih alamat Gmail-nya 😳<br>Contoh: <code>dottrick namaku@gmail.com</code>';
+		  if (!args || args.length < 2) {
+			return 'Usage: dottrick <email> <jumlah>\nContoh: dottrick namaku@gmail.com 30';
 		  }
 
 		  const email = args[0];
-		  const results = gmailDotTrick(email);
+		  const count = parseInt(args[1], 10);
+		  if (isNaN(count) || count < 1 || count > 1000) {
+			return 'Jumlah harus angka antara 1–1000 yaa~ 😳';
+		  }
 
+		  const results = gmailDotTrick(email, count);
 		  if (!Array.isArray(results)) return results;
 
 		  const listId = `dottrick-${Math.random().toString(36).slice(2, 9)}`;
 		  const emailsHTML = results.map(e => `<div>${e}</div>`).join('');
 
 		  return `
-			<div style="margin-bottom: 0.5em">
-			  <b>Hasil dot trick untuk <code>${email}</code></b>
+			<div style="margin-bottom:0.5em">
+			  <b>Hasil dot trick untuk <code>${email}</code> (${count} alamat)</b>
 			</div>
-			<div id="${listId}" style="max-height: 300px; overflow-y: auto; border-left: 3px solid #999; padding-left: 1em; margin-bottom: 1em; font-family: monospace;">
+			<div id="${listId}" style="max-height:300px; overflow-y:auto; border-left:3px solid #999; padding-left:1em; margin-bottom:1em; font-family:monospace;">
 			  ${emailsHTML}
 			</div>
 			<button 
-			  onclick="(function() {
+			  onclick="(function(){
 				const text = Array.from(document.querySelectorAll('#${listId} div'))
-								  .map(div => div.textContent).join('\\n');
-				navigator.clipboard.writeText(text).then(() => {
-				  alert('Berhasil di-copy ke clipboard yaa 💌');
-				});
+								  .map(div=>div.textContent).join('\\n');
+				navigator.clipboard.writeText(text)
+				  .then(()=>alert('Berhasil di-copy yaa 💌'));
 			  })()" 
-			  style="padding: 6px 12px; background: #444; color: #fff; border: none; border-radius: 4px; cursor: pointer;">
+			  style="padding:6px 12px; background:#444; color:#fff; border:none; border-radius:4px; cursor:pointer;">
 			  📋 Copy All
 			</button>
 		  `;

@@ -11,8 +11,24 @@ export async function getCoords(city) {
 }
 
 export function gmailDotTrick(email, maxCount = 100) {
-  // ... (copy logic dari script.js) :contentReference[oaicite:0]{index=0}:contentReference[oaicite:1]{index=1}
-}
+  const [username, domain] = email.split('@');
+	  if (!username || domain.toLowerCase() !== 'gmail.com') {
+		return ['Format salah yaa~ 😢 Coba: dottrick namaku@gmail.com 30'];
+	  }
+
+	  const results = new Set();
+
+	  const recurse = (current, index) => {
+		for (let i = index; i < username.length - 1; i++) {
+		  const withDot = current.slice(0, i + 1) + '.' + current.slice(i + 1);
+		  if (!withDot.includes('..')) {
+			results.add(withDot);
+			if (results.size >= maxCount) return;
+			recurse(withDot, i + 2);
+		  }
+		  if (results.size >= maxCount) return;
+		}
+}};
 
 export const weatherCodeMap = {
   0: 'Cerah', 1:'Sebagian berawan',2:'Berawan',3:'Mendung',
@@ -156,7 +172,8 @@ export const commands = {
 		  }},
   random:  ()=>`Random: ${Math.floor(Math.random()*100)+1}`,
   techstack:()=> 'HTML, CSS, JavaScript, Three.js, Node.js, React, GSAP, Lottie',
-  clearhistory:()=>{/* clear chatHistory */},
+  clearhistory:()=>{chatHistory.length = 0;
+		  return 'Chat history cleared.';},
   experience:()=> '2015 ─ People Management Intern PT. Pertamina (Persero)\n' +
 		'2016 ─ Planning & Schedulling Net Mediatama TV\n' +
 		'2017 ─ Web Dev Freelance\n'+

@@ -553,3 +553,20 @@ footer { padding: 2rem; margin-top: 2rem; text-align: center; }
 .reveal.visible .lantern {
   opacity: 1;
 }
+
+/* Copy button */
+.copy-button {
+  background: #222;
+  color: #0ff;
+  border: 1px solid #0ff3;
+  padding: 4px 8px;
+  margin: 6px 0 12px;
+  font-family: inherit;
+  font-size: 0.85em;
+  cursor: pointer;
+  border-radius: 4px;
+}
+.copy-button:hover {
+  background: #0ff3;
+  color: #000;
+}

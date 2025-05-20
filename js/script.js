@@ -439,8 +439,10 @@ document.addEventListener('DOMContentLoaded', () => {
 	      output = await commands.ask([raw]);
 	    }
 	    thinkingEl.remove();
-	    const isTrustedHTML = ['dottrick', 'ascii', 'weather'].includes(cmd); // HTML yang kamu percaya
-
+	  if (output !== null) {
+		const respEl = document.createElement('p');
+		const isTrustedHTML = ['dottrick', 'ascii', 'weather'].includes(cmd); // HTML yang kamu percaya
+		let parsedHTML;
 		if (isTrustedHTML) {
 		  parsedHTML = output; // Langsung render HTML dari command (tanpa sanitize)
 		} else if (/[\s\S]{3,}/.test(output) && !output.includes('<') && output.includes('\n')) {
@@ -451,7 +453,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 			respEl.innerHTML = parsedHTML;
 			termOutput.appendChild(respEl);
-	   
+	  } 
 	  } catch (err) {
 	    thinkingEl.remove();
 	    const errEl = document.createElement('p');

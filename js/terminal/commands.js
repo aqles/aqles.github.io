@@ -135,7 +135,12 @@ export const commands = {
 		} catch (err) {
 		  return 'Gagal ambil IP.';
 		}},
-  dottrick: args=> gmailDotTrick(args[0], parseInt(args[1],10)),
+  dottrick: args => {
+ 	if (!args[0]) {
+   	return 'Format: dottrick <email@gmail.com> [maxCount]';
+ 	}
+ 	return gmailDotTrick(args[0], parseInt(args[1], 10) || 100);
+   },
   weather: async args=>{const helpMsg = 'Format: <span class="accent">weather &lt;nama kota&gt;</span><br>Contoh: <code>weather Jakarta</code>. Jangan pakai in atau di';
 		
 		  if (!args || args.length === 0) {

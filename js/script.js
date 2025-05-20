@@ -304,16 +304,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
 		  if (!Array.isArray(results)) return results;
 
-		  const listId = `dottrick-${Math.random().toString(36).substring(2, 9)}`;
-		  const emailsHTML = results.map(e => e).join('<br>');
+		  const listId = `dottrick-${Math.random().toString(36).slice(2, 9)}`;
+		  const emailsHTML = results.map(e => `<div>${e}</div>`).join('');
 
-		  // Tambahkan tombol copy & list email
 		  return `
-			<b>Hasil dot trick untuk <code>${email}</code></b>:<br><br>
-			<div id="${listId}" style="max-height: 300px; overflow-y: auto; border-left: 2px solid #777; padding-left: 1em; margin-bottom: 1em;">
+			<div style="margin-bottom: 0.5em">
+			  <b>Hasil dot trick untuk <code>${email}</code></b>
+			</div>
+			<div id="${listId}" style="max-height: 300px; overflow-y: auto; border-left: 3px solid #999; padding-left: 1em; margin-bottom: 1em; font-family: monospace;">
 			  ${emailsHTML}
 			</div>
-			<button onclick="navigator.clipboard.writeText(document.getElementById('${listId}').innerText).then(() => alert('Berhasil di-copy ke clipboard yaa 💌'))">
+			<button 
+			  onclick="(function() {
+				const text = Array.from(document.querySelectorAll('#${listId} div'))
+								  .map(div => div.textContent).join('\\n');
+				navigator.clipboard.writeText(text).then(() => {
+				  alert('Berhasil di-copy ke clipboard yaa 💌');
+				});
+			  })()" 
+			  style="padding: 6px 12px; background: #444; color: #fff; border: none; border-radius: 4px; cursor: pointer;">
 			  📋 Copy All
 			</button>
 		  `;

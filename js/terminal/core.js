@@ -1,6 +1,7 @@
 // public/js/terminal/core.js
 import { sanitizeResponse } from '../utils/sanitize.js';
 import { commands, getCoords, gmailDotTrick, weatherCodeMap, startTime, quotes } from './commands.js';
+import { copyToClipboard } from '../utils/copy.js';
 
 export function initTerminal() {
   const termInput  = document.getElementById('terminal-input');
@@ -42,7 +43,14 @@ export function initTerminal() {
         }
         respEl.innerHTML = parsed;
         termOutput.appendChild(respEl);
-      }
+        if (['dottrick', 'ip', 'ascii'].includes(cmd) && output) {
+ 					const copyBtn = document.createElement('button');
+ 					copyBtn.textContent = '📋 Copy';
+ 					copyBtn.className = 'copy-button';
+					copyBtn.onclick = () => copyToClipboard(output);
+ 					termOutput.appendChild(copyBtn);
+					}
+       }
     } catch (err) {
       thinkingEl.remove();
       const errEl = document.createElement('p');

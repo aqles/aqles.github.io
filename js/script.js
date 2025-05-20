@@ -144,6 +144,31 @@ document.addEventListener('DOMContentLoaded', () => {
 	    lon: parseFloat(data[0].lon)
 	  };
 	};
+	const gmailDotTrick = (email) => {
+	  const [username, domain] = email.split('@');
+	  if (!username || domain.toLowerCase() !== 'gmail.com') {
+		return ['Format salah yaa~ 😢 Coba begini: <code>dottrick namaku@gmail.com</code>'];
+	  }
+
+	  const results = new Set();
+
+	  const recurse = (current, index) => {
+		for (let i = index; i < username.length - 1; i++) {
+		  const withDot = current.slice(0, i + 1) + '.' + current.slice(i + 1);
+		  if (!withDot.includes('..')) {
+			results.add(withDot);
+			if (results.size >= 50) break;
+			recurse(withDot, i + 2); // skip next to avoid overlapping dots
+		  }
+		}
+	  };
+
+	  recurse(username, 0);
+
+	  return Array.from(results)
+		.slice(0, 50)
+		.map(name => `${name}@gmail.com`);
+	};
 	const weatherCodeMap = {
 	  0: 'Cerah',
 	  1: 'Sebagian berawan',
@@ -169,23 +194,23 @@ document.addEventListener('DOMContentLoaded', () => {
 	  `“Talk is cheap. Show me the code.” – Linus Torvalds`,
 	  `“Programs must be written for people to read.” – Harold Abelson`,
 	  `“First, solve the problem. Then, write the code.” – John Johnson`,
-	  `Janganlah kalian memandang rendah kebaikan, meskipun hanya sekadar menjawab salam kepada saudaramu.
+	  `“Janganlah kalian memandang rendah kebaikan, meskipun hanya sekadar menjawab salam kepada saudaramu.”
 	HR. Muslim`,
-	  `Barangsiapa yang memelihara adabnya, maka ia telah memelihara agamanya.
+	  `“Barangsiapa yang memelihara adabnya, maka ia telah memelihara agamanya.”
 	HR. Al-Bukhari`,
-	  `Barangsiapa yang memperbaiki akhlaknya, maka ia telah menyempurnakan imannya.
+	  `“Barangsiapa yang memperbaiki akhlaknya, maka ia telah menyempurnakan imannya.”
 	HR. Abu Daud`,
-	  `Jangan marahi anak-anak karena menangis, karena mereka seperti burung kecil yang takut kehilangan.
+	  `“Jangan marahi anak-anak karena menangis, karena mereka seperti burung kecil yang takut kehilangan.”
 	HR. Tirmidzi (disebutkan dalam konteks kelembutan)`,
-	  `Jangan kalian dengki, jangan saling membenci, jangan saling memutus hubungan, dan jadilah kalian hamba Allah yang bersaudara.
+	  `“Jangan kalian dengki, jangan saling membenci, jangan saling memutus hubungan, dan jadilah kalian hamba Allah yang bersaudara.”
 	HR. Al-Bukhari`,
-	  `Perumpamaan orang yang mengingat Allah dan yang tidak mengingat-Nya adalah seperti orang hidup dan mati.
+	  `“Perumpamaan orang yang mengingat Allah dan yang tidak mengingat-Nya adalah seperti orang hidup dan mati.”
 	HR. Al-Bukhari`,
-	  `Barangsiapa yang beriman kepada Allah dan hari akhir, maka hendaklah dia berkata yang baik atau diam.
+	  `“Barangsiapa yang beriman kepada Allah dan hari akhir, maka hendaklah dia berkata yang baik atau diam.”
 	HR. Abu Hurairah (dikutip dari riwayat Bukhari-Muslim secara maknawi)`,
-	  `Tempat yang paling dicintai Allah adalah masjid, dan tempat yang paling dibenci Allah adalah pasar.
+	  `“Tempat yang paling dicintai Allah adalah masjid, dan tempat yang paling dibenci Allah adalah pasar.”
 	HR. Abu Hurairah (dalam beberapa riwayat disebutkan oleh Tirmidzi)`,
-	  `Orang mukmin yang paling sempurna imannya adalah yang paling baik akhlaknya.
+	  `“Orang mukmin yang paling sempurna imannya adalah yang paling baik akhlaknya.”
 	HR. Abu Daud no. 4682 dan Ibnu Hibban`
 	];
 //List command
@@ -268,6 +293,30 @@ document.addEventListener('DOMContentLoaded', () => {
 		} catch (err) {
 		  return 'Gagal ambil IP.';
 		}
+	  },
+	  dottrick: (args) => {
+		  if (!args || args.length === 0) {
+			return 'Kamu belum kasih alamat Gmail-nya 😳<br>Contoh: <code>dottrick namaku@gmail.com</code>';
+		  }
+
+		  const email = args[0];
+		  const results = gmailDotTrick(email);
+
+		  if (!Array.isArray(results)) return results;
+
+		  const listId = `dottrick-${Math.random().toString(36).substring(2, 9)}`;
+		  const emailsHTML = results.map(e => e).join('<br>');
+
+		  // Tambahkan tombol copy & list email
+		  return `
+			<b>Hasil dot trick untuk <code>${email}</code></b>:<br><br>
+			<div id="${listId}" style="max-height: 300px; overflow-y: auto; border-left: 2px solid #777; padding-left: 1em; margin-bottom: 1em;">
+			  ${emailsHTML}
+			</div>
+			<button onclick="navigator.clipboard.writeText(document.getElementById('${listId}').innerText).then(() => alert('Berhasil di-copy ke clipboard yaa 💌'))">
+			  📋 Copy All
+			</button>
+		  `;
 	  },
 	  weather: async (args) => {
 		  const helpMsg = 'Format: <span class="accent">weather &lt;nama kota&gt;</span><br>Contoh: <code>weather Jakarta</code>. Jangan pakai in atau di';

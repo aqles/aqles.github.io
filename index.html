@@ -5,17 +5,17 @@
   <meta name="description" content="Showcasing modern web and backend development skills through clean design, responsive interfaces, and scalable solutions. Built with passion, crafted for performance.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MyWorld</title>
-  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/global.css">
   <link rel="icon" type="image/png" href="/assets/favicon-32x32.png" sizes="32x32" />
   <link rel="icon" type="image/ico" href="/assets/favicon.ico" />
   <link rel="shortcut icon" href="/assets/favicon.ico" />
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
   <meta name="apple-mobile-web-app-title" content="My World" />
   <link rel="manifest" href="/assets/site.webmanifest" />
-  <!-- Particles.js CDN -->
+  <!-- Particles.js CDN (untuk modul init-particles.js) -->
   <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
+  <!-- Marked.js jika diperlukan di UI -->
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <script src="js/script.js" defer></script>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -34,17 +34,16 @@
       </svg>
     </div>
     <nav class="nav-links">
-		<a href="#hero">Home</a>
-		<a href="#projects">Projects</a>
-		<a href="#interactive-terminal">Terminal</a>
-		<a href="#contact">Contact</a>
-	  </nav>
-
-  <!-- Hamburger untuk mobile -->
-	  <button id="nav-toggle" aria-label="Toggle navigation">
-		<span></span><span></span><span></span>
-	  </button>
-	</header>
+      <a href="#hero">Home</a>
+      <a href="#projects">Projects</a>
+      <a href="#interactive-terminal">Terminal</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <!-- Hamburger Mobile -->
+    <button id="nav-toggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
 
   <!-- Hero Section -->
   <section id="hero" class="reveal">
@@ -56,19 +55,19 @@
   <section id="projects" class="reveal">
     <h2 class="neon-flicker">Projects</h2>
     <div class="grid">
-      <!--Card Section-->
+      <!-- Project Cards -->
       <div class="card">
-        <a  href="https://ai.ednasalam.com" target="_blank">
-        <img src="assets/screenshots/Port-AI.webp" alt="Project 1">
+        <a href="https://ai.ednasalam.com" target="_blank">
+          <img src="assets/screenshots/Port-AI.webp" alt="Project 1">
         </a>
         <div class="card-info">
           <h3>Salam AI</h3>
           <p>Chatbot AI opensource, masih dalam tahap pengembangan.</p>
         </div>
       </div>
-	  <div class="card">
-        <a  href="#interactive-terminal">
-        <img src="assets/screenshots/web-dev.webp" alt="Project 2">
+      <div class="card">
+        <a href="#interactive-terminal">
+          <img src="assets/screenshots/web-dev.webp" alt="Project 2">
         </a>
         <div class="card-info">
           <h3>Web development</h3>
@@ -81,7 +80,7 @@
   <!-- Contact Section -->
   <section id="contact" class="reveal">
     <h2 class="neon-flicker">Contact Me</h2>
-    <form id="contact-form" action="https://formspree.io/f/xzzrrjbj" method="POST">
+    <form id="contact-form">
       <input type="text" name="nama" placeholder="Nama kamu" required>
       <input type="email" name="_replyto" placeholder="Email kamu" required>
       <textarea name="keperluan" placeholder="Keperluan pesan" rows="4" required></textarea>
@@ -91,38 +90,39 @@
   
   <!-- Interactive Terminal Section -->
   <section id="interactive-terminal" class="reveal">
-	  <div class="terminal-widget">
-		<div id="terminal-output" class="terminal-output">
-		  <p>Try this Terminal. Type <span class="accent">help</span> to see commands, or just ask anything.</p>
-		</div>
-		<div class="terminal-input-line">
-		  <span class="prompt">$&gt;</span>
-		  <input type="text" id="terminal-input" autocomplete="off" />
-		</div>
-	  </div>
+    <div class="terminal-widget">
+      <div id="terminal-output" class="terminal-output">
+        <p>Try this Terminal. Type <span class="accent">help</span> to see commands, or just ask anything.</p>
+      </div>
+      <div class="terminal-input-line">
+        <span class="prompt">$&gt;</span>
+        <input type="text" id="terminal-input" autocomplete="off" />
+      </div>
+      <button id="start-terminal" hidden>Start Terminal</button>
+    </div>
   </section>
 
-  <!-- Footer with Terminal Effect -->
+  <!-- Footer -->
   <footer class="reveal">
     <div class="terminal">
       <p>$ sudo apt install creativity</p>
     </div>
-	<div class="social-links">
+    <div class="social-links">
       <a class="neon-flicker" href="https://github.com/aqles" target="_blank">GitHub</a> |
       <a class="neon-flicker" href="https://linkedin.com/in/ednasalam" target="_blank">LinkedIn</a> |
-	  <a class="neon-flicker" href="https://x.com/aqles" target="_blank">X</a> |
-	  <a class="neon-flicker" href="https://instagram.com/aql_es" target="_blank">IG</a>
+      <a class="neon-flicker" href="https://x.com/aqles" target="_blank">X</a> |
+      <a class="neon-flicker" href="https://instagram.com/aql_es" target="_blank">IG</a>
     </div>
   </footer>
   
-  <!-- Theme Switcher Slider -->
+  <!-- Theme Switcher -->
   <div class="theme-switcher" id="theme-switcher">
-  <span class="icon moon">🌙</span>
-  <label class="switch">
-    <input type="checkbox" id="theme-switch">
-    <span class="slider"></span>
-  </label>
-  <span class="icon sun">☀️</span>
+    <span class="icon moon">🌙</span>
+    <label class="switch">
+      <input type="checkbox" id="theme-switch">
+      <span class="slider"></span>
+    </label>
+    <span class="icon sun">☀️</span>
   </div>
 
   <!-- Thank You Popup -->
@@ -132,5 +132,8 @@
       <button id="close-popup">Tutup</button>
     </div>
   </div>
+  
+  <!-- Module JavaScript Entry Point -->
+  <script type="module" src="/js/main.js"></script>
 </body>
 </html>

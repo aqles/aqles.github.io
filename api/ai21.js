@@ -1,5 +1,20 @@
 // api/ai21.js
+let ipRequestTimes = new Map(); // <ip, timestamp>
+
+// Expire cache tiap 5 menit
+setInterval(() => ipRequestTimes.clear(), 5 * 60 * 1000);
+
 export default async function handler(req, res) {
+  const ip = req.headers['x-forwarded-for']?.split(',')[0] || req.socket.remoteAddress;
+  const now = Date.now();
+  const last = ipRequestTimes.get(ip) || 0;
+
+  if (now - last < 3000) {
+    return res.status(429).json({ reply: null, error: 'Terlalu cepat. Coba sebentar lagi ya.' });
+  }
+
+  ipRequestTimes.set(ip, now);
+  
   const { prompt } = req.body;
   const apiKey = process.env.AI21_API_KEY;
   if (!prompt) return res.status(400).json({ error: 'Missing prompt' });
@@ -21,7 +36,7 @@ export default async function handler(req, res) {
             { role: 'user', content: prompt }
           ],
           temperature: 0.7,
-          maxTokens: 556
+          max_tokens: 2560
         })
       }
     );

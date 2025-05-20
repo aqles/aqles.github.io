@@ -2,11 +2,13 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   // ——— Fungsi sanitizeResponse ———
-  function sanitizeResponse(input) {
-    const div = document.createElement('div');
-    div.textContent = input;
-    return div.innerHTML;
+  function sanitizeResponse(input, allowHTML = false) {
+  if (allowHTML) return input;
+  const div = document.createElement('div');
+  div.textContent = input;
+  return div.innerHTML;
   }
+
   // Theme switcher slider
   const switchEl = document.getElementById('theme-switch');
   const saved = localStorage.getItem('theme') || 'dark';
@@ -437,15 +439,15 @@ document.addEventListener('DOMContentLoaded', () => {
 	      output = await commands.ask([raw]);
 	    }
 	    thinkingEl.remove();
-	    if (output !== null) {
-			const respEl = document.createElement('p');
-			let parsedHTML;
+	    const isTrustedHTML = ['dottrick', 'ascii', 'weather'].includes(cmd); // HTML yang kamu percaya
 
-			if (/[\s\S]{3,}/.test(output) && !output.includes('<') && output.includes('\n')) {
-			  parsedHTML = `<pre>${sanitizeResponse(output)}</pre>`;
-			} else {
-			  parsedHTML = marked.parse(output);
-			}
+		if (isTrustedHTML) {
+		  parsedHTML = output; // Langsung render HTML dari command (tanpa sanitize)
+		} else if (/[\s\S]{3,}/.test(output) && !output.includes('<') && output.includes('\n')) {
+		  parsedHTML = `<pre>${sanitizeResponse(output)}</pre>`;
+		} else {
+		  parsedHTML = marked.parse(sanitizeResponse(output));
+		}
 
 			respEl.innerHTML = parsedHTML;
 			termOutput.appendChild(respEl);

@@ -1,7 +1,6 @@
 // public/js/terminal/core.js
 import { sanitizeResponse } from '../utils/sanitize.js';
 import { commands, getCoords, gmailDotTrick, weatherCodeMap, startTime, quotes } from './commands.js';
-import { copyToClipboard } from '../utils/copy.js';
 
 export function initTerminal() {
   const termInput  = document.getElementById('terminal-input');
@@ -31,33 +30,27 @@ export function initTerminal() {
       }
       thinkingEl.remove();
       if (output !== null) {
-        const respEl = document.createElement('p');
-        const isHTML = ['dottrick','weather'].includes(cmd);
-        let parsed;
-        if (isHTML) {
-          parsed = output;
-        } else if (/[\s\S]{3,}/.test(output) && !output.includes('<') && output.includes('\n')) {
-          parsed = `<pre>${sanitizeResponse(output)}</pre>`;
-        } else {
-          parsed = DOMPurify ? DOMPurify.sanitize(output) : sanitizeResponse(output);
-        }
-        respEl.innerHTML = parsed;
-        termOutput.appendChild(respEl);
-        if (['dottrick', 'ip', 'ascii'].includes(cmd) && output) {
- 					const copyBtn = document.createElement('button');
- 					copyBtn.textContent = '📋 Copy';
- 					copyBtn.className = 'copy-button';
-					copyBtn.onclick = () => copyToClipboard(output);
- 					termOutput.appendChild(copyBtn);
-					}
-       }
-    } catch (err) {
-      thinkingEl.remove();
-      const errEl = document.createElement('p');
-      errEl.textContent = `Error: ${err.message}`;
-      termOutput.appendChild(errEl);
-      console.error(err);
-    }
+		const respEl = document.createElement('p');
+		const isTrustedHTML = ['dottrick', 'weather','ask'].includes(cmd); // HTML yang kamu percaya
+		let parsedHTML;
+		if (isTrustedHTML) {
+		  parsedHTML = output; // Langsung render HTML dari command (tanpa sanitize)
+		} else if (/[\s\S]{3,}/.test(output) && !output.includes('<') && output.includes('\n')) {
+		  parsedHTML = `<pre>${sanitizeResponse(output)}</pre>`;
+		} else {
+		  parsedHTML = marked.parse(sanitizeResponse(output));
+		}
+
+			respEl.innerHTML = parsedHTML;
+			termOutput.appendChild(respEl);
+	  } 
+	  } catch (err) {
+	    thinkingEl.remove();
+	    const errEl = document.createElement('p');
+	    errEl.textContent = `Error: ${err.message}`;
+	    termOutput.appendChild(errEl);
+	    console.error('Command execution error:', err);
+	  }
     termOutput.scrollTop = termOutput.scrollHeight;
     termInput.value = '';
   });

@@ -136,11 +136,41 @@ export const commands = {
 		  return 'Gagal ambil IP.';
 		}},
   dottrick: args => {
- 	if (!args[0]) {
-   	return 'Format: dottrick <email@gmail.com> [maxCount]';
- 	}
- 	return gmailDotTrick(args[0], parseInt(args[1], 10) || 100);
-   },
+ 	if (!args || args.length < 2) {
+			return 'Usage: dottrick <email> <jumlah>\nContoh: dottrick namaku@gmail.com 30';
+		  }
+
+		  const email = args[0];
+		  const count = parseInt(args[1], 10);
+		  if (isNaN(count) || count < 1 || count > 1000) {
+			return 'Jumlah harus angka antara 1–1000 yaa~ 😳';
+		  }
+
+		  const results = gmailDotTrick(email, count);
+		  if (!Array.isArray(results)) return results;
+
+		  const listId = `dottrick-${Math.random().toString(36).slice(2, 9)}`;
+		  const emailsHTML = results.map(e => `<div>${e}</div>`).join('');
+
+		  return `
+			<div style="margin-bottom:0.5em">
+			  <b>Hasil dot trick untuk <code>${email}</code> (${count} alamat)</b>
+			</div>
+			<div id="${listId}" style="max-height:300px; overflow-y:auto; border-left:3px solid #999; padding-left:1em; margin-bottom:1em; font-family:monospace;">
+			  ${emailsHTML}
+			</div>
+			<button 
+			  onclick="(function(){
+				const text = Array.from(document.querySelectorAll('#${listId} div'))
+								  .map(div=>div.textContent).join('\\n');
+				navigator.clipboard.writeText(text)
+				  .then(()=>alert('Berhasil di-copy yaa 💌'));
+			  })()" 
+			  style="padding:6px 12px; background:#444; color:#fff; border:none; border-radius:4px; cursor:pointer;">
+			  📋 Copy All
+			</button>
+		  `;
+	  },
   weather: async args=>{const helpMsg = 'Format: <span class="accent">weather &lt;nama kota&gt;</span><br>Contoh: <code>weather Jakarta</code>. Jangan pakai in atau di';
 		
 		  if (!args || args.length === 0) {

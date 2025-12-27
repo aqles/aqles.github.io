@@ -4,6 +4,8 @@
 ![Status](https://img.shields.io/badge/status-active-success.svg)
 ![Build](https://img.shields.io/badge/build-passing-brightgreen.svg)
 
+> 🔗 **Live Demo:** [https://aqles.github.io](https://aqles.github.io)
+
 Welcome to the official portfolio landing page for [Ednasalam](https://ednasalam.com). This repository hosts a lightweight, mobile-first static site that serves as a central hub for my digital presence, connecting visitors to my main portfolio, social channels, and latest open-source contributions.
 
 ## 🚀 Features

@@ -1,140 +1,89 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta name="description" content="Showcasing modern web and backend development skills through clean design, responsive interfaces, and scalable solutions. Built with passion, crafted for performance.">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MyWorld</title>
-  <link rel="stylesheet" href="/css/global.css">
-  <link rel="icon" type="image/png" href="/assets/favicon-32x32.png" sizes="32x32" />
-  <link rel="icon" type="image/ico" href="/assets/favicon.ico" />
-  <link rel="shortcut icon" href="/assets/favicon.ico" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
-  <meta name="apple-mobile-web-app-title" content="My World" />
-  <link rel="manifest" href="/assets/site.webmanifest" />
-  <!-- Particles.js CDN (untuk modul init-particles.js) -->
-  <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
-  <!-- Marked.js jika diperlukan di UI -->
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Ednasalam's Portfolio Hub. Full Stack Developer, AI Enthusiast, and Open Source Contributor.">
+    <meta name="keywords" content="Ednasalam, Web Development, AI, Full Stack, Portfolio, GitHub, Aqles">
+    <meta name="author" content="Ednasalam">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://aqles.github.io/">
+    <meta property="og:title" content="Ednasalam - Full Stack Developer">
+    <meta property="og:description" content="Explore my projects, code, and professional journey.">
+    <meta property="og:image" content="https://avatars.githubusercontent.com/u/aqles">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://aqles.github.io/">
+    <meta property="twitter:title" content="Ednasalam - Full Stack Developer">
+    <meta property="twitter:description" content="Explore my projects, code, and professional journey.">
+    <meta property="twitter:image" content="https://avatars.githubusercontent.com/u/aqles">
+
+    <title>Ednasalam | Portfolio Hub</title>
+    
+    <link rel="icon" type="image/ico" href="/assets/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/global.css">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-  <!-- Preloader -->
-  <div id="preloader">
-    <div class="spinner"></div>
-    <p>Loading... <span class="bar"></span></p>
-  </div>
-
-  <!-- Header -->
-  <header id="main-header">
-    <div class="logo">
-      <svg width="40" height="40" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="50" cy="50" r="48" stroke="currentColor" stroke-width="4" fill="none" />
-        <text x="50%" y="55%" text-anchor="middle" fill="currentColor" font-family="Fira Code" font-size="20">&lt;/&gt;</text>
-      </svg>
+    <div class="background-globes">
+        <div class="globe globe-1"></div>
+        <div class="globe globe-2"></div>
+        <div class="globe globe-3"></div>
     </div>
-    <nav class="nav-links">
-      <a href="#hero">Home</a>
-      <a href="#projects">Projects</a>
-      <a href="#interactive-terminal">Terminal</a>
-      <a href="#contact">Contact</a>
-    </nav>
-    <!-- Hamburger Mobile -->
-    <button id="nav-toggle" aria-label="Toggle navigation">
-      <span></span><span></span><span></span>
-    </button>
-  </header>
 
-  <!-- Hero Section -->
-  <section id="hero" class="reveal">
-    <div id="particle-bg"></div>
-    <h1 class="typing"></h1>
-  </section>
+    <main class="container">
+        <!-- Profile Section -->
+        <section class="profile-card glass-panel fade-in-up">
+            <div class="profile-image-container">
+                <img src="https://avatars.githubusercontent.com/u/68564175?v=4" alt="Ednasalam" class="profile-img" onerror="this.src='/assets/favicon.ico'"> <!-- Dynamic GitHub Avatar fallback -->
+                <div class="status-badge">
+                    <span class="status-dot"></span>
+                    Available for hire
+                </div>
+            </div>
+            <h1>Ednasalam</h1>
+            <p class="role">Full Stack Developer & AI Enthusiast</p>
+            <p class="bio">Building scalable web applications and exploring the frontiers of Artificial Intelligence. Driven by code, powered by coffee.</p>
+            
+            <div class="primary-action">
+                <a href="https://ednasalam.com" class="btn btn-primary glow-effect">
+                    <i class="fa-solid fa-rocket"></i> Visit Official Portfolio
+                </a>
+            </div>
+            
+            <div class="social-links">
+                <a href="https://github.com/aqles" target="_blank" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+                <a href="https://linkedin.com/in/ednasalam" target="_blank" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="https://x.com/aqles" target="_blank" aria-label="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="https://instagram.com/aql_es" target="_blank" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+            </div>
+        </section>
 
-  <!-- Projects Section -->
-  <section id="projects" class="reveal">
-    <h2 class="neon-flicker">Projects</h2>
-    <div class="grid">
-      <!-- Project Cards -->
-      <div class="card">
-        <a href="https://ai.ednasalam.com" target="_blank">
-          <img src="assets/screenshots/Port-AI.webp" alt="Project 1">
-        </a>
-        <div class="card-info">
-          <h3>Salam AI</h3>
-          <p>Chatbot AI opensource, masih dalam tahap pengembangan.</p>
-        </div>
-      </div>
-      <div class="card">
-        <a href="#interactive-terminal">
-          <img src="assets/screenshots/web-dev.webp" alt="Project 2">
-        </a>
-        <div class="card-info">
-          <h3>Web development</h3>
-          <p>Project ini masih dalam tahap pengembangan.</p>
-        </div>
-      </div>
-    </div>
-  </section>
+        <!-- Dynamic GitHub Projects -->
+        <section class="projects-section glass-panel fade-in-up delay-1">
+            <div class="section-header">
+                <h2>Latest Repositories</h2>
+                <a href="https://github.com/aqles?tab=repositories" target="_blank" class="view-all">View All <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+            <div id="repo-list" class="repo-grid">
+                <!-- Repos injected via JS -->
+                <div class="loader"></div>
+            </div>
+        </section>
 
-  <!-- Contact Section -->
-  <section id="contact" class="reveal">
-    <h2 class="neon-flicker">Contact Me</h2>
-    <form id="contact-form">
-      <input type="text" name="nama" placeholder="Nama kamu" required>
-      <input type="email" name="_replyto" placeholder="Email kamu" required>
-      <textarea name="keperluan" placeholder="Keperluan pesan" rows="4" required></textarea>
-      <button type="submit" class="lantern">Send</button>
-    </form>
-  </section>
-  
-  <!-- Interactive Terminal Section -->
-  <section id="interactive-terminal" class="reveal">
-    <div class="terminal-widget">
-      <div id="terminal-output" class="terminal-output">
-        <p>Try this Terminal. Type <span class="accent">help</span> to see commands, or just ask anything.</p>
-      </div>
-      <div class="terminal-input-line">
-        <span class="prompt">$&gt;</span>
-        <input type="text" id="terminal-input" autocomplete="off" />
-      </div>
-      <button id="start-terminal" hidden>Start Terminal</button>
-    </div>
-  </section>
+        <footer class="fade-in-up delay-2">
+            <p>&copy; <span id="year"></span> Ednasalam. Crafted with <i class="fa-solid fa-heart accent-color"></i> and Code.</p>
+        </footer>
+    </main>
 
-  <!-- Footer -->
-  <footer class="reveal">
-    <div class="terminal">
-      <p>$ sudo apt install creativity</p>
-    </div>
-    <div class="social-links">
-      <a class="neon-flicker" href="https://github.com/aqles" target="_blank">GitHub</a> |
-      <a class="neon-flicker" href="https://linkedin.com/in/ednasalam" target="_blank">LinkedIn</a> |
-      <a class="neon-flicker" href="https://x.com/aqles" target="_blank">X</a> |
-      <a class="neon-flicker" href="https://instagram.com/aql_es" target="_blank">IG</a>
-    </div>
-  </footer>
-  
-  <!-- Theme Switcher -->
-  <div class="theme-switcher" id="theme-switcher">
-    <span class="icon moon">🌙</span>
-    <label class="switch">
-      <input type="checkbox" id="theme-switch">
-      <span class="slider"></span>
-    </label>
-    <span class="icon sun">☀️</span>
-  </div>
-
-  <!-- Thank You Popup -->
-  <div id="thank-you-popup" class="popup">
-    <div class="popup-content">
-      <p>Terima kasih sudah mengisi form!</p>
-      <button id="close-popup">Tutup</button>
-    </div>
-  </div>
-  
-  <!-- Module JavaScript Entry Point -->
-  <script src="https://cdn.jsdelivr.net/npm/dompurify@2.3.10/dist/purify.min.js"></script>
-  <script type="module" src="/js/main.js"></script>
+    <script type="module" src="/js/main.js"></script>
 </body>
 </html>

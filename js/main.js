@@ -5,6 +5,9 @@ function init() {
         yearEl.textContent = new Date().getFullYear();
     }
 
+    // Initialize Easter Eggs
+    initEasterEggs();
+
     // Fetch GitHub Repos
     const repoContainer = document.getElementById('repo-list');
     const username = 'aqles';
@@ -116,3 +119,184 @@ if (document.readyState === 'loading') {
 } else {
     init();
 }
+
+// Easter Egg Logic
+function initEasterEggs() {
+    const snowBtn = document.getElementById('snow-btn');
+    const fireworkBtn = document.getElementById('firework-btn');
+
+    if (snowBtn) {
+        snowBtn.addEventListener('click', toggleSnow);
+    }
+
+    if (fireworkBtn) {
+        fireworkBtn.addEventListener('click', triggerFirework);
+    }
+}
+
+// Snow Logic
+let snowInterval = null;
+let isSnowing = false;
+
+function toggleSnow() {
+    const btn = document.getElementById('snow-btn');
+    isSnowing = !isSnowing;
+
+    if (isSnowing) {
+        btn.classList.add('btn-active');
+        btn.innerHTML = '<i class="fa-regular fa-snowflake"></i> Stop Snow';
+        startSnow();
+    } else {
+        btn.classList.remove('btn-active');
+        btn.innerHTML = '<i class="fa-regular fa-snowflake"></i> Let it Snow';
+        stopSnow();
+    }
+}
+
+function startSnow() {
+    if (snowInterval) return;
+    // initial burst
+    for (let i = 0; i < 5; i++) createSnowflake();
+    snowInterval = setInterval(createSnowflake, 200);
+}
+
+function stopSnow() {
+    clearInterval(snowInterval);
+    snowInterval = null;
+    document.querySelectorAll('.snowflake').forEach(el => {
+        el.style.opacity = '0';
+        setTimeout(() => el.remove(), 1000);
+    });
+}
+
+function createSnowflake() {
+    const snowflake = document.createElement('div');
+    snowflake.classList.add('snowflake');
+    snowflake.textContent = '\u2744';
+    snowflake.style.left = Math.random() * 100 + 'vw';
+
+    const duration = Math.random() * 3 + 5; // 5-8s fall
+    snowflake.style.animationName = 'fall, sway';
+    snowflake.style.animationDuration = `${duration}s, ${Math.random() * 2 + 2}s`; // Sway 2-4s
+    snowflake.style.animationDelay = `0s, ${Math.random() * -5}s`;
+    snowflake.style.animationTimingFunction = 'linear, ease-in-out';
+    snowflake.style.animationIterationCount = '1, infinite';
+
+    snowflake.style.opacity = Math.random() * 0.7 + 0.3;
+    snowflake.style.fontSize = Math.random() * 10 + 10 + 'px';
+
+    document.body.appendChild(snowflake);
+
+    setTimeout(() => {
+        snowflake.remove();
+    }, duration * 1000);
+}
+
+// Firework Logic
+function triggerFirework() {
+    const btn = document.getElementById('firework-btn');
+    btn.classList.add('btn-active');
+
+    let canvas = document.getElementById('firework-canvas');
+    if (!canvas) {
+        canvas = document.createElement('canvas');
+        canvas.id = 'firework-canvas';
+        document.body.appendChild(canvas);
+    }
+
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    // Resize handler
+    window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }, { once: true });
+
+    const particles = [];
+    const colors = ['#ff0040', '#00ff80', '#4080ff', '#ffff00', '#ff8000', '#ff00ff', '#ffffff'];
+
+    // Launch sequence
+    let launchCount = 0;
+    const launchInterval = setInterval(() => {
+        launchCount++;
+        createExplosion(
+            Math.random() * canvas.width * 0.8 + canvas.width * 0.1,
+            Math.random() * canvas.height * 0.5 + canvas.height * 0.1,
+            colors[Math.floor(Math.random() * colors.length)],
+            ctx, particles
+        );
+
+        if (launchCount >= 8) {
+            clearInterval(launchInterval);
+            setTimeout(() => {
+                btn.classList.remove('btn-active');
+            }, 2000);
+        }
+    }, 400);
+
+    if (!window.fireworkLoopActive) {
+        window.fireworkLoopActive = true;
+        animateFireworks(canvas, ctx, particles);
+    }
+}
+
+function createExplosion(x, y, color, ctx, particles) {
+    const particleCount = 80;
+    for (let i = 0; i < particleCount; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const velocity = Math.random() * 5 + 2;
+        particles.push({
+            x: x,
+            y: y,
+            vx: Math.cos(angle) * velocity,
+            vy: Math.sin(angle) * velocity,
+            alpha: 1,
+            color: color,
+            decay: Math.random() * 0.015 + 0.005,
+            gravity: 0.1
+        });
+    }
+}
+
+function animateFireworks(canvas, ctx, particles) {
+    requestAnimationFrame(() => {
+        // Create trail effect
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.globalCompositeOperation = 'lighter';
+
+        for (let i = particles.length - 1; i >= 0; i--) {
+            const p = particles[i];
+            p.x += p.vx;
+            p.y += p.vy;
+            p.vy += p.gravity;
+            p.vx *= 0.96; // air resistance
+            p.vy *= 0.96;
+            p.alpha -= p.decay;
+
+            if (p.alpha <= 0) {
+                particles.splice(i, 1);
+            } else {
+                ctx.globalAlpha = p.alpha;
+                ctx.fillStyle = p.color;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        ctx.globalCompositeOperation = 'source-over'; // Reset
+
+        if (particles.length > 0) {
+            animateFireworks(canvas, ctx, particles);
+        } else {
+            window.fireworkLoopActive = false;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+    });
+}
+

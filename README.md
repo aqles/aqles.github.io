@@ -14,6 +14,7 @@ Welcome to the official portfolio landing page for [Ednasalam](https://ednasalam
 -   **Mobile-First Design**: Fully responsive "Bento-grid" layout that adapts perfectly to any device size.
 -   **Dynamic Content**: Automatically fetches and displays the latest repositories via GitHub API.
 -   **Modern UI**: Features a dark "GitHub Dimmed" theme, glassmorphism effects, and subtle animations.
+-   **Interactive Easter Eggs**: Includes 'Let it Snow' and 'Firework' visual effects for user engagement.
 -   **SEO Optimized**: Semantic structure with comprehensive Open Graph and Twitter Card metadata.
 
 ## 🛠️ Tech Stack
@@ -48,6 +49,14 @@ To run this project locally:
 
 2.  **Open in Browser**:
     Simply open the `index.html` file in your preferred web browser. Alternatively, use a live server extension (e.g., in VS Code) for hot-reloading.
+
+## 📝 Change Log
+
+### v3.1.0 (2025-12-28)
+-   **New Feature**: Added 'Let it Snow' easter egg button with physics-based snowflake animation (sway & fall).
+-   **New Feature**: Added 'Firework' easter egg button with particle trails, gravity, and vibrant colors.
+-   **Update**: Added X (formerly Twitter) link for user `aqles`.
+-   **UX**: Improved animation performance and smoothness.
 
 ## 🤝 Contributing
 

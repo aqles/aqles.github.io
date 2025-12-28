@@ -1,16 +1,71 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>404 Not Found</title>
-  <link rel="stylesheet" href="css/style.css">
+  <title>404 | Lost in Space</title>
+
+  <link rel="icon" type="image/ico" href="/assets/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@300;500;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/css/global.css">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <style>
+    /* specific 404 overrides if needed */
+    .error-code {
+      font-size: 6rem;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--accent), #ff0080);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .error-message {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+      color: var(--text-secondary);
+    }
+  </style>
 </head>
+
 <body>
-  <div class="error-container">
-    <h1>404</h1>
-    <p>Oops! Nyasar Bro!.</p>
-    <a href="/" class="btn">Kembali ke Home</a>
+  <!-- Background Magic -->
+  <div class="background-globes">
+    <div class="globe globe-1"></div>
+    <div class="globe globe-2"></div>
+    <div class="globe globe-3"></div>
   </div>
+
+  <main class="container">
+    <section class="glass-panel fade-in-up" style="text-align: center; padding: 4rem 2rem;">
+      <div class="error-code">404</div>
+      <h1>Houston, We Have a Problem</h1>
+      <p class="error-message">Oops! Nyasar Bro! Halaman yang kamu cari sepertinya hilang di antariksa.</p>
+
+      <a href="/" class="btn btn-primary glow-effect">
+        <i class="fa-solid fa-house-chimney"></i> Kembali ke Bumi
+      </a>
+    </section>
+
+    <footer class="fade-in-up delay-1">
+      <p>&copy; <span id="year"></span> Aql Edna Salam</p>
+    </footer>
+  </main>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 </body>
+
 </html>

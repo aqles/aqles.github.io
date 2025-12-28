@@ -1,14 +1,14 @@
-// Update Year
+// Keep the copyright year fresh automatically
 function init() {
     const yearEl = document.getElementById('year');
     if (yearEl) {
         yearEl.textContent = new Date().getFullYear();
     }
 
-    // Initialize Easter Eggs
+    // Let's sprinkle some magic ✨
     initEasterEggs();
 
-    // Fetch GitHub Repos
+    // Grabbing my latest cool stuff from GitHub
     const repoContainer = document.getElementById('repo-list');
     const username = 'aqles';
 
@@ -16,7 +16,7 @@ function init() {
 
     async function fetchRepos() {
         try {
-            // Add timeout signal (5 seconds)
+            // Don't keep them waiting too long (5s timeout)
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 5000);
 
@@ -30,7 +30,7 @@ function init() {
 
             const repos = await response.json();
 
-            // Clear loader
+            // Clear the loading spinner
             repoContainer.innerHTML = '';
 
             if (!Array.isArray(repos) || repos.length === 0) {
@@ -44,10 +44,10 @@ function init() {
                 card.target = '_blank';
                 card.className = 'repo-card';
 
-                // Format language color (basic)
+                // Give it a splash of color based on the tech stack
                 const langColor = getLanguageColor(repo.language);
 
-                // Escape HTML content to prevent XSS (basic)
+                // Sanitizing inputs because safety first! 🛡️
                 const repoName = escapeHtml(repo.name);
                 const repoDesc = escapeHtml(repo.description || 'No description available.');
                 const repoLang = escapeHtml(repo.language || 'Code');
@@ -69,7 +69,7 @@ function init() {
 
         } catch (error) {
             console.error('Error fetching repos:', error);
-            // Fallback UI
+            // Oops, something went wrong. Show a friendly error.
             repoContainer.innerHTML = `
                 <div style="grid-column: 1/-1; text-align: center;">
                     <p style="color: #ff6b6b; margin-bottom: 1rem;">
@@ -113,14 +113,14 @@ function escapeHtml(text) {
         .replace(/'/g, "&#039;");
 }
 
-// Run init
+// Let's get this party started! 🚀
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
 } else {
     init();
 }
 
-// Easter Egg Logic
+// 🥚 Easter Egg Logic - Because why not?
 function initEasterEggs() {
     const snowBtn = document.getElementById('snow-btn');
     const fireworkBtn = document.getElementById('firework-btn');
@@ -134,7 +134,7 @@ function initEasterEggs() {
     }
 }
 
-// Snow Logic
+// ❄️ Let it Snow Logic
 let snowInterval = null;
 let isSnowing = false;
 
@@ -155,7 +155,7 @@ function toggleSnow() {
 
 function startSnow() {
     if (snowInterval) return;
-    // initial burst
+    // Start with a little flurry
     for (let i = 0; i < 5; i++) createSnowflake();
     snowInterval = setInterval(createSnowflake, 200);
 }
@@ -175,7 +175,7 @@ function createSnowflake() {
     snowflake.textContent = '\u2744';
     snowflake.style.left = Math.random() * 100 + 'vw';
 
-    const duration = Math.random() * 3 + 5; // 5-8s fall
+    const duration = Math.random() * 3 + 5; // Melt away!
     snowflake.style.animationName = 'fall, sway';
     snowflake.style.animationDuration = `${duration}s, ${Math.random() * 2 + 2}s`; // Sway 2-4s
     snowflake.style.animationDelay = `0s, ${Math.random() * -5}s`;
@@ -192,7 +192,7 @@ function createSnowflake() {
     }, duration * 1000);
 }
 
-// Firework Logic
+// 🎆 Firework Logic - Boom!
 const particles = [];
 const colors = ['#ff0040', '#00ff80', '#4080ff', '#ffff00', '#ff8000', '#ff00ff', '#ffffff'];
 let isFireworking = false;
@@ -225,7 +225,7 @@ function startFirework() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    // Resize handler
+    // Make sure we handle window resizing so the show goes on perfectly
     if (!window.fireworkResizeHandler) {
         window.fireworkResizeHandler = true;
         window.addEventListener('resize', () => {
@@ -236,13 +236,13 @@ function startFirework() {
         });
     }
 
-    // Launch one immediately
+    // Fire start!
     launchEffect(canvas, ctx);
 
-    // Continuous launch
+    // Keep the show going with a loop
     fireworkInterval = setInterval(() => {
         launchEffect(canvas, ctx);
-    }, 800); // Slower interval for continuous pleasant effect
+    }, 800); // A nice steady rhythm
 }
 
 function stopFirework() {
@@ -286,9 +286,9 @@ function createExplosion(x, y, color, ctx) {
 
 function animateFireworks(canvas, ctx) {
     requestAnimationFrame(() => {
-        // Create trail effect
+        // Create that lovely trailing effect
         ctx.globalCompositeOperation = 'destination-out';
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.2)'; // Faster fadeout to avoid permanent trails
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.2)'; // Fade out fast enough to keep it clean
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         ctx.globalCompositeOperation = 'lighter';
@@ -298,7 +298,7 @@ function animateFireworks(canvas, ctx) {
             p.x += p.vx;
             p.y += p.vy;
             p.vy += p.gravity;
-            p.vx *= 0.96; // air resistance
+            p.vx *= 0.96; // Air resistance is a thing
             p.vy *= 0.96;
             p.alpha -= p.decay;
 
@@ -313,7 +313,7 @@ function animateFireworks(canvas, ctx) {
             }
         }
 
-        ctx.globalCompositeOperation = 'source-over'; // Reset
+        ctx.globalCompositeOperation = 'source-over'; // Back to normal drawing
 
         if (particles.length > 0 || isFireworking) {
             animateFireworks(canvas, ctx);

@@ -288,7 +288,7 @@ function animateFireworks(canvas, ctx) {
     requestAnimationFrame(() => {
         // Create trail effect
         ctx.globalCompositeOperation = 'destination-out';
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.1)'; // Smoother fadeout
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.2)'; // Faster fadeout to avoid permanent trails
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         ctx.globalCompositeOperation = 'lighter';

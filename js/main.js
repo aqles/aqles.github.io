@@ -224,14 +224,14 @@ function triggerFirework() {
 
     // Launch sequence
     let launchCount = 0;
+
+    // Immediate launch
+    launchEffect(canvas, ctx, btn);
+    launchCount++;
+
     const launchInterval = setInterval(() => {
         launchCount++;
-        createExplosion(
-            Math.random() * canvas.width * 0.8 + canvas.width * 0.1,
-            Math.random() * canvas.height * 0.5 + canvas.height * 0.1,
-            colors[Math.floor(Math.random() * colors.length)],
-            ctx
-        );
+        launchEffect(canvas, ctx, btn);
 
         if (launchCount >= 8) {
             clearInterval(launchInterval);
@@ -240,6 +240,15 @@ function triggerFirework() {
             }, 2000);
         }
     }, 400);
+}
+
+function launchEffect(canvas, ctx, btn) {
+    createExplosion(
+        Math.random() * canvas.width * 0.8 + canvas.width * 0.1,
+        Math.random() * canvas.height * 0.5 + canvas.height * 0.1,
+        colors[Math.floor(Math.random() * colors.length)],
+        ctx
+    );
 
     if (!window.fireworkLoopActive) {
         window.fireworkLoopActive = true;

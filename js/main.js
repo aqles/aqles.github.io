@@ -193,6 +193,9 @@ function createSnowflake() {
 }
 
 // Firework Logic
+const particles = [];
+const colors = ['#ff0040', '#00ff80', '#4080ff', '#ffff00', '#ff8000', '#ff00ff', '#ffffff'];
+
 function triggerFirework() {
     const btn = document.getElementById('firework-btn');
     btn.classList.add('btn-active');
@@ -209,13 +212,15 @@ function triggerFirework() {
     canvas.height = window.innerHeight;
 
     // Resize handler
-    window.addEventListener('resize', () => {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    }, { once: true });
-
-    const particles = [];
-    const colors = ['#ff0040', '#00ff80', '#4080ff', '#ffff00', '#ff8000', '#ff00ff', '#ffffff'];
+    if (!window.fireworkResizeHandler) {
+        window.fireworkResizeHandler = true;
+        window.addEventListener('resize', () => {
+            if (canvas) {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+        });
+    }
 
     // Launch sequence
     let launchCount = 0;
@@ -225,7 +230,7 @@ function triggerFirework() {
             Math.random() * canvas.width * 0.8 + canvas.width * 0.1,
             Math.random() * canvas.height * 0.5 + canvas.height * 0.1,
             colors[Math.floor(Math.random() * colors.length)],
-            ctx, particles
+            ctx
         );
 
         if (launchCount >= 8) {
@@ -238,11 +243,11 @@ function triggerFirework() {
 
     if (!window.fireworkLoopActive) {
         window.fireworkLoopActive = true;
-        animateFireworks(canvas, ctx, particles);
+        animateFireworks(canvas, ctx);
     }
 }
 
-function createExplosion(x, y, color, ctx, particles) {
+function createExplosion(x, y, color, ctx) {
     const particleCount = 80;
     for (let i = 0; i < particleCount; i++) {
         const angle = Math.random() * Math.PI * 2;
@@ -260,7 +265,7 @@ function createExplosion(x, y, color, ctx, particles) {
     }
 }
 
-function animateFireworks(canvas, ctx, particles) {
+function animateFireworks(canvas, ctx) {
     requestAnimationFrame(() => {
         // Create trail effect
         ctx.globalCompositeOperation = 'destination-out';
@@ -292,7 +297,7 @@ function animateFireworks(canvas, ctx, particles) {
         ctx.globalCompositeOperation = 'source-over'; // Reset
 
         if (particles.length > 0) {
-            animateFireworks(canvas, ctx, particles);
+            animateFireworks(canvas, ctx);
         } else {
             window.fireworkLoopActive = false;
             ctx.clearRect(0, 0, canvas.width, canvas.height);

@@ -11,4 +11,10 @@
     <priority>1.00</priority>
   </url>
 
+  <url>
+    <loc>https://aqles.github.io/create.html</loc>
+    <lastmod>2026-11-06</lastmod>
+    <priority>0.80</priority>
+  </url>
+
 </urlset>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com https://cdnjs.cloudflare.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' https://avatars.githubusercontent.com data:; connect-src https://api.github.com; base-uri 'self'; form-action 'self'">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Create your own portfolio hub page from your GitHub profile.">
+
+    <title>Create your own page | Aql Edna Salam</title>
+
+    <link rel="canonical" href="https://aqles.github.io/create.html">
+    <meta name="theme-color" content="#0d1117">
+    <link rel="icon" type="image/ico" href="/assets/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@300;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/css/global.css">
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+</head>
+
+<body>
+    <div class="background-globes">
+        <div class="globe globe-1"></div>
+        <div class="globe globe-2"></div>
+        <div class="globe globe-3"></div>
+    </div>
+
+    <main class="container">
+        <!-- Create Form -->
+        <section class="glass-panel fade-in-up">
+            <div class="section-header">
+                <h2>Create your own page</h2>
+            </div>
+            <p class="create-intro">Enter a GitHub username to preview a portfolio page like this site, built from
+                public GitHub data.</p>
+            <form id="create-form" class="create-form">
+                <label for="username-input">GitHub username</label>
+                <input id="username-input" type="text" autocomplete="off" spellcheck="false"
+                    placeholder="e.g. aqles">
+                <button type="submit" class="btn btn-primary">Preview</button>
+            </form>
+            <p id="status" class="create-status" aria-live="polite"></p>
+        </section>
+
+        <!-- Generated Preview -->
+        <div id="preview" aria-live="polite" hidden></div>
+
+        <div class="download-row">
+            <button id="download-btn" class="btn btn-primary" type="button" hidden>
+                <i class="fa-solid fa-download"></i> Download this page
+            </button>
+        </div>
+
+        <footer class="fade-in-up delay-2">
+            <p>&copy; <span id="year"></span> Aql Edna Salam. Crafted with <i
+                    class="fa-solid fa-heart accent-color"></i> and
+                Code.</p>
+        </footer>
+    </main>
+
+    <script type="module" src="/js/create.js"></script>
+</body>
+
+</html>

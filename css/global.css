@@ -481,3 +481,26 @@ footer {
     z-index: 10000;
     pointer-events: none;
 }
+/* Visible focus for keyboard navigation */
+a:focus-visible,
+button:focus-visible,
+.repo-card:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .fade-in-up {
+        opacity: 1;
+        transform: none;
+    }
+}

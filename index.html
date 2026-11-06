@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 
 <head>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com https://cdnjs.cloudflare.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' https://avatars.githubusercontent.com data:; connect-src https://api.github.com; base-uri 'self'; form-action 'self'">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
@@ -14,17 +15,19 @@
     <meta property="og:url" content="https://aqles.github.io/">
     <meta property="og:title" content="Aql Edna Salam - Full Tank Developer">
     <meta property="og:description" content="Explore my projects, code, and professional journey.">
-    <meta property="og:image" content="https://avatars.githubusercontent.com/u/aqles">
+    <meta property="og:image" content="https://avatars.githubusercontent.com/u/70847820?v=4">
 
     <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:card" content="summary">
     <meta property="twitter:url" content="https://aqles.github.io/">
     <meta property="twitter:title" content="Aql Edna Salam - Full Tank Developer">
     <meta property="twitter:description" content="Explore my projects, code, and professional journey.">
-    <meta property="twitter:image" content="https://avatars.githubusercontent.com/u/aqles">
+    <meta property="twitter:image" content="https://avatars.githubusercontent.com/u/70847820?v=4">
 
     <title>Aql Edna Salam | Portfolio Hub</title>
 
+    <link rel="canonical" href="https://aqles.github.io/">
+    <meta name="theme-color" content="#0d1117">
     <link rel="icon" type="image/ico" href="/assets/favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -34,7 +37,9 @@
     <link rel="stylesheet" href="/css/global.css">
 
     <!-- Font Awesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer">
 </head>
 
 <body>
@@ -48,8 +53,8 @@
         <!-- Profile Section -->
         <section class="profile-card glass-panel fade-in-up">
             <div class="profile-image-container">
-                <img src="https://avatars.githubusercontent.com/u/70847820?v=4" alt="Ednasalam" class="profile-img"
-                    onerror="this.src='/assets/favicon.ico'"> <!-- Dynamic GitHub Avatar fallback -->
+                <img id="profile-img" src="https://avatars.githubusercontent.com/u/70847820?v=4" alt="Ednasalam"
+                    class="profile-img"> <!-- Avatar fallback to favicon is handled in js/main.js -->
                 <div class="status-badge">
                     <span class="status-dot"></span>
                     Available for hire
@@ -69,20 +74,20 @@
             <!-- Easter Egg Controls -->
             <div class="easter-egg-controls"
                 style="margin-top: 1rem; display: flex; gap: 10px; justify-content: center;">
-                <button id="snow-btn" class="btn-sm btn-outline"><i class="fa-regular fa-snowflake"></i> Let it
+                <button id="snow-btn" class="btn-sm btn-outline" aria-pressed="false"><i class="fa-regular fa-snowflake"></i> Let it
                     Snow</button>
-                <button id="firework-btn" class="btn-sm btn-outline"><i class="fa-solid fa-wand-magic-sparkles"></i>
+                <button id="firework-btn" class="btn-sm btn-outline" aria-pressed="false"><i class="fa-solid fa-wand-magic-sparkles"></i>
                     Start Firework</button>
             </div>
 
             <div class="social-links">
-                <a href="https://github.com/aqles" target="_blank" aria-label="GitHub"><i
+                <a href="https://github.com/aqles" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i
                         class="fa-brands fa-github"></i></a>
-                <a href="https://linkedin.com/in/ednasalam" target="_blank" aria-label="LinkedIn"><i
+                <a href="https://linkedin.com/in/ednasalam" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i
                         class="fa-brands fa-linkedin"></i></a>
-                <a href="https://x.com/aqles" target="_blank" aria-label="X (Twitter)"><i
+                <a href="https://x.com/aqles" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)"><i
                         class="fa-brands fa-x-twitter"></i></a>
-                <a href="https://instagram.com/aql_es" target="_blank" aria-label="Instagram"><i
+                <a href="https://instagram.com/aql_es" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i
                         class="fa-brands fa-instagram"></i></a>
             </div>
         </section>
@@ -91,12 +96,12 @@
         <section class="projects-section glass-panel fade-in-up delay-1">
             <div class="section-header">
                 <h2>Latest Public Repositories</h2>
-                <a href="https://github.com/aqles?tab=repositories" target="_blank" class="view-all">View All <i
+                <a href="https://github.com/aqles?tab=repositories" target="_blank" rel="noopener noreferrer" class="view-all">View All <i
                         class="fa-solid fa-arrow-right"></i></a>
             </div>
-            <div id="repo-list" class="repo-grid">
+            <div id="repo-list" class="repo-grid" aria-live="polite">
                 <!-- Repos injected via JS -->
-                <div class="loader"></div>
+                <div class="loader" role="status" aria-label="Loading repositories"></div>
             </div>
         </section>
 

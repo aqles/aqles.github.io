@@ -1,8 +1,8 @@
-# Portfolio Hub v3.0
+# Portfolio Hub
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Status](https://img.shields.io/badge/status-active-success.svg)
-![Build](https://img.shields.io/badge/build-passing-brightgreen.svg)
+![Deploy](https://github.com/aqles/aqles.github.io/actions/workflows/static.yml/badge.svg)
 
 > 🔗 **Live Demo:** [https://aqles.github.io](https://aqles.github.io)
 
@@ -10,12 +10,13 @@ Welcome to the official portfolio landing page for [Ednasalam](https://ednasalam
 
 ## 🚀 Features
 
--   **High Performance**: Built with vanilla HTML5, CSS3, and JavaScript modules for zero-dependency speed.
--   **Mobile-First Design**: Fully responsive "Bento-grid" layout that adapts perfectly to any device size.
--   **Dynamic Content**: Automatically fetches and displays the latest repositories via GitHub API.
--   **Modern UI**: Features a dark "GitHub Dimmed" theme, glassmorphism effects, and subtle animations.
--   **Interactive Easter Eggs**: Includes 'Let it Snow' and 'Firework' visual effects for user engagement.
--   **SEO Optimized**: Semantic structure with comprehensive Open Graph and Twitter Card metadata.
+-   **Plain HTML, CSS, and JavaScript**: No build step and no framework. Fonts come from Google Fonts and icons from FontAwesome, both loaded from CDNs.
+-   **Layout**: One column that fits phones first. The repo cards switch to two columns on screens 600px and wider.
+-   **Repo list**: Latest public repos from the GitHub API, cached for 30 minutes. This site's own repo and test repos are filtered out, as are forks and archived repos.
+-   **Look**: Dark colours close to GitHub's dark theme, translucent panels, and three blurred background blobs.
+-   **Easter eggs**: Two buttons, 'Let it Snow' and 'Start Firework'. Each starts its effect and stops it when clicked again.
+-   **Security**: The pages set a Content-Security-Policy with a meta tag (GitHub Pages cannot send custom response headers), and the FontAwesome stylesheet carries an integrity hash.
+-   **Sharing metadata**: Open Graph and Twitter Card tags point at the GitHub avatar, so shared links show a picture.
 
 ## 🛠️ Tech Stack
 
@@ -28,13 +29,21 @@ Welcome to the official portfolio landing page for [Ednasalam](https://ednasalam
 
 ```bash
 aqles.github.io/
-├── assets/          # Static assets (Favicons, Icons)
-├── css/             # Global stylesheets
-│   └── global.css   # Main styles, variables, and responsive rules
-├── js/              # JavaScript modules
-│   └── main.js      # Logic for GitHub API fetching and DOM manipulation
-├── index.html       # Main entry point
-└── README.md        # Project documentation
+├── .github/
+│   └── workflows/
+│       └── static.yml   # Deploys the site to GitHub Pages
+├── assets/
+│   └── favicon.ico
+├── css/
+│   └── global.css       # All styles
+├── js/
+│   └── main.js          # Repo list, avatar fallback, snow and firework effects
+├── 404.html             # Not-found page
+├── index.html           # Main page
+├── LICENSE
+├── README.md
+├── robots.txt
+└── sitemap.xml
 ```
 
 ## 🔧 Local Development
@@ -47,10 +56,23 @@ To run this project locally:
     cd aqles.github.io
     ```
 
-2.  **Open in Browser**:
-    Simply open the `index.html` file in your preferred web browser. Alternatively, use a live server extension (e.g., in VS Code) for hot-reloading.
+2.  **Serve the folder**:
+    ```bash
+    python3 -m http.server 8000
+    ```
+    Then open http://localhost:8000 in the browser.
+
+    Opening `index.html` as a file does not work: the asset paths start with `/` and the script loads as a module, and both need the page to be served over HTTP.
 
 ## 📝 Change Log
+
+### v3.1.1 (2026-11-06)
+- Fixed the social preview image (it pointed at an invalid avatar URL, so shared links showed no picture).
+- Added `rel="noopener noreferrer"` to external links.
+- Added a Content-Security-Policy (meta tag, since GitHub Pages can't send custom headers) and an integrity check for the Font Awesome stylesheet.
+- The repo list no longer shows this site itself or test repos, and results are cached for 30 minutes so the GitHub API limit is not hit on every visit.
+- Removed vercel.json (the site is hosted on GitHub Pages, which ignores it) and the CNAME file (not needed for the default aqles.github.io domain).
+- Added the MIT LICENSE file, fixed the README (local run instructions, feature list), and added reduced-motion support, visible focus outlines, and ARIA state on the effect buttons.
 
 ### v3.1.0 (2025-12-28)
 -   **New Feature**: Added 'Let it Snow' easter egg button with physics-based snowflake animation (sway & fall).

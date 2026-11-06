@@ -14,7 +14,7 @@ Welcome to the official portfolio landing page for [Ednasalam](https://ednasalam
 -   **Layout**: One column that fits phones first. The repo cards switch to two columns on screens 600px and wider.
 -   **Repo list**: Latest public repos from the GitHub API, cached for 30 minutes. This site's own repo and test repos are filtered out, as are forks and archived repos.
 -   **Create page**: A page where anyone can type a GitHub username and preview a hub page like this one, then download it as a single HTML file.
--   **Look**: Dark colours close to GitHub's dark theme, translucent panels, and three blurred background blobs.
+-   **Look**: Dark colours close to GitHub's dark theme, flat surfaces, and one blue accent. The name is set large at the top, and repositories are shown as a plain list.
 -   **Easter eggs**: Two buttons, 'Let it Snow' and 'Start Firework'. Each starts its effect and stops it when clicked again.
 -   **Security**: The pages set a Content-Security-Policy with a meta tag (GitHub Pages cannot send custom response headers), and the FontAwesome stylesheet carries an integrity hash.
 -   **Sharing metadata**: Open Graph and Twitter Card tags point at the GitHub avatar, so shared links show a picture.
@@ -70,6 +70,8 @@ To run this project locally:
 ## 📝 Change Log
 
 ### November 2026
+- Redesigned the home page: the name set large as type, flat colours with one blue accent, repositories as a plain list, and the create form now sits on the home page too.
+- Rebuilt the snow and firework effects on canvas: flakes drift with wind and depth, rockets climb and burst with twinkle and crackle.
 - Added a create page: type a GitHub username, preview a hub page like this one, and download it as a single HTML file. The home page links to it.
 - Fixed the create page form on phones: full-width input, and the download button stays hidden until a preview exists.
 - Fixed the social preview image, and added `rel="noopener noreferrer"` to external links.

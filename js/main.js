@@ -135,11 +135,11 @@ function renderRepos(repoContainer, repos) {
         card.innerHTML = `
             <div class="repo-top">
                 <span class="repo-name"><i class="fa-regular fa-folder"></i> ${repoName}</span>
-                <span style="font-size: 0.8rem;"><i class="fa-regular fa-star"></i> ${stars}</span>
+                <span class="repo-stars"><i class="fa-regular fa-star"></i> ${stars}</span>
             </div>
             <p class="repo-desc">${repoDesc}</p>
             <div class="repo-meta">
-                <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${langColor};margin-right:4px;"></span>${repoLang}</span>
+                <span><span class="lang-dot" style="background:${langColor};"></span>${repoLang}</span>
             </div>
         `;
 
@@ -194,8 +194,33 @@ function initEasterEggs() {
     }
 }
 
-// ❄️ Let it Snow Logic
-let snowInterval = null;
+// Both effects draw on their own full-screen canvas. The physics runs on
+// delta time (seconds), so speed does not depend on the display's refresh
+// rate, and each loop stops by itself once its particles are gone.
+function getEffectCanvas(id) {
+    let canvas = document.getElementById(id);
+    if (!canvas) {
+        canvas = document.createElement('canvas');
+        canvas.id = id;
+        canvas.setAttribute('aria-hidden', 'true');
+        document.body.appendChild(canvas);
+    }
+    const resize = () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    };
+    if (!canvas.dataset.sized) {
+        canvas.dataset.sized = '1';
+        resize();
+        window.addEventListener('resize', resize);
+    }
+    return canvas;
+}
+
+// ❄️ Let it Snow — flakes with depth (far ones are smaller, slower and
+// fainter), a gusting wind, and a per-flake flutter, so the fall wobbles
+// instead of sliding down a rail.
+const snowState = { flakes: [], running: false, last: 0, windPhase: 0, fade: 1, draining: false };
 let isSnowing = false;
 
 function toggleSnow() {
@@ -216,49 +241,91 @@ function toggleSnow() {
     btn.setAttribute('aria-pressed', String(isSnowing));
 }
 
+function newFlake(canvas, anywhere) {
+    const depth = Math.random();
+    return {
+        x: Math.random() * canvas.width,
+        y: anywhere ? Math.random() * canvas.height : -5,
+        r: 0.8 + depth * 2.4,
+        speed: 22 + depth * 55,
+        depth,
+        phase: Math.random() * Math.PI * 2,
+        flutter: 0.6 + Math.random() * 1.4,
+        alpha: 0.35 + depth * 0.6
+    };
+}
+
 function startSnow() {
-    if (snowInterval) return;
-    // Start with a little flurry
-    for (let i = 0; i < 5; i++) createSnowflake();
-    snowInterval = setInterval(createSnowflake, 200);
+    const canvas = getEffectCanvas('snow-canvas');
+    snowState.draining = false;
+    snowState.fade = 1;
+
+    const target = Math.min(160, Math.floor(canvas.width / 9));
+    while (snowState.flakes.length < target) {
+        snowState.flakes.push(newFlake(canvas, true));
+    }
+
+    if (!snowState.running) {
+        snowState.running = true;
+        snowState.last = performance.now();
+        requestAnimationFrame(t => snowTick(t, canvas));
+    }
 }
 
 function stopSnow() {
-    clearInterval(snowInterval);
-    snowInterval = null;
-    document.querySelectorAll('.snowflake').forEach(el => {
-        el.style.opacity = '0';
-        setTimeout(() => el.remove(), 1000);
-    });
+    // Stop spawning and fade what is left; the loop ends itself.
+    snowState.draining = true;
 }
 
-function createSnowflake() {
-    const snowflake = document.createElement('div');
-    snowflake.classList.add('snowflake');
-    snowflake.setAttribute('aria-hidden', 'true');
-    snowflake.textContent = '\u2744';
-    snowflake.style.left = Math.random() * 100 + 'vw';
+function snowTick(now, canvas) {
+    const ctx = canvas.getContext('2d');
+    const dt = Math.min((now - snowState.last) / 1000, 0.05);
+    snowState.last = now;
 
-    const duration = Math.random() * 3 + 5; // Melt away!
-    snowflake.style.animationName = 'fall, sway';
-    snowflake.style.animationDuration = `${duration}s, ${Math.random() * 2 + 2}s`; // Sway 2-4s
-    snowflake.style.animationDelay = `0s, ${Math.random() * -5}s`;
-    snowflake.style.animationTimingFunction = 'linear, ease-in-out';
-    snowflake.style.animationIterationCount = '1, infinite';
+    snowState.windPhase += dt * 0.25;
+    const wind = Math.sin(snowState.windPhase) * 14 + Math.sin(snowState.windPhase * 0.37) * 8;
 
-    snowflake.style.opacity = Math.random() * 0.7 + 0.3;
-    snowflake.style.fontSize = Math.random() * 10 + 10 + 'px';
+    if (snowState.draining) {
+        snowState.fade = Math.max(0, snowState.fade - dt * 1.4);
+    }
 
-    document.body.appendChild(snowflake);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#ffffff';
 
-    setTimeout(() => {
-        snowflake.remove();
-    }, duration * 1000);
+    snowState.flakes = snowState.flakes.filter(f => f.y < canvas.height + 6);
+    while (!snowState.draining && snowState.flakes.length < Math.min(160, Math.floor(canvas.width / 9))) {
+        snowState.flakes.push(newFlake(canvas, false));
+    }
+
+    for (const f of snowState.flakes) {
+        f.phase += dt * f.flutter;
+        f.x += (wind * (0.4 + f.depth * 0.6) + Math.sin(f.phase) * 10) * dt;
+        f.y += f.speed * dt * (1 + 0.15 * Math.sin(f.phase * 0.7));
+        if (f.x < -6) f.x = canvas.width + 6;
+        if (f.x > canvas.width + 6) f.x = -6;
+
+        ctx.globalAlpha = f.alpha * snowState.fade;
+        ctx.beginPath();
+        ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+        ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+
+    if (snowState.draining && snowState.fade <= 0) {
+        snowState.running = false;
+        snowState.flakes = [];
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        return;
+    }
+
+    requestAnimationFrame(t => snowTick(t, canvas));
 }
 
-// 🎆 Firework Logic - Boom!
-const particles = [];
-const colors = ['#ff0040', '#00ff80', '#4080ff', '#ffff00', '#ff8000', '#ff00ff', '#ffffff'];
+// 🎆 Fireworks — a rocket climbs with a spark trail and bursts at its apex.
+// Particles vary in size, drag and life; some twinkle, a few crackle into
+// mini sparks mid-flight, and some bursts get a tighter inner ring (pistil).
+const fwState = { rockets: [], parts: [], running: false, last: 0 };
+const FW_HUES = [350, 150, 210, 55, 25, 300, 0];
 let isFireworking = false;
 let fireworkInterval = null;
 
@@ -281,114 +348,195 @@ function triggerFirework() {
 }
 
 function startFirework() {
-    let canvas = document.getElementById('firework-canvas');
-    if (!canvas) {
-        canvas = document.createElement('canvas');
-        canvas.id = 'firework-canvas';
-        canvas.setAttribute('aria-hidden', 'true');
-        document.body.appendChild(canvas);
+    const canvas = getEffectCanvas('firework-canvas');
+    launchRocket(canvas);
+    fireworkInterval = setInterval(() => launchRocket(canvas), 750);
+
+    if (!fwState.running) {
+        fwState.running = true;
+        fwState.last = performance.now();
+        requestAnimationFrame(t => fireworkTick(t, canvas));
     }
-
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    // Make sure we handle window resizing so the show goes on perfectly
-    if (!window.fireworkResizeHandler) {
-        window.fireworkResizeHandler = true;
-        window.addEventListener('resize', () => {
-            if (canvas) {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-            }
-        });
-    }
-
-    // Fire start!
-    launchEffect(canvas, ctx);
-
-    // Keep the show going with a loop
-    fireworkInterval = setInterval(() => {
-        launchEffect(canvas, ctx);
-    }, 800); // A nice steady rhythm
 }
 
 function stopFirework() {
+    // No new rockets; what is in the sky burns out and the loop ends itself.
     if (fireworkInterval) {
         clearInterval(fireworkInterval);
         fireworkInterval = null;
     }
 }
 
-function launchEffect(canvas, ctx) {
-    createExplosion(
-        Math.random() * canvas.width * 0.8 + canvas.width * 0.1,
-        Math.random() * canvas.height * 0.5 + canvas.height * 0.1,
-        colors[Math.floor(Math.random() * colors.length)],
-        ctx
-    );
-
-    if (!window.fireworkLoopActive) {
-        window.fireworkLoopActive = true;
-        animateFireworks(canvas, ctx);
-    }
-}
-
-function createExplosion(x, y, color, ctx) {
-    const particleCount = 80;
-    for (let i = 0; i < particleCount; i++) {
-        const angle = Math.random() * Math.PI * 2;
-        const velocity = Math.random() * 5 + 2;
-        particles.push({
-            x: x,
-            y: y,
-            vx: Math.cos(angle) * velocity,
-            vy: Math.sin(angle) * velocity,
-            alpha: 1,
-            color: color,
-            decay: Math.random() * 0.015 + 0.005,
-            gravity: 0.1
-        });
-    }
-}
-
-function animateFireworks(canvas, ctx) {
-    requestAnimationFrame(() => {
-        // Create that lovely trailing effect
-        ctx.globalCompositeOperation = 'destination-out';
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.2)'; // Fade out fast enough to keep it clean
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        ctx.globalCompositeOperation = 'lighter';
-
-        for (let i = particles.length - 1; i >= 0; i--) {
-            const p = particles[i];
-            p.x += p.vx;
-            p.y += p.vy;
-            p.vy += p.gravity;
-            p.vx *= 0.96; // Air resistance is a thing
-            p.vy *= 0.96;
-            p.alpha -= p.decay;
-
-            if (p.alpha <= 0) {
-                particles.splice(i, 1);
-            } else {
-                ctx.globalAlpha = p.alpha;
-                ctx.fillStyle = p.color;
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        ctx.globalCompositeOperation = 'source-over'; // Back to normal drawing
-
-        if (particles.length > 0 || isFireworking) {
-            animateFireworks(canvas, ctx);
-        } else {
-            window.fireworkLoopActive = false;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-        }
+function launchRocket(canvas) {
+    fwState.rockets.push({
+        x: canvas.width * (0.12 + Math.random() * 0.76),
+        y: canvas.height + 4,
+        vx: (Math.random() - 0.5) * 24,
+        vy: -(560 + Math.random() * 190),
+        targetY: canvas.height * (0.16 + Math.random() * 0.3),
+        hue: FW_HUES[Math.floor(Math.random() * FW_HUES.length)],
+        wobble: Math.random() * Math.PI * 2
     });
 }
 
+function explode(x, y, hue) {
+    const count = 70 + Math.floor(Math.random() * 40);
+    for (let i = 0; i < count; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = 90 + 290 * Math.pow(Math.random(), 0.5);
+        fwState.parts.push({
+            x, y,
+            px: x, py: y,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed,
+            life: 0,
+            ttl: 1.1 + Math.random() * 0.9,
+            size: 1 + Math.random() * 1.6,
+            hue: hue + (Math.random() - 0.5) * 24,
+            light: 55 + Math.random() * 20,
+            twinkle: Math.random() < 0.35,
+            phase: Math.random() * Math.PI * 2,
+            crackle: Math.random() < 0.12,
+            crackled: false,
+            dragK: 1.6 + Math.random() * 0.8
+        });
+    }
+
+    // Pistil: a tighter, slower inner ring in a shifted hue.
+    if (Math.random() < 0.35) {
+        for (let i = 0; i < 24; i++) {
+            const angle = Math.random() * Math.PI * 2;
+            const speed = 40 + 90 * Math.random();
+            fwState.parts.push({
+                x, y,
+                px: x, py: y,
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed,
+                life: 0,
+                ttl: 0.8 + Math.random() * 0.5,
+                size: 1 + Math.random(),
+                hue: hue + 40,
+                light: 65,
+                twinkle: false,
+                phase: 0,
+                crackle: false,
+                crackled: true,
+                dragK: 1.8
+            });
+        }
+    }
+
+    if (fwState.parts.length > 500) {
+        fwState.parts.splice(0, fwState.parts.length - 500);
+    }
+}
+
+function fireworkTick(now, canvas) {
+    const ctx = canvas.getContext('2d');
+    const dt = Math.min((now - fwState.last) / 1000, 0.05);
+    fwState.last = now;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.lineCap = 'round';
+
+    // Rockets: gravity bleeds their climb until the apex or the target
+    // height, where they burst. A short bright streak is their trail.
+    fwState.rockets = fwState.rockets.filter(r => {
+        r.wobble += dt * 6;
+        r.vy += 300 * dt;
+        r.x += r.vx * dt + Math.sin(r.wobble) * 6 * dt;
+        r.y += r.vy * dt;
+
+        ctx.strokeStyle = 'rgba(255, 240, 200, 0.9)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(r.x - r.vx * 0.03, r.y - r.vy * 0.03);
+        ctx.lineTo(r.x, r.y);
+        ctx.stroke();
+
+        // Loose sparks shed on the way up.
+        if (Math.random() < 0.6) {
+            fwState.parts.push({
+                x: r.x, y: r.y,
+                px: r.x, py: r.y,
+                vx: (Math.random() - 0.5) * 30,
+                vy: 40 + Math.random() * 40,
+                life: 0,
+                ttl: 0.3 + Math.random() * 0.3,
+                size: 0.8,
+                hue: 45,
+                light: 70,
+                twinkle: false,
+                phase: 0,
+                crackle: false,
+                crackled: true,
+                dragK: 1
+            });
+        }
+
+        if (r.vy >= -60 || r.y <= r.targetY) {
+            explode(r.x, r.y, r.hue);
+            return false;
+        }
+        return true;
+    });
+
+    // Particles: exponential drag, gravity, fade-out, optional twinkle and
+    // one crackle pop. Drawn as short streaks along their motion.
+    fwState.parts = fwState.parts.filter(p => p.life < p.ttl);
+    for (const p of fwState.parts) {
+        p.px = p.x;
+        p.py = p.y;
+        const drag = Math.exp(-p.dragK * dt);
+        p.vx *= drag;
+        p.vy = p.vy * drag + 320 * dt;
+        p.x += p.vx * dt;
+        p.y += p.vy * dt;
+        p.life += dt;
+
+        if (p.crackle && !p.crackled && p.life > p.ttl * 0.55) {
+            p.crackled = true;
+            for (let i = 0; i < 3; i++) {
+                fwState.parts.push({
+                    x: p.x, y: p.y,
+                    px: p.x, py: p.y,
+                    vx: p.vx + (Math.random() - 0.5) * 120,
+                    vy: p.vy + (Math.random() - 0.5) * 120,
+                    life: 0,
+                    ttl: 0.25 + Math.random() * 0.2,
+                    size: 0.7,
+                    hue: p.hue,
+                    light: 80,
+                    twinkle: false,
+                    phase: 0,
+                    crackle: false,
+                    crackled: true,
+                    dragK: 1
+                });
+            }
+        }
+
+        let alpha = 1 - p.life / p.ttl;
+        alpha *= alpha;
+        if (p.twinkle) {
+            alpha *= 0.55 + 0.45 * Math.sin(p.life * 40 + p.phase);
+        }
+
+        ctx.strokeStyle = `hsla(${p.hue}, 100%, ${p.light}%, ${Math.max(alpha, 0)})`;
+        ctx.lineWidth = p.size;
+        ctx.beginPath();
+        ctx.moveTo(p.px, p.py);
+        ctx.lineTo(p.x, p.y);
+        ctx.stroke();
+    }
+
+    ctx.globalCompositeOperation = 'source-over';
+
+    if (!isFireworking && fwState.rockets.length === 0 && fwState.parts.length === 0) {
+        fwState.running = false;
+        return;
+    }
+
+    requestAnimationFrame(t => fireworkTick(t, canvas));
+}

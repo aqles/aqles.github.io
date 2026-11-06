@@ -34,7 +34,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@300;500;700&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/global.css?v=3">
 
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
@@ -43,65 +43,71 @@
 </head>
 
 <body>
-    <div class="background-globes">
-        <div class="globe globe-1"></div>
-        <div class="globe globe-2"></div>
-        <div class="globe globe-3"></div>
-    </div>
+    <div class="container">
+        <header class="site-head">
+            <a class="wordmark" href="/">@aqles</a>
+            <nav>
+                <a href="https://github.com/aqles" target="_blank" rel="noopener noreferrer">GitHub</a>
+                <a href="https://ednasalam.com" target="_blank" rel="noopener noreferrer">Portfolio</a>
+                <a href="#create">Create</a>
+            </nav>
+        </header>
 
-    <main class="container">
-        <!-- Profile Section -->
-        <section class="profile-card glass-panel fade-in-up">
-            <div class="profile-image-container">
-                <img id="profile-img" src="https://avatars.githubusercontent.com/u/70847820?v=4" alt="Ednasalam"
-                    class="profile-img"> <!-- Avatar fallback to favicon is handled in js/main.js -->
-                <div class="status-badge">
-                    <span class="status-dot"></span>
-                    Available for hire
+        <!-- Hero: the name, set as type -->
+        <section class="hero">
+            <h1>
+                <span class="h-line"><span>Aql Edna</span></span>
+                <span class="h-line h-line-2"><span>Salam</span></span>
+            </h1>
+            <div class="hero-bottom">
+                <div class="hero-text fade-in-up delay-1">
+                    <p class="role">Full tank developer &amp; AI enthusiast, based in Jakarta.</p>
+                    <p class="bio">Building scalable web applications and exploring the frontiers of Artificial
+                        Intelligence. Driven by code, powered by coffee.</p>
+                </div>
+                <div class="hero-action fade-in-up delay-2">
+                    <a href="https://ednasalam.com" class="btn btn-primary">
+                        <i class="fa-solid fa-rocket"></i> Visit Official Portfolio
+                    </a>
+                    <br>
+                    <a class="hero-alt" href="#create">or make your own page <i
+                            class="fa-solid fa-arrow-down"></i></a>
                 </div>
             </div>
-            <h1>Aql Edna Salam</h1>
-            <p class="role">Full Tank Developer & AI Enthusiast</p>
-            <p class="bio">Building scalable web applications and exploring the frontiers of Artificial Intelligence.
-                Driven by code, powered by coffee.</p>
+        </section>
 
-            <div class="primary-action">
-                <a href="https://ednasalam.com" class="btn btn-primary glow-effect">
-                    <i class="fa-solid fa-rocket"></i> Visit Official Portfolio
-                </a>
+        <!-- Identity strip -->
+        <section class="identity fade-in-up delay-2" aria-label="Profile">
+            <img id="profile-img" src="https://avatars.githubusercontent.com/u/70847820?v=4" alt="Ednasalam"
+                class="profile-img"> <!-- Avatar fallback to favicon is handled in js/main.js -->
+            <div class="identity-meta">
+                <span class="handle">@aqles</span>
+                <span class="status-line"><span class="status-dot"></span> Available for hire</span>
+                <div class="easter-egg-controls">
+                    <button id="snow-btn" class="btn-sm btn-outline" aria-pressed="false"><i
+                            class="fa-regular fa-snowflake"></i> Let it Snow</button>
+                    <button id="firework-btn" class="btn-sm btn-outline" aria-pressed="false"><i
+                            class="fa-solid fa-wand-magic-sparkles"></i> Start Firework</button>
+                </div>
             </div>
-
-            <div style="margin-top: 1rem;">
-                <a href="/create.html" class="btn-sm btn-outline" style="text-decoration: none;">Create your own page</a>
-            </div>
-
-            <!-- Easter Egg Controls -->
-            <div class="easter-egg-controls"
-                style="margin-top: 1rem; display: flex; gap: 10px; justify-content: center;">
-                <button id="snow-btn" class="btn-sm btn-outline" aria-pressed="false"><i class="fa-regular fa-snowflake"></i> Let it
-                    Snow</button>
-                <button id="firework-btn" class="btn-sm btn-outline" aria-pressed="false"><i class="fa-solid fa-wand-magic-sparkles"></i>
-                    Start Firework</button>
-            </div>
-
             <div class="social-links">
                 <a href="https://github.com/aqles" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i
                         class="fa-brands fa-github"></i></a>
-                <a href="https://linkedin.com/in/ednasalam" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i
-                        class="fa-brands fa-linkedin"></i></a>
+                <a href="https://linkedin.com/in/ednasalam" target="_blank" rel="noopener noreferrer"
+                    aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
                 <a href="https://x.com/aqles" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)"><i
                         class="fa-brands fa-x-twitter"></i></a>
-                <a href="https://instagram.com/aql_es" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i
-                        class="fa-brands fa-instagram"></i></a>
+                <a href="https://instagram.com/aql_es" target="_blank" rel="noopener noreferrer"
+                    aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
             </div>
         </section>
 
         <!-- Dynamic GitHub Projects -->
-        <section class="projects-section glass-panel fade-in-up delay-1">
+        <section class="projects-section page-section fade-in-up delay-1">
             <div class="section-header">
                 <h2>Latest Public Repositories</h2>
-                <a href="https://github.com/aqles?tab=repositories" target="_blank" rel="noopener noreferrer" class="view-all">View All <i
-                        class="fa-solid fa-arrow-right"></i></a>
+                <a href="https://github.com/aqles?tab=repositories" target="_blank" rel="noopener noreferrer"
+                    class="view-all">View All <i class="fa-solid fa-arrow-right"></i></a>
             </div>
             <div id="repo-list" class="repo-grid" aria-live="polite">
                 <!-- Repos injected via JS -->
@@ -109,14 +115,74 @@
             </div>
         </section>
 
-        <footer class="fade-in-up delay-2">
-            <p>&copy; <span id="year"></span> Aql Edna Salam. Crafted with <i
-                    class="fa-solid fa-heart accent-color"></i> and
-                Code.</p>
-        </footer>
-    </main>
+        <!-- Create your own page: the live tool, on the home page -->
+        <section class="create-section page-section fade-in-up delay-1" id="create">
+            <h2 class="create-title"><span>Make your own</span><span>hub page.</span></h2>
+            <p class="create-intro">Type a GitHub username and this page builds a portfolio hub like this one from
+                that account's public data. Download it as a single file and host it anywhere.</p>
+            <form id="create-form" class="create-form">
+                <label for="username-input">GitHub username</label>
+                <input id="username-input" type="text" autocomplete="off" spellcheck="false"
+                    placeholder="e.g. aqles">
+                <button type="submit" class="btn btn-primary">Preview</button>
+            </form>
+            <p id="status" class="create-status" aria-live="polite"></p>
+
+            <div id="preview" aria-live="polite" hidden></div>
+
+            <div class="download-row">
+                <button id="download-btn" class="btn btn-primary" type="button" hidden>
+                    <i class="fa-solid fa-download"></i> Download this page
+                </button>
+            </div>
+
+            <a class="create-page-link" href="/create.html">Open the create page on its own <i
+                    class="fa-solid fa-arrow-right"></i></a>
+        </section>
+    </div>
+
+    <footer class="site-footer fade-in-up delay-2">
+        <div class="footer-inner">
+            <div class="footer-grid">
+                <div class="footer-reach">
+                    <a href="https://github.com/aqles" target="_blank" rel="noopener noreferrer">GitHub</a>
+                    <a href="https://linkedin.com/in/ednasalam" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                    <a href="https://x.com/aqles" target="_blank" rel="noopener noreferrer">X (Twitter)</a>
+                    <a href="https://instagram.com/aql_es" target="_blank" rel="noopener noreferrer">Instagram</a>
+                </div>
+                <div class="footer-cols">
+                    <div>
+                        <h3>Pages</h3>
+                        <ul>
+                            <li><a href="https://ednasalam.com" target="_blank" rel="noopener noreferrer">Official
+                                    Portfolio</a></li>
+                            <li><a href="/create.html">Create your own page</a></li>
+                            <li><a href="https://github.com/aqles?tab=repositories" target="_blank"
+                                    rel="noopener noreferrer">All repositories</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Elsewhere</h3>
+                        <ul>
+                            <li><a href="https://calistung.ednasalam.com" target="_blank"
+                                    rel="noopener noreferrer">PintarCilik</a></li>
+                            <li><a href="https://github.com/aqles/aqles.github.io" target="_blank"
+                                    rel="noopener noreferrer">This site's source</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-legal">
+                <p>&copy; <span id="year"></span> Aql Edna Salam. Crafted with <i
+                        class="fa-solid fa-heart accent-color"></i> and Code.</p>
+                <a href="#">Back to top</a>
+            </div>
+            <div class="footer-name" aria-hidden="true">Aql Edna Salam</div>
+        </div>
+    </footer>
 
     <script type="module" src="/js/main.js"></script>
+    <script type="module" src="/js/create.js"></script>
 </body>
 
 </html>

@@ -305,11 +305,6 @@ ${css}
 </head>
 
 <body>
-    <div class="background-globes">
-        <div class="globe globe-1"></div>
-        <div class="globe globe-2"></div>
-        <div class="globe globe-3"></div>
-    </div>
 
     <main class="container">
 ${profileCardHtml(user)}

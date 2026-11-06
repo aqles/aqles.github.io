@@ -70,6 +70,7 @@ To run this project locally:
 ## 📝 Change Log
 
 ### November 2026
+- Fixed the home page reopening at the create form instead of the top.
 - Fixed the intro text on the create page being too dark to read.
 - Redesigned the home page: the name set large as type, flat colours with one blue accent, repositories as a plain list, and the create form now sits on the home page too.
 - Rebuilt the snow and firework effects on canvas: flakes drift with wind and depth, rockets climb and burst with twinkle and crackle.

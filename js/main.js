@@ -174,6 +174,25 @@ function escapeHtml(text) {
 }
 
 // Let's get this party started! 🚀
+// Always open at the top. Browsers restore the last scroll position on
+// reload and tab restore, which buried the hero after a visit to the
+// create form further down the page, and a leftover #create in the URL
+// jumped straight to the form. This runs before init on purpose: the
+// browser restores scroll around DOMContentLoaded, so setting it inside
+// init is too late. Clicking an in-page link later still scrolls.
+if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+}
+if (window.location.hash) {
+    history.replaceState(null, '', window.location.pathname + window.location.search);
+}
+window.scrollTo(0, 0);
+window.addEventListener('load', () => {
+    if (!window.location.hash) {
+        window.scrollTo(0, 0);
+    }
+});
+
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
 } else {

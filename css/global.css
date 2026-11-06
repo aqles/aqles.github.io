@@ -506,6 +506,10 @@ button:focus-visible,
 }
 
 /* Create page (create.html) */
+[hidden] {
+    display: none !important;
+}
+
 .create-intro {
     color: var(--text-secondary);
 }
@@ -524,6 +528,7 @@ button:focus-visible,
 
 .create-form input {
     width: 100%;
+    min-height: 52px;
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid var(--glass-border);
     border-radius: 12px;
@@ -531,6 +536,10 @@ button:focus-visible,
     color: var(--text-primary);
     font-family: var(--font-body);
     font-size: 1rem;
+}
+
+.create-form input::placeholder {
+    color: var(--text-secondary);
 }
 
 .create-form input:focus-visible {

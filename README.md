@@ -69,24 +69,18 @@ To run this project locally:
 
 ## 📝 Change Log
 
-### v3.2.0 (2026-11-06)
-- Added a create page: type any GitHub username and get a preview of a hub page like this one, built from that account's public GitHub data.
-- The preview can be downloaded as a single HTML file with the styles included, so it can be hosted anywhere as-is.
-- The home page now links to the create page, under the main portfolio button.
+### November 2026
+- Added a create page: type a GitHub username, preview a hub page like this one, and download it as a single HTML file. The home page links to it.
+- Fixed the create page form on phones: full-width input, and the download button stays hidden until a preview exists.
+- Fixed the social preview image, and added `rel="noopener noreferrer"` to external links.
+- Added a Content-Security-Policy meta tag and an integrity check for the Font Awesome stylesheet.
+- The repo list skips this site and test repos now, and caches results for 30 minutes.
+- Removed vercel.json and the CNAME file; GitHub Pages does not use them.
+- Added the MIT LICENSE, fixed the local run instructions, and added reduced-motion support, visible focus outlines, and ARIA state on the effect buttons.
 
-### v3.1.1 (2026-11-06)
-- Fixed the social preview image (it pointed at an invalid avatar URL, so shared links showed no picture).
-- Added `rel="noopener noreferrer"` to external links.
-- Added a Content-Security-Policy (meta tag, since GitHub Pages can't send custom headers) and an integrity check for the Font Awesome stylesheet.
-- The repo list no longer shows this site itself or test repos, and results are cached for 30 minutes so the GitHub API limit is not hit on every visit.
-- Removed vercel.json (the site is hosted on GitHub Pages, which ignores it) and the CNAME file (not needed for the default aqles.github.io domain).
-- Added the MIT LICENSE file, fixed the README (local run instructions, feature list), and added reduced-motion support, visible focus outlines, and ARIA state on the effect buttons.
-
-### v3.1.0 (2025-12-28)
--   **New Feature**: Added 'Let it Snow' easter egg button with physics-based snowflake animation (sway & fall).
--   **New Feature**: Added 'Firework' easter egg button with particle trails, gravity, and vibrant colors.
--   **Update**: Added X (formerly Twitter) link for user `aqles`.
--   **UX**: Improved animation performance and smoothness.
+### December 2025
+- Added two easter egg buttons, 'Let it Snow' and 'Firework'.
+- Added the X (formerly Twitter) link.
 
 ## 🤝 Contributing
 

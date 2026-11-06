@@ -1,8 +1,20 @@
+const EXCLUDED_REPOS = ['aqles.github.io', 'scroll-test'];
+const REPO_CACHE_KEY = 'aqles-repos-v1';
+const REPO_CACHE_TTL_MS = 30 * 60 * 1000;
+
 // Keep the copyright year fresh automatically
 function init() {
     const yearEl = document.getElementById('year');
     if (yearEl) {
         yearEl.textContent = new Date().getFullYear();
+    }
+
+    const profileImg = document.getElementById('profile-img');
+    if (profileImg) {
+        profileImg.addEventListener('error', () => { profileImg.src = '/assets/favicon.ico'; }, { once: true });
+        if (profileImg.complete && profileImg.naturalWidth === 0) {
+            profileImg.src = '/assets/favicon.ico';
+        }
     }
 
     // Let's sprinkle some magic ✨
@@ -14,13 +26,46 @@ function init() {
 
     if (!repoContainer) return;
 
+    const cachedRepos = readCachedRepos();
+    if (cachedRepos) {
+        renderRepos(repoContainer, cachedRepos);
+    } else {
+        fetchRepos();
+    }
+
+    // Repeat visits in the same tab reuse the cached list for 30 minutes,
+    // so they do not burn through the GitHub API rate limit (60/hour/IP).
+    function readCachedRepos() {
+        try {
+            const raw = sessionStorage.getItem(REPO_CACHE_KEY);
+            if (!raw) return null;
+
+            const cached = JSON.parse(raw);
+            if (!cached || !Array.isArray(cached.repos)) return null;
+            if (Date.now() - cached.savedAt >= REPO_CACHE_TTL_MS) return null;
+
+            return cached.repos;
+        } catch (error) {
+            return null;
+        }
+    }
+
+    function cacheRepos(repos) {
+        try {
+            sessionStorage.setItem(REPO_CACHE_KEY, JSON.stringify({ savedAt: Date.now(), repos }));
+        } catch (error) {
+            // Storage can be unavailable (e.g. private mode). The list is
+            // already on the page by then, so not caching is not an error.
+        }
+    }
+
     async function fetchRepos() {
         try {
             // Don't keep them waiting too long (5s timeout)
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 5000);
 
-            const response = await fetch(`https://api.github.com/users/${username}/repos?sort=pushed&per_page=6`, {
+            const response = await fetch(`https://api.github.com/users/${username}/repos?sort=pushed&per_page=100`, {
                 signal: controller.signal
             });
 
@@ -30,42 +75,17 @@ function init() {
 
             const repos = await response.json();
 
-            // Clear the loading spinner
-            repoContainer.innerHTML = '';
+            // Hide forks, archived repos, and the ones named in
+            // EXCLUDED_REPOS (this site itself, test repos). Filter before
+            // caching, so the cache only holds the list we actually show.
+            const visibleRepos = Array.isArray(repos)
+                ? repos
+                    .filter(repo => !repo.fork && !repo.archived && !EXCLUDED_REPOS.includes(repo.name))
+                    .slice(0, 6)
+                : [];
 
-            if (!Array.isArray(repos) || repos.length === 0) {
-                repoContainer.innerHTML = '<p style="text-align:center; color:#888;">No repositories found.</p>';
-                return;
-            }
-
-            repos.forEach(repo => {
-                const card = document.createElement('a');
-                card.href = repo.html_url;
-                card.target = '_blank';
-                card.className = 'repo-card';
-
-                // Give it a splash of color based on the tech stack
-                const langColor = getLanguageColor(repo.language);
-
-                // Sanitizing inputs because safety first! 🛡️
-                const repoName = escapeHtml(repo.name);
-                const repoDesc = escapeHtml(repo.description || 'No description available.');
-                const repoLang = escapeHtml(repo.language || 'Code');
-                const stars = repo.stargazers_count || 0;
-
-                card.innerHTML = `
-                    <div class="repo-top">
-                        <span class="repo-name"><i class="fa-regular fa-folder"></i> ${repoName}</span>
-                        <span style="font-size: 0.8rem;"><i class="fa-regular fa-star"></i> ${stars}</span>
-                    </div>
-                    <p class="repo-desc">${repoDesc}</p>
-                    <div class="repo-meta">
-                        <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${langColor};margin-right:4px;"></span>${repoLang}</span>
-                    </div>
-                `;
-
-                repoContainer.appendChild(card);
-            });
+            renderRepos(repoContainer, visibleRepos);
+            cacheRepos(visibleRepos);
 
         } catch (error) {
             console.error('Error fetching repos:', error);
@@ -76,15 +96,55 @@ function init() {
                         <i class="fa-solid fa-circle-exclamation"></i>
                         Unable to load projects (${error.name === 'AbortError' ? 'Timeout' : 'Error'}).
                     </p>
-                    <a href="https://github.com/${username}?tab=repositories" target="_blank" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                    <a href="https://github.com/${username}?tab=repositories" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
                         View on GitHub
                     </a>
                 </div>
             `;
         }
     }
+}
 
-    fetchRepos();
+function renderRepos(repoContainer, repos) {
+    // Clear the loading spinner
+    repoContainer.innerHTML = '';
+
+    if (!Array.isArray(repos) || repos.length === 0) {
+        repoContainer.innerHTML = '<p style="text-align:center; color:#888;">No repositories found.</p>';
+        return;
+    }
+
+    repos.forEach(repo => {
+        const card = document.createElement('a');
+        card.href = (typeof repo.html_url === 'string' && repo.html_url.startsWith('https://github.com/'))
+            ? repo.html_url
+            : 'https://github.com/aqles?tab=repositories';
+        card.target = '_blank';
+        card.rel = 'noopener noreferrer';
+        card.className = 'repo-card';
+
+        // Give it a splash of color based on the tech stack
+        const langColor = getLanguageColor(repo.language);
+
+        // Sanitizing inputs because safety first! 🛡️
+        const repoName = escapeHtml(repo.name);
+        const repoDesc = escapeHtml(repo.description || 'No description available.');
+        const repoLang = escapeHtml(repo.language || 'Code');
+        const stars = Number(repo.stargazers_count) || 0;
+
+        card.innerHTML = `
+            <div class="repo-top">
+                <span class="repo-name"><i class="fa-regular fa-folder"></i> ${repoName}</span>
+                <span style="font-size: 0.8rem;"><i class="fa-regular fa-star"></i> ${stars}</span>
+            </div>
+            <p class="repo-desc">${repoDesc}</p>
+            <div class="repo-meta">
+                <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${langColor};margin-right:4px;"></span>${repoLang}</span>
+            </div>
+        `;
+
+        repoContainer.appendChild(card);
+    });
 }
 
 function getLanguageColor(language) {
@@ -139,6 +199,8 @@ let snowInterval = null;
 let isSnowing = false;
 
 function toggleSnow() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
     const btn = document.getElementById('snow-btn');
     isSnowing = !isSnowing;
 
@@ -151,6 +213,7 @@ function toggleSnow() {
         btn.innerHTML = '<i class="fa-regular fa-snowflake"></i> Let it Snow';
         stopSnow();
     }
+    btn.setAttribute('aria-pressed', String(isSnowing));
 }
 
 function startSnow() {
@@ -172,6 +235,7 @@ function stopSnow() {
 function createSnowflake() {
     const snowflake = document.createElement('div');
     snowflake.classList.add('snowflake');
+    snowflake.setAttribute('aria-hidden', 'true');
     snowflake.textContent = '\u2744';
     snowflake.style.left = Math.random() * 100 + 'vw';
 
@@ -199,6 +263,8 @@ let isFireworking = false;
 let fireworkInterval = null;
 
 function triggerFirework() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
     const btn = document.getElementById('firework-btn');
     isFireworking = !isFireworking;
 
@@ -211,6 +277,7 @@ function triggerFirework() {
         btn.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles"></i> Start Firework';
         stopFirework();
     }
+    btn.setAttribute('aria-pressed', String(isFireworking));
 }
 
 function startFirework() {
@@ -218,6 +285,7 @@ function startFirework() {
     if (!canvas) {
         canvas = document.createElement('canvas');
         canvas.id = 'firework-canvas';
+        canvas.setAttribute('aria-hidden', 'true');
         document.body.appendChild(canvas);
     }
 

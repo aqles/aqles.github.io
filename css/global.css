@@ -449,10 +449,14 @@ body {
 }
 
 .create-intro {
-    color: rgba(13, 17, 23, 0.75);
+    color: var(--text-secondary);
     font-size: 1.125rem;
     max-width: 52ch;
     margin-top: 1.25rem;
+}
+
+.create-section .create-intro {
+    color: rgba(13, 17, 23, 0.75);
 }
 
 .create-form {
@@ -500,6 +504,7 @@ body {
     margin-top: 1rem;
     min-height: 1.5em;
     font-weight: 600;
+    color: #ff6b6b;
 }
 
 .create-section .create-status {
